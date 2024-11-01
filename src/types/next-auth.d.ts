@@ -18,5 +18,6 @@ declare module "next-auth" {
     }
     interface User {
         role: UserRole; // Custom property added here
-      }
+        emailVerified: DateTime,
+    }
 }

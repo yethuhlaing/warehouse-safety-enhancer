@@ -5,7 +5,6 @@ import("./src/env.mjs");
 const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
-    logging: true,
     images: {
         remotePatterns: [
             {
@@ -22,7 +21,7 @@ const nextConfig = {
             },
         ],
     },
-    serverExternalPackages: ["@prisma/client"],
+    // serverExternalPackages: ["@prisma/client"],
 };
 
 export default nextConfig;

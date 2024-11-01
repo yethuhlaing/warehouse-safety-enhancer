@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { userRoleSchema } from "@/validations/user";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { SectionColumns } from "@/components/dashboard/section-columns";
 import { Icons } from "@/components/shared/icons";
+import { userRoleSchema } from "@/lib/zod";
 
 interface UserNameFormProps {
     user: Pick<User, "id" | "role">;

@@ -7,7 +7,6 @@ import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
-
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,8 +29,9 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
         resolver: zodResolver(userAuthSchema),
     });
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const [isGoogleLoading, setIsGoogleLoading] =
-        React.useState<boolean>(false);
+    const [isGoogleLoading, setIsGoogleLoading] =React.useState<boolean>(false);
+    const [isGithubLoading, setIsGithubLoading] =React.useState<boolean>(false);
+
     const searchParams = useSearchParams();
 
     async function onSubmit(data: FormData) {
@@ -42,7 +42,6 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
             redirect: false,
             callbackUrl: searchParams?.get("from") || "/dashboard",
         });
-
         setIsLoading(false);
 
         if (!signInResult?.ok) {
@@ -104,22 +103,40 @@ export function UserAuthForm({ className, type, ...props }: UserAuthFormProps) {
                     </span>
                 </div>
             </div>
-            <button
-                type="button"
-                className={cn(buttonVariants({ variant: "outline" }))}
-                onClick={() => {
-                    setIsGoogleLoading(true);
-                    signIn("google");
-                }}
-                disabled={isLoading || isGoogleLoading}
-            >
-                {isGoogleLoading ? (
-                    <Icons.spinner className="mr-2 size-4 animate-spin" />
-                ) : (
-                    <Icons.google className="mr-2 size-4" />
-                )}{" "}
-                Google
-            </button>
+            <div className="flex flex-col gap-2">
+                <button
+                    type="button"
+                    className={cn(buttonVariants({ variant: "outline" }))}
+                    onClick={() => {
+                        setIsGoogleLoading(true);
+                        signIn("google");
+                    }}
+                    disabled={isLoading || isGoogleLoading}
+                >
+                    {isGoogleLoading ? (
+                        <Icons.spinner className="mr-2 size-4 animate-spin" />
+                    ) : (
+                        <Icons.google className="mr-2 size-4" />
+                    )}{" "}
+                    Google
+                </button>
+                <button
+                    type="button"
+                    className={cn(buttonVariants({ variant: "outline" }))}
+                    disabled={isLoading || isGithubLoading }
+                    onClick={() => {
+                        setIsGithubLoading(true);
+                        signIn("github")
+                    }}
+                >
+                    {isGithubLoading ? (
+                        <Icons.spinner className="mr-2 size-4 animate-spin" />
+                    ) : (
+                        <Icons.gitHub className="mr-2 size-4" />
+                    )}{" "}
+                    Github
+                </button>
+            </div>
         </div>
     );
 }
