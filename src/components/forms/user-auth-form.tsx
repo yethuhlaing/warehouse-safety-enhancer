@@ -9,11 +9,11 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 import { cn } from "@/lib/utils";
-import { userAuthSchema } from "@/validations/auth";
 import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "@/components/shared/icons";
+import { userAuthSchema } from "@/lib/zod";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
     type?: string;

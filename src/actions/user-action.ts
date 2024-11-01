@@ -1,4 +1,4 @@
-import prisma from "./prisma";
+import prisma from "@/lib/prisma";
 
 export const getUserByEmail = async (email: string) => {
     try {
@@ -8,7 +8,6 @@ export const getUserByEmail = async (email: string) => {
             },
             select: {
                 name: true,
-                emailVerified: true,
             },
         });
 

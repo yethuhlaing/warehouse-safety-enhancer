@@ -8,12 +8,12 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { userNameSchema } from "@/validations/user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SectionColumns } from "@/components/dashboard/section-columns";
 import { Icons } from "@/components/shared/icons";
+import { userNameSchema } from "@/lib/zod";
 
 interface UserNameFormProps {
     user: Pick<User, "id" | "name">;
