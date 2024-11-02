@@ -10,6 +10,7 @@
     "build": "contentlayer build && next build",
     "start": "next start",
     "lint": "next lint",
+    "webhook": "stripe listen --forward-to localhost:4242/webhook",
     "postinstall": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "preview": "next build && next start",

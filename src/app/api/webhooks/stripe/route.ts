@@ -32,7 +32,7 @@ export async function POST(req: Request) {
         // Update the user stripe into in our database.
         // Since this is the initial subscription, we need to update
         // the subscription id and customer id.
-        await prisma.user.update({
+        const Completetesubscription = await prisma.user.update({
             where: {
                 id: session?.metadata?.userId,
             },
@@ -45,6 +45,7 @@ export async function POST(req: Request) {
                 ),
             },
         });
+        console.log(Completetesubscription)
     }
 
     if (event.type === "invoice.payment_succeeded") {
@@ -59,7 +60,7 @@ export async function POST(req: Request) {
             );
 
             // Update the price id and set the new period end.
-            await prisma.user.update({
+            const Completetesubscription = await prisma.user.update({
                 where: {
                     stripeSubscriptionId: subscription.id,
                 },
@@ -70,6 +71,7 @@ export async function POST(req: Request) {
                     ),
                 },
             });
+            console.log(Completetesubscription)
         }
     }
 

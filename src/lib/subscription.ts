@@ -10,7 +10,7 @@ export async function getUserSubscriptionPlan(
 ): Promise<UserSubscriptionPlan> {
     if (!userId) throw new Error("Missing parameters");
 
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findMany({
         where: {
             id: userId,
         },

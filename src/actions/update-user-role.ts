@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { auth } from "@/lib/auth";
 import { UserRole } from "@prisma/client";
 
-import { userRoleSchema } from "@/validations/user";
 import prisma from "@/lib/prisma";
+import { auth } from "@/auth";
+import { userRoleSchema } from "@/lib/zod";
 
 export type FormData = {
     role: UserRole;
