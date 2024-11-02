@@ -1,3 +1,4 @@
+const { withContentlayer } = require("next-contentlayer2");
 
 import("./src/env.mjs");
 
@@ -21,7 +22,9 @@ const nextConfig = {
             },
         ],
     },
-    // serverExternalPackages: ["@prisma/client"],
+    experimental: {
+        serverComponentsExternalPackages: ["@prisma/client"],
+    },
 };
 
-export default nextConfig;
+module.exports = withContentlayer(nextConfig);
