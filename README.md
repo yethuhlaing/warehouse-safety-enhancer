@@ -1,196 +1,128 @@
-<h1 align="center"><img src=".github/assets/thumbnail.png" alt="Start UI Web" /></h1>
+<a href="https://next-saas-stripe-starter.vercel.app">
+  <img alt="SaaS Starter" src="public/_static/og.jpg">
+  <h1 align="center">Next SaaS Stripe Starter</h1>
+</a>
 
-[![Discord](https://img.shields.io/discord/452798408491663361)](https://go.bearstudio.fr/discord)
+<p align="center">
+  Start at full speed with SaaS Starter !
+</p>
 
-🚀 Start UI <small>[web]</small> is an opinionated frontend starter repository created & maintained by the [BearStudio Team](https://www.bearstudio.fr/team) and other contributors.
-It represents our team's up-to-date stack that we use when creating web apps for our clients.
+<p align="center">
+  <a href="https://twitter.com/miickasmt">
+    <img src="https://img.shields.io/twitter/follow/miickasmt?style=flat&label=miickasmt&logo=twitter&color=0bf&logoColor=fff" alt="Mickasmt Twitter follower count" />
+  </a>
+</p>
 
-## Documentation
+<p align="center">
+  <a href="#introduction"><strong>Introduction</strong></a> ·
+  <a href="#installation"><strong>Installation</strong></a> ·
+  <a href="#tech-stack--features"><strong>Tech Stack + Features</strong></a> ·
+  <a href="#author"><strong>Author</strong></a> ·
+  <a href="#credits"><strong>Credits</strong></a>
+</p>
+<br/>
 
-For detailed information on how to use this project, please refer to the [documentation](https://docs.web.start-ui.com). The documentation contains all the necessary information on installation, usage, and some guides.
+## Introduction
 
-## Demo
-
-A live read-only demonstration of what you will have when starting a project with 🚀 Start UI <small>[web]</small> is available on [demo.start-ui.com](https://demo.start-ui.com).
-
-## Technologies
-
-<div align="center" style="margin: 0 0 16px 0"><img src=".github/assets/tech-logos.png" alt="Technologies logos of the starter" /></div>
-
-[🟦 TypeScript](https://www.typescriptlang.org/), [⚛️ React](https://react.dev/), [⚫️ NextJS](https://nextjs.org/), [⚡️ Chakra UI](https://chakra-ui.com/),  [🟦 tRPC](https://trpc.io/), [▲ Prisma](https://www.prisma.io/), [🏖️ TanStack Query](https://react-query.tanstack.com/), [📕 Storybook](https://storybook.js.org/), [🎭 Playwright](https://playwright.dev/), [📋 React Hook Form](https://react-hook-form.com/)
-, [🌍 React i18next](https://react.i18next.com/)
-
-
-## Requirements
-
-- [NodeJS](https://nodejs.org/) >=20
-- [Pnpm](https://pnpm.io/)
-- [Docker](https://www.docker.com/) (or a [PostgreSQL](https://www.postgresql.org/) database)
-
-## Getting Started
-
-```bash
-pnpm create start-ui --web myApp
-```
-
-That will scaffold a new folder with the latest version of 🚀 Start UI <small>[web]</small> 🎉
+Empower your next project with the stack of Next.js 14, Prisma, Neon, Auth.js v5, Resend, React Email, Shadcn/ui, and Stripe.
+<br/>
+All seamlessly integrated with the SaaS Starter to accelerate your development and saas journey.
 
 ## Installation
 
-1. Duplicate the `.env.example` file to a new `.env` file, and update the environment variables
+Clone & create this repo locally with the following command:
 
 ```bash
-cp .env.example .env
+npx create-next-app my-saas-project --example "https://github.com/mickasmt/next-saas-stripe-starter"
 ```
 
-> [!NOTE]
-> **Quick advices for local development**
-> - **DON'T update** the **EMAIL_SERVER** variable, because the default value will be used to catch the emails during the development.
+Or, deploy with Vercel:
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmickasmt%2Fnext-saas-stripe-starter)
 
-2. Install dependencies
-```bash
-pnpm install
-```
+### Steps
 
-3. Setup and start the db with docker
-```bash
-pnpm dk:init
-```
-> [!NOTE]
-> **Don't want to use docker?**
->
-> Setup a PostgreSQL database (locally or online) and replace the **DATABASE_URL** environment variable. Then you can run `pnpm db:push` to update your database schema and then run `pnpm db:seed` to seed your database.
-
-## Development
-
-```bash
-# Run the database in Docker (if not already started)
-pnpm dk:start
-# Run the development server
-pnpm dev
-```
-
-### Emails in development
-
-#### Maildev to catch emails
-
-In development, the emails will not be sent and will be catched by [maildev](https://github.com/maildev/maildev).
-
-The maildev UI is available at [0.0.0.0:1080](http://0.0.0.0:1080).
-
-#### Preview emails
-
-Emails templates are built with `react-email` components in the `src/emails` folder.
-
-You can preview an email template at `http://localhost:3000/devtools/email/{template}` where `{template}` is the name of the template file in the `src/emails/templates` folder.
-
-Example: [Login Code](http://localhost:3000/devtools/email/login-code)
-
-##### Email translation preview
-
-Add the language in the preview url like `http://localhost:3000/devtools/email/{template}/{language}` where `{language}` is the language key (`en`, `fr`, ...)
-
-#### Email props preview
-
-You can add search params to the preview url to pass as props to the template.
-`http://localhost:3000/devtools/email/{template}/?{propsName}={propsValue}`
-
-### Storybook
-
-```bash
-pnpm storybook
-```
-
-### Update theme typing
-
-When adding or updating theme components, component variations, sizes, colors and other theme foundations, you can extend the internal theme typings to provide nice autocomplete.
-
-Just run the following command after updating the theme:
-
-```bash
-pnpm theme:generate-typing
-```
-
-### Generate custom icons components from svg files
-
-Put the custom svg files into the `src/components/Icons/svg-sources` folder and then run the following command:
-
-```bash
-pnpm theme:generate-icons
-```
-
-> [!WARNING]
-> All svg icons should be svg files prefixed by `icon-` (example: `icon-externel-link`) with **24x24px** size, only **one shape** and **filled with `#000` color** (will be replaced by `currentColor`).
-
-
-### Update color mode storage key
-
-You can update the storage key used to detect the color mode by updating this constant in the `src/theme/config.ts` file:
-
-```tsx
-export const COLOR_MODE_STORAGE_KEY = 'start-ui-color-mode'; // Update the key according to your needs
-```
-
-### E2E Tests
-
-E2E tests are setup with Playwright.
+1. Install dependencies using pnpm:
 
 ```sh
-pnpm e2e     # Run tests in headless mode, this is the command executed in CI
-pnpm e2e:ui  # Open a UI which allow you to run specific tests and see test execution
-```
-
-Tests are written in the `e2e` folder; there is also a `e2e/utils` folder which contains some utils to help writing tests.
-
-## Show hint on development environments
-
-Setup the `NEXT_PUBLIC_ENV_NAME` env variable with the name of the environment.
-
-```
-NEXT_PUBLIC_ENV_NAME="staging"
-NEXT_PUBLIC_ENV_EMOJI="🔬"
-NEXT_PUBLIC_ENV_COLOR_SCHEME="teal"
-```
-
-## Translations
-
-### Setup the i18n Ally extension
-
-We recommended using the [i18n Ally](https://marketplace.visualstudio.com/items?itemName=lokalise.i18n-ally) plugin for VS Code for translations management.
-
-Create or edit the `.vscode/settings.json` file with the following settings:
-
-```json
-{
-  "i18n-ally.localesPaths": ["src/locales"],
-  "i18n-ally.keystyle": "nested",
-  "i18n-ally.enabledFrameworks": ["general", "react", "i18next"],
-  "i18n-ally.namespace": true,
-  "i18n-ally.defaultNamespace": "common",
-  "i18n-ally.extract.autoDetect": true,
-  "i18n-ally.keysInUse": ["common.languages.*"]
-}
-```
-
-## Production
-
-```bash
 pnpm install
-pnpm storybook:build # Optional: Will expose the Storybook at `/storybook`
-pnpm build
-pnpm start
 ```
 
-### Deploy with Docker
+2. Copy `.env.example` to `.env.local` and update the variables.
 
-1. Build the Docker image (replace `start-ui-web` with your project name)
-```
-docker build -t start-ui-web .
+```sh
+cp .env.example .env.local
 ```
 
-2. Run the Docker image (replace `start-ui-web` with your project name)
+3. Start the development server:
+
+```sh
+pnpm run dev
 ```
-docker run -p 80:3000 start-ui-web
-```
-Application will be exposed on port 80 ([http://localhost](http://localhost))
+
+> [!NOTE]  
+> I use [npm-check-updates](https://www.npmjs.com/package/npm-check-updates) package for update this project.
+>
+> Use this command for update your project: `ncu -i --format group`
+
+## Roadmap
+- [ ] Upgrade eslint to v9
+- [ ] Add resend for success subscriptions
+
+## Tech Stack + Features
+
+https://github.com/mickasmt/next-saas-stripe-starter/assets/62285783/828a4e0f-30e3-4cfe-96ff-4dfd9cd55124
+
+### Frameworks
+
+- [Next.js](https://nextjs.org/) – React framework for building performant apps with the best developer experience
+- [Auth.js](https://authjs.dev/) – Handle user authentication with ease with providers like Google, Twitter, GitHub, etc.
+- [Prisma](https://www.prisma.io/) – Typescript-first ORM for Node.js
+- [React Email](https://react.email/) – Versatile email framework for efficient and flexible email development
+
+### Platforms
+
+- [Vercel](https://vercel.com/) – Easily preview & deploy changes with git
+- [Resend](https://resend.com/) – A powerful email framework for streamlined email development
+- [Neon](https://neon.tech/) – Serverless Postgres with autoscaling, branching, bottomless storage and generous free tier.
+
+### UI
+
+- [Tailwind CSS](https://tailwindcss.com/) – Utility-first CSS framework for rapid UI development
+- [Shadcn/ui](https://ui.shadcn.com/) – Re-usable components built using Radix UI and Tailwind CSS
+- [Framer Motion](https://framer.com/motion) – Motion library for React to animate components with ease
+- [Lucide](https://lucide.dev/) – Beautifully simple, pixel-perfect icons
+- [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) – Optimize custom fonts and remove external network requests for improved performance
+- [`ImageResponse`](https://nextjs.org/docs/app/api-reference/functions/image-response) – Generate dynamic Open Graph images at the edge
+
+### Hooks and Utilities
+
+- `useIntersectionObserver` – React hook to observe when an element enters or leaves the viewport
+- `useLocalStorage` – Persist data in the browser's local storage
+- `useScroll` – React hook to observe scroll position ([example](https://github.com/mickasmt/precedent/blob/main/components/layout/navbar.tsx#L12))
+- `nFormatter` – Format numbers with suffixes like `1.2k` or `1.2M`
+- `capitalize` – Capitalize the first letter of a string
+- `truncate` – Truncate a string to a specified length
+- [`use-debounce`](https://www.npmjs.com/package/use-debounce) – Debounce a function call / state update
+
+### Code Quality
+
+- [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
+- [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
+- [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
+
+### Miscellaneous
+
+- [Vercel Analytics](https://vercel.com/analytics) – Track unique visitors, pageviews, and more in a privacy-friendly way
+
+## Author
+
+Created by [@miickasmt](https://twitter.com/miickasmt) in 2023, released under the [MIT license](https://github.com/shadcn/taxonomy/blob/main/LICENSE.md).
+
+## Credits
+
+This project was inspired by shadcn's [Taxonomy](https://github.com/shadcn-ui/taxonomy), Steven Tey’s [Precedent](https://github.com/steven-tey/precedent), and Antonio Erdeljac's [Next 13 AI SaaS](https://github.com/AntonioErdeljac/next13-ai-saas).
+
+- Shadcn ([@shadcn](https://twitter.com/shadcn))
+- Steven Tey ([@steventey](https://twitter.com/steventey))
+- Antonio Erdeljac ([@YTCodeAntonio](https://twitter.com/AntonioErdeljac))
