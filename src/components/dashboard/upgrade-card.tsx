@@ -6,8 +6,14 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 export function UpgradeCard() {
+    const router = useRouter();
+
+    const handleRedirect = () => {
+      router.push('/pricing');  // Replace with your target path
+    };
     return (
         <Card className="md:max-xl:rounded-none md:max-xl:border-none md:max-xl:shadow-none">
             <CardHeader className="md:max-xl:px-4">
@@ -18,7 +24,7 @@ export function UpgradeCard() {
                 </CardDescription>
             </CardHeader>
             <CardContent className="md:max-xl:px-4">
-                <Button size="sm" className="w-full">
+                <Button size="sm" className="w-full" onClick={handleRedirect}>
                     Upgrade
                 </Button>
             </CardContent>

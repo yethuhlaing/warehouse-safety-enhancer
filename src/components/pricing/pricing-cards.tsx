@@ -14,6 +14,7 @@ import { ModalContext } from "@/components/modals/providers";
 import { HeaderSection } from "@/components/shared/header-section";
 import { Icons } from "@/components/shared/icons";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
+import { siteConfig } from "@/config/site";
 
 interface PricingCardsProps {
     userId?: string;
@@ -181,16 +182,12 @@ export function PricingCards({ userId, subscriptionPlan }: PricingCardsProps) {
                     Email{" "}
                     <a
                         className="font-medium text-primary hover:underline"
-                        href="mailto:support@saas-starter.com"
+                        href={`mailto:${siteConfig.mailSupport}`}
                     >
-                        support@saas-starter.com
+                        {siteConfig.mailSupport}
                     </a>{" "}
                     for to contact our support team.
                     <br />
-                    <strong>
-                        You can test the subscriptions and won&apos;t be
-                        charged.
-                    </strong>
                 </p>
             </section>
         </MaxWidthWrapper>

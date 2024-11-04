@@ -52,7 +52,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                             email: user.email,
                             image: user.image,
                             emailVerified: user.emailVerified,
-                            role: user.role || "USER" as UserRole,
+                            role: user.role ?? "USER" as UserRole,
                         },
                 })
                 } else {
@@ -74,8 +74,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         jwt({ token, user, trigger, session }) {
             if (user) {
+                console.log("User", user)
                 token.id = user.id as string;
-                token.role = user.role;
+                token.role = user.role
             }
             if (trigger === "update" && session) {
                 token = { ...token, ...session };
@@ -84,7 +85,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
         session({ session, token }) {
             session.user.id = token.id as string;
-            session.user.role = token.role;
+            session.user.role = token.role ?? "USER";
             return session;
         }
     },

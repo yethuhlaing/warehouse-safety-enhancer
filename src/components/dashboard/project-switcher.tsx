@@ -31,7 +31,7 @@ const projects: ProjectType[] = [
         color: "bg-blue-500",
     },
 ];
-const selected: ProjectType = projects[1];
+const selected: ProjectType = projects[0];
 
 export default function ProjectSwitcher({
     large = false,
