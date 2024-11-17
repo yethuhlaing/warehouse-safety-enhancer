@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { clsx, type ClassValue } from "clsx";
 import ms from "ms";
 import { twMerge } from "tailwind-merge";
-
+import { format } from "date-fns";
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
 
@@ -77,6 +77,14 @@ export function formatDate(input: string | number): string {
         day: "numeric",
         year: "numeric",
     });
+}
+
+export function outputDate(startingDate: Date, endingDate: Date): string {
+
+    const startingTime = startingDate ? format(startingDate, 'MMMM dd, hh:mm a') : 'No data available';
+    const endingTime = endingDate ? format(endingDate, 'MMMM dd, hh:mm a') : 'No data available';
+    const formattedDate = startingTime + " - "  + endingTime
+    return formattedDate
 }
 
 export function absoluteUrl(path: string) {
