@@ -20,17 +20,11 @@ import {
 } from "@/components/ui/chart";
 import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { Button } from "../ui/button";
-import { outputDate } from "@/lib/utils";
+import { Capitalize, formatChartData, formatSensorDate } from "@/lib/utils";
 import { format } from "date-fns";
+import { FormattedChartData } from "@/types";
+import TimeRangeSelector from "../dashboard/time-range-selector";
 
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-];
 
 const chartConfig = {
     desktop: {
@@ -43,25 +37,21 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-export type AirSensorData = {
-    _time: Date;                 // Time as a Date object
-    _value: number;              // Measurement value (e.g., 0.7077731111296438)
-    _field: string;              // 'co'
-    _measurement: string;        // 'airSensors'
-    sensor_id: string;           // 'TLM0201'
-};
-
-export function LineChartMultiple() {
+export function LineChartTemperature() {
     const { chartData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/temperature');
+    console.log(chartData)
+    const { 
+        field, rawData, minimum, maximum, average
+    } = formatChartData(chartData) as FormattedChartData  
 
-    // Get the Date
-    const duration = chartData?.[0]?._time ? outputDate(chartData[0]._time , chartData[chartData.length - 1]._time) : null
-    
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>Line Chart - Temperature</CardTitle>
-                <CardDescription>{duration}</CardDescription>
+            <CardHeader className="flex flex-row justify-between w-full items-center">
+                <div className="flex flex-col space-y-2">
+                    <CardTitle>Line Chart - {Capitalize(field || '')}</CardTitle>
+                    <CardDescription>{average}</CardDescription>
+                </div>
+                <TimeRangeSelector field={field || ''} />
             </CardHeader>
             <CardContent>
                 {connectionStatus !== 'connected' && (
@@ -74,11 +64,11 @@ export function LineChartMultiple() {
                         <Button onClick={reconnect}>Reconnect</Button>
                     </div>
                 )}
-                {chartData && !error && (
+                {chartData && !error && connectionStatus == 'connected' && (
                     <ChartContainer config={chartConfig}>
                         <LineChart
                             accessibilityLayer
-                            data={chartData}
+                            data={rawData}
                             margin={{
                                 left: 12,
                                 right: 12,
@@ -87,7 +77,7 @@ export function LineChartMultiple() {
                             <CartesianGrid vertical={false} />
                             <XAxis
                                 dataKey="_time"
-                                tickLine={false}
+                                tickLine={true}
                                 axisLine={false}
                                 tickMargin={12}
                                 tickFormatter={(value) => format(new Date(value), 'MMMd,HH:mm')}                            />
@@ -118,12 +108,14 @@ export function LineChartMultiple() {
             </CardContent>
             <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
                 <div className="flex items-center gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month{" "}
-                    <TrendingUp className="size-4" />
+                    {maximum}{" "}
                 </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
+                <div className="flex items-center gap-2 font-medium leading-none">
+                    {minimum}{" "}
                 </div>
+                {/* <div className="leading-none text-muted-foreground">
+                    Showing total {field} for today
+                </div> */}
             </CardFooter>
         </Card>
     );

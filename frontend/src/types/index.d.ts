@@ -3,6 +3,7 @@ import type { Icon } from "lucide-react";
 
 import { Icons } from "@/components/shared/icons";
 
+
 export type SiteConfig = {
     name: string;
     description: string;
@@ -103,3 +104,45 @@ export type TestimonialType = {
     image: string;
     review: string;
 };
+
+
+// Dashboard Carts
+export type AirSensorData = {
+    _time: Date;                 // Time as a Date object
+    _value: number;              // Measurement value (e.g., 0.7077731111296438)
+    _field?: string;              // 'co'
+    _measurement?: string;        // 'airSensors'
+    sensor_id?: string;           // 'TLM0201'
+};
+
+export type chartData = { 
+    meanData: AirSensorData[], 
+    rawData: AirSensorData[],
+    minData: AirSensorData[], 
+    maxData: AirSensorData[]
+} | null;
+
+export interface UseWebSocketResult {
+    chartData: chartData;
+    connectionStatus: 'connecting' | 'connected' | 'disconnected';
+    error: Error | null;
+    reconnect: () => void;
+    sendMessage: (message: string) => void;
+}
+
+export type FormattedChartData = {
+    field: string | null
+    rawData: AirSensorData[]
+    average: string | null
+    minimum: string | null 
+    maximum: string | null
+};
+
+
+export const fields = [
+    'temperature', 'humidity', 'co', 'propane', 'methane', 'emergency',
+    'light_intensity', 'motion_detected', 'vibration', 'noise_level',
+    'water_level', 'pm10', 'pm2_5'
+]
+
+export type FieldType = typeof fields[number];

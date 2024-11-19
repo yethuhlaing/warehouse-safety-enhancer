@@ -1,4 +1,14 @@
-import { Point } from "@influxdata/influxdb-client";
+import { InfluxDB, Point } from "@influxdata/influxdb-client";
+
+const QUERY_DURATION = "1d"
+
+const token = process.env.INFLUXDB_TOKEN
+const influx_url = process.env.INFLUXDB_URL
+const org = process.env.INFLUXDB_ORG
+const bucket = process.env.INFLUXDB_BUCKET
+
+const influxDB = new InfluxDB({ url: influx_url, token })
+const queryApi = influxDB.getQueryApi(org)
 
 export const writeInfluxDB = () => {
     const now = new Date();
@@ -70,3 +80,66 @@ export const writeInfluxDB = () => {
         //     .timestamp(now),
     ];
 };
+
+export async function queryInfluxDB(field, timeRange) {
+    const fluxQuery = `
+    from(bucket: "${bucket}")
+        |> range(start: -${timeRange})
+        |> filter(fn: (r) => r._field == "${field}")
+        |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
+        |> aggregateWindow(every: ${QUERY_DURATION}, fn: mean)
+        |> yield(name: "mean")
+        
+    from(bucket: "${bucket}")
+        |> range(start: -${timeRange})
+        |> filter(fn: (r) => r._field == "${field}")
+        |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
+        |> aggregateWindow(every: ${QUERY_DURATION}, fn: min)
+        |> yield(name: "min") 
+
+    from(bucket: "${bucket}")
+        |> range(start: -${timeRange})
+        |> filter(fn: (r) => r._field == "${field}")
+        |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
+        |> aggregateWindow(every: ${QUERY_DURATION}, fn: max)
+        |> yield(name: "max") 
+
+    from(bucket: "${bucket}")
+        |> range(start: -${timeRange})
+        |> filter(fn: (r) => r._field == "${field}")
+        |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
+        |> yield(name: "raw_data")
+    `
+    return new Promise((resolve, reject) => {
+        const meanData = []
+        const minData = []
+        const maxData = []
+        const rawData = []
+        queryApi.queryRows(fluxQuery, {
+        next: (row, tableMeta) => {
+            const o = tableMeta.toObject(row)
+            if (o.result === "mean") {
+                meanData.push({ _field: o._field, _value: o._value, _time: o._time })
+            } else if (o.result === "max") {
+                maxData.push({ _field: o._field, _value: o._value, _time: o._time })
+            } else if (o.result === "min") {
+                minData.push({ _field: o._field, _value: o._value, _time: o._time })
+            } else if (o.result === "raw_data") {
+                rawData.push({
+                    _time: o._time,
+                    _value: o._value,
+                    _field: o._field,
+                    _measurement: o._measurement,
+                    sensor_id: o.sensor_id
+                })
+            }
+        },
+            error: (error) => {
+                reject(error)
+        },
+            complete: () => {
+                resolve({ meanData, rawData, minData, maxData })
+        },
+        })
+    })
+}

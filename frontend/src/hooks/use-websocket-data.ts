@@ -1,38 +1,29 @@
+import { chartData, UseWebSocketResult } from '@/types';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
-import { useState, useEffect, useCallback } from 'react';
-
-export type AirSensorData = {
-    _time: Date;                 // Time as a Date object
-    _value: number;              // Measurement value (e.g., 0.7077731111296438)
-    _field: string;              // 'co'
-    _measurement: string;        // 'airSensors'
-    sensor_id: string;           // 'TLM0201'
-};
-
-interface UseWebSocketResult {
-    chartData: AirSensorData[] | null;
-    connectionStatus: 'connecting' | 'connected' | 'disconnected';
-    error: Error | null;
-    reconnect: () => void;
-}
-  
 export function useWebSocketData(url: string): UseWebSocketResult {
-    const [chartData, setChartData] = useState<AirSensorData[] | null>(null);
+    const [chartData, setChartData] = useState<chartData | null>(null);
     const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
     const [error, setError] = useState<Error | null>(null);
+    const wsRef = useRef<WebSocket | null>(null);
+    const messageQueueRef = useRef<string[]>([]);
 
     const connect = useCallback(() => {
         setConnectionStatus('connecting');
         const ws = new WebSocket(url);
+        wsRef.current = ws;
 
         ws.onopen = () => {
             setConnectionStatus('connected');
             setError(null);
+            // Send any queued messages
+            messageQueueRef.current.forEach(message => ws.send(message));
+            messageQueueRef.current = [];
         };
 
         ws.onmessage = (event) => {
             try {
-                const newData: AirSensorData[] = JSON.parse(event.data);
+                const newData: chartData = JSON.parse(event.data);
                 setChartData(newData);
             } catch (err) {
                 setError(new Error('Failed to parse WebSocket data'));
@@ -59,8 +50,21 @@ export function useWebSocketData(url: string): UseWebSocketResult {
     }, [connect]);
 
     const reconnect = useCallback(() => {
+        if (wsRef.current) {
+            wsRef.current.close();
+        }
         connect();
     }, [connect]);
 
-    return { chartData, connectionStatus, error, reconnect };
+    const sendMessage = useCallback((message: string) => {
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+            wsRef.current.send(message);
+        } else {
+            console.log('WebSocket is not connected. Queueing message.');
+            console.log(messageQueueRef)
+            messageQueueRef.current.push(message);
+        }
+    }, []);
+
+    return { chartData, connectionStatus, error, reconnect, sendMessage };
 }

@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
+import { AirSensorData, chartData, FormattedChartData } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -78,15 +79,70 @@ export function formatDate(input: string | number): string {
         year: "numeric",
     });
 }
+export function Capitalize(input: string) {
+    return String(input).charAt(0).toUpperCase() + String(input).slice(1);
+}
 
-export function outputDate(startingDate: Date, endingDate: Date): string {
+export function formatSensorDate(startingDate: Date, endingDate: Date): string {
 
     const startingTime = startingDate ? format(startingDate, 'MMMM dd, hh:mm a') : 'No data available';
     const endingTime = endingDate ? format(endingDate, 'MMMM dd, hh:mm a') : 'No data available';
     const formattedDate = startingTime + " - "  + endingTime
     return formattedDate
 }
+export function formatAggregateDate(inputDate: Date | undefined): string {
 
+    const inputTime = inputDate ? format(inputDate, 'MMMdd HH:mm') : 'No data available';
+    return inputTime
+}
+export function formatAggregateValue(inputValue: number | undefined): string {
+    const aggregateValue = inputValue ? inputValue.toFixed(1).toString() : "( No data available )"
+    return aggregateValue
+}
+export function formatAggregateOutput(type: string ,field: string, aggregateValue: string): string {
+    const result = `The ${type} ${field} - ${aggregateValue}`
+    return result
+} 
+export function formatChartData(chartData: chartData) {
+
+    let result: FormattedChartData = {
+        field: '',
+        rawData: [],
+        average: '',
+        minimum: '',
+        maximum: '',
+    };
+
+    const meanData = chartData?.meanData
+    const rawData = chartData?.rawData
+    const minData = chartData?.minData
+    const maxData = chartData?.maxData
+    const field = meanData?.[0]?._field || minData?.[0]?._field || maxData?.[0]?._field || '';
+    result.field = field
+
+
+    if (meanData && meanData.length > 0) {
+        const aggregateTime = formatAggregateDate(meanData?.[meanData.length - 1]?._time)
+        const aggregateValue = formatAggregateValue(meanData?.[meanData.length - 1]?._value) 
+        result.average = formatAggregateOutput("Average",field, aggregateValue)
+    }
+    if (minData && minData.length > 0) {
+        const aggregateTime = formatAggregateDate(minData?.[minData.length-1]?._time)
+        const aggregateValue = formatAggregateValue(minData?.[minData.length-1]?._value) 
+        result.minimum = formatAggregateOutput("Minimum", field, aggregateValue)
+    }
+    if (maxData && maxData.length > 0) {
+        const aggregateTime = formatAggregateDate(maxData?.[maxData.length-1]?._time)
+        const aggregateValue = formatAggregateValue(maxData?.[maxData.length-1]?._value) 
+        result.maximum = formatAggregateOutput("Maximum", field, aggregateValue)
+    }
+    if (rawData && rawData.length > 0) {
+        result.rawData = rawData
+    }
+
+    return result
+
+}
 export function absoluteUrl(path: string) {
     return `${env.NEXT_PUBLIC_APP_URL}${path}`;
 }
