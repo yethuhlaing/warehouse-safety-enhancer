@@ -7,10 +7,10 @@ import { toast } from "@/components/ui/use-toast";
 import { FieldType } from '@/types';
 
 const timeRanges = [
-    '5m', '10m', '15m', '30m', '1h', '4h', '8h', '12h', '24h', '1d'
+    '5m', '15m', '30m', '1h', '4h', '8h', '12h', '1d'
   ];
-function TimeRangeSelector({ field } : { field : FieldType} ) {
-    const [selectedTimeRange, setSelectedTimeRange] = useState('1h');
+function TimeRangeSelector({ field } : { field : FieldType | null} ) {
+    const [selectedTimeRange, setSelectedTimeRange] = useState('15m');
     const { connectionStatus, error, sendMessage } = useWebSocketData(`ws://localhost:3001/${field}`);
 
     // useEffect(() => {

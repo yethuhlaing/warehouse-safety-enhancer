@@ -79,7 +79,7 @@ export function formatDate(input: string | number): string {
         year: "numeric",
     });
 }
-export function Capitalize(input: string) {
+export function Capitalize(input: string | null) {
     return String(input).charAt(0).toUpperCase() + String(input).slice(1);
 }
 

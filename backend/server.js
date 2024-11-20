@@ -13,9 +13,9 @@ const server = http.createServer(app)
 
 // Define the list of fields you want to track
 const fields = [
-    'temperature', 'humidity', 'co', 'propane', 'methane', 'emergency',
+    'temperature', 'humidity', 'co', 'no2', 'pm10', 'propane', 'methane', 'emergency',
     'light_intensity', 'motion_detected', 'vibration', 'noise_level',
-    'water_level', 'pm10', 'pm2_5'
+    'water_level', 
 ]
 
 // Create a WebSocket server for each field
@@ -24,7 +24,7 @@ const wssMap = new Map()
 fields.forEach(field => {
     const wss = new WebSocketServer({ noServer: true })
     wssMap.set(field, wss)
-    let timeRange = '1h' // Default time range
+    let timeRange = '15m' // Default time range
 
     wss.on('connection', (ws) => {
         console.log(`Client connected to ${field} WebSocket`)

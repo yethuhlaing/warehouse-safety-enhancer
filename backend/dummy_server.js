@@ -10,7 +10,7 @@ const bucket = process.env.INFLUXDB_BUCKET
 const influxDB = new InfluxDB({ url: influx_url, token })
 const writeApi = influxDB.getWriteApi(org, bucket)
 
-const WRITE_INTERVAL = 5000 // 5 seconds
+const WRITE_INTERVAL = 10 * 1000 // 5 seconds
 
 function writeData() {
     const points = writeInfluxDB()
@@ -27,5 +27,5 @@ process.on('SIGINT', () => {
         process.exit(0)
     })
 })
-    
+
 console.log('Dummy InfluxDB writer started. Press Ctrl+C to stop.')

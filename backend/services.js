@@ -15,26 +15,28 @@ export const writeInfluxDB = () => {
     return [
 
         // Air Quality Sensors
+
         // new Point('airSensors')
         //     .tag('sensor_id', 'TLM0100')
         //     .floatField('co', Math.random() * 100)
         //     .timestamp(now),
-        new Point('airSensors')
-            .tag('sensor_id', 'TLM0101')
-            .floatField('temperature', Math.random() * 50 + 20)
-            .timestamp(now),
+        // new Point('airSensors')
+        //     .tag('sensor_id', 'TLM0103')
+        //     .floatField('pm10', Math.random() * 250)
+        //     .timestamp(now),
+        // new Point('airSensors')
+        //     .tag('sensor_id', 'TLM0104')
+        //     .floatField('no2', Math.random() * 300)
+        //     .timestamp(now),
+        // new Point('airSensors')
+        //     .tag('sensor_id', 'TLM0101')
+        //     .floatField('temperature', Math.random() * 50 + 20)
+        //     .timestamp(now),
         // new Point('airSensors')
         //     .tag('sensor_id', 'TLM0102')
         //     .floatField('humidity', Math.random() * 100)
         //     .timestamp(now),
-        // new Point('airSensors')
-        //     .tag('sensor_id', 'TLM0103')
-        //     .floatField('pm2_5', Math.random() * 250) // Particulate matter (2.5 μm)
-        //     .timestamp(now),
-        // new Point('airSensors')
-        //     .tag('sensor_id', 'TLM0104')
-        //     .floatField('pm10', Math.random() * 300) // Particulate matter (10 μm)
-        //     .timestamp(now),
+
 
         // // Water Level Sensors
         // new Point('h2o_feet')
@@ -43,10 +45,10 @@ export const writeInfluxDB = () => {
         //     .timestamp(now), 
 
         // // Noise Sensors
-        // new Point('noiseSensors')
-        // .tag('sensor_id', 'TLM0200')
-        // .floatField('noise_level', (50 + Math.random() * 40).toFixed(1)) // Noise level in dB
-        // .timestamp(now),
+        new Point('noiseSensors')
+        .tag('sensor_id', 'TLM0200')
+        .floatField('noise_level', (50 + Math.random() * 40).toFixed(1)) // Noise level in dB
+        .timestamp(now),
 
         // // Vibration Sensors
         // new Point('vibrationSensors')
