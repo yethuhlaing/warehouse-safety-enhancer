@@ -32,7 +32,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function RadialStackedChart() {
-    const totalVisitors = chartData[0].desktop + chartData[0].mobile;
+    const totalPopulation = chartData[0].desktop + chartData[0].mobile;
 
     return (
         <Card className="flex flex-col">
@@ -78,7 +78,7 @@ export function RadialStackedChart() {
                                                     y={(viewBox.cy || 0) - 16}
                                                     className="fill-foreground text-2xl font-bold"
                                                 >
-                                                    {totalVisitors.toLocaleString()}
+                                                    {totalPopulation.toLocaleString()}
                                                 </tspan>
                                                 <tspan
                                                     x={viewBox.cx}

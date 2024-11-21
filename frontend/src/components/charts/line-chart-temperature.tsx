@@ -22,7 +22,7 @@ import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { Button } from "../ui/button";
 import { Capitalize, formatChartData, formatSensorDate } from "@/lib/utils";
 import { format } from "date-fns";
-import { FormattedChartData } from "@/types";
+import { FormattedAggregateData } from "@/types";
 import TimeRangeSelector from "../dashboard/time-range-selector";
 
 
@@ -38,20 +38,19 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function LineChartTemperature() {
-    const { chartData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/temperature');
-    console.log(chartData)
-    const { 
-        field, rawData, minimum, maximum, average
-    } = formatChartData(chartData) as FormattedChartData  
+    const { sensorData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/temperature');
+    console.log(sensorData)
+    // const { 
+    //     field, minimum, maximum, average
+    // } = formatChartData(chartData) as FormattedAggregateData  
 
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
                 <div className="flex flex-col space-y-2">
-                    <CardTitle>Line Chart - {Capitalize(field || '')}</CardTitle>
-                    <CardDescription>{average}</CardDescription>
+                    <CardTitle>Temperature</CardTitle>
                 </div>
-                <TimeRangeSelector field={field || ''} />
+                <TimeRangeSelector field={'temperature'} />
             </CardHeader>
             <CardContent>
                 {connectionStatus !== 'connected' && (
@@ -64,11 +63,11 @@ export function LineChartTemperature() {
                         <Button onClick={reconnect}>Reconnect</Button>
                     </div>
                 )}
-                {chartData && !error && connectionStatus == 'connected' && (
+                {sensorData && !error && connectionStatus == 'connected' && (
                     <ChartContainer config={chartConfig}>
                         <LineChart
                             accessibilityLayer
-                            data={rawData}
+                            data={sensorData}
                             margin={{
                                 left: 12,
                                 right: 12,
@@ -80,7 +79,7 @@ export function LineChartTemperature() {
                                 tickLine={true}
                                 axisLine={false}
                                 tickMargin={12}
-                                tickFormatter={(value) => format(new Date(value), 'MMMd,HH:mm')}                            />
+                                tickFormatter={(value) => format(new Date(value), 'MMMd,HH:mm')} />
                             <YAxis />
 
                             <ChartTooltip
@@ -106,17 +105,17 @@ export function LineChartTemperature() {
                 )}
 
             </CardContent>
-            <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
+            {/* <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
                 <div className="flex items-center gap-2 font-medium leading-none">
                     {maximum}{" "}
                 </div>
                 <div className="flex items-center gap-2 font-medium leading-none">
                     {minimum}{" "}
                 </div>
-                {/* <div className="leading-none text-muted-foreground">
+                <div className="leading-none text-muted-foreground">
                     Showing total {field} for today
-                </div> */}
-            </CardFooter>
+                </div>
+            </CardFooter> */}
         </Card>
     );
 }

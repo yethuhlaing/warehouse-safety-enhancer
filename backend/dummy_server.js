@@ -7,10 +7,15 @@ const influx_url = process.env.INFLUXDB_URL
 const org = process.env.INFLUXDB_ORG
 const bucket = process.env.INFLUXDB_BUCKET
 
-const influxDB = new InfluxDB({ url: influx_url, token })
+const influxDB = new InfluxDB({ 
+    url: influx_url, 
+    token,   
+    transportOptions: {
+        gzipThreshold: 1, // Compress all requests
+    }, })
 const writeApi = influxDB.getWriteApi(org, bucket)
 
-const WRITE_INTERVAL = 10 * 1000 // 5 seconds
+const WRITE_INTERVAL = 5 * 1000 // 5 seconds
 
 function writeData() {
     const points = writeInfluxDB()

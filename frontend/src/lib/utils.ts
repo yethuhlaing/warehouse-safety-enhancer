@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
 import { env } from "@/env.mjs";
 import { siteConfig } from "@/config/site";
-import { AirSensorData, chartData, FormattedChartData } from "@/types";
+import { aggregateData, FormattedAggregateData } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -70,6 +70,17 @@ export function constructMetadata({
         }),
     };
 }
+export function getCurrentDateTime(): string {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = { 
+        month: "long", 
+        day: "numeric", 
+        hour: "2-digit", 
+        minute: "2-digit", 
+        hour12: false 
+    };
+    return new Intl.DateTimeFormat('en-US', options).format(now);
+}
 
 export function formatDate(input: string | number): string {
     const date = new Date(input);
@@ -103,18 +114,16 @@ export function formatAggregateOutput(type: string ,field: string, aggregateValu
     const result = `The ${type} ${field} - ${aggregateValue}`
     return result
 } 
-export function formatChartData(chartData: chartData) {
+export function formatChartData(chartData: aggregateData) {
 
-    let result: FormattedChartData = {
+    let result: FormattedAggregateData = {
         field: '',
-        rawData: [],
         average: '',
         minimum: '',
         maximum: '',
     };
 
     const meanData = chartData?.meanData
-    const rawData = chartData?.rawData
     const minData = chartData?.minData
     const maxData = chartData?.maxData
     const field = meanData?.[0]?._field || minData?.[0]?._field || maxData?.[0]?._field || '';
@@ -135,9 +144,6 @@ export function formatChartData(chartData: chartData) {
         const aggregateTime = formatAggregateDate(maxData?.[maxData.length-1]?._time)
         const aggregateValue = formatAggregateValue(maxData?.[maxData.length-1]?._value) 
         result.maximum = formatAggregateOutput("Maximum", field, aggregateValue)
-    }
-    if (rawData && rawData.length > 0) {
-        result.rawData = rawData
     }
 
     return result

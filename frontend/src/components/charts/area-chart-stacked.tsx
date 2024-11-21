@@ -58,9 +58,9 @@ type CombinedDataType = {
     no2: number,
 }
 export function AreaChartStacked() {
-    const { chartData: coData, connectionStatus: coStatus, error: coError, reconnect: coReconnect } = useWebSocketData('ws://localhost:3001/co')
-    const { chartData: pm10Data, connectionStatus: pm10Status, error: pm10Error, reconnect: pm10Reconnect } = useWebSocketData('ws://localhost:3001/pm10')
-    const { chartData: no2Data, connectionStatus: pm25Status, error: no2Error, reconnect: no2Reconnect } = useWebSocketData('ws://localhost:3001/no2')
+    const { sensorData: coData, connectionStatus: coStatus, error: coError, reconnect: coReconnect } = useWebSocketData('ws://localhost:3001/co')
+    const { sensorData: pm10Data, connectionStatus: pm10Status, error: pm10Error, reconnect: pm10Reconnect } = useWebSocketData('ws://localhost:3001/pm10')
+    const { sensorData: no2Data, connectionStatus: pm25Status, error: no2Error, reconnect: no2Reconnect } = useWebSocketData('ws://localhost:3001/no2')
     const [visibleAreas, setVisibleAreas] = useState({
         co: true,
         pm10: false,
@@ -74,11 +74,11 @@ export function AreaChartStacked() {
 
     useEffect(() => {
         if (coData && pm10Data && no2Data) {
-            const combined = coData.rawData?.map((item, index) => ({
+            const combined = coData?.map((item, index) => ({
                 time: item._time,
                 co: item._value,
-                pm10: pm10Data.rawData[index]?._value,
-                no2: no2Data.rawData[index]?._value,
+                pm10: pm10Data[index]?._value,
+                no2: no2Data[index]?._value,
           }))
           setCombinedData(combined)
         }

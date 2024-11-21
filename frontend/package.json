@@ -78,6 +78,7 @@
     "react-day-picker": "^8.10.1",
     "react-dom": "18.3.1",
     "react-email": "2.1.5",
+    "react-gauge-component": "^1.2.6",
     "react-hook-form": "^7.52.1",
     "react-textarea-autosize": "^8.5.3",
     "recharts": "^2.12.7",

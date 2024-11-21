@@ -1,8 +1,8 @@
-import { chartData, UseWebSocketResult } from '@/types';
+import { SensorData, UseWebSocketResult } from '@/types';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 export function useWebSocketData(url: string): UseWebSocketResult {
-    const [chartData, setChartData] = useState<chartData | null>(null);
+    const [sensorData, setSensortData] = useState<SensorData[] | null>(null);
     const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
     const [error, setError] = useState<Error | null>(null);
     const wsRef = useRef<WebSocket | null>(null);
@@ -23,8 +23,8 @@ export function useWebSocketData(url: string): UseWebSocketResult {
 
         ws.onmessage = (event) => {
             try {
-                const newData: chartData = JSON.parse(event.data);
-                setChartData(newData);
+                const result: SensorData[] = JSON.parse(event.data);
+                setSensortData(result);
             } catch (err) {
                 setError(new Error('Failed to parse WebSocket data'));
             }
@@ -66,5 +66,5 @@ export function useWebSocketData(url: string): UseWebSocketResult {
         }
     }, []);
 
-    return { chartData, connectionStatus, error, reconnect, sendMessage };
+    return { sensorData, connectionStatus, error, reconnect, sendMessage };
 }

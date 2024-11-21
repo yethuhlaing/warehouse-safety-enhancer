@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/chart";
 import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { format } from 'date-fns';
-import { FormattedChartData } from '@/types';
+import { FormattedAggregateData } from '@/types';
 import { Capitalize, formatChartData } from '@/lib/utils';
 import TimeRangeSelector from '../dashboard/time-range-selector';
 
@@ -44,26 +44,25 @@ const chartConfig = {
 
 export function BarChartNoise() {
     const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>("desktop");
-    const { chartData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/noise_level');
-    const { field, rawData, minimum, maximum, average } = formatChartData(chartData) as FormattedChartData  
+    const { sensorData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/noise_level');
+    // const { field, rawData, minimum, maximum, average } = formatChartData(chartData) as FormattedAggregateData  
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
                 <div className="flex flex-col space-y-2">
-                    <CardTitle>Line Chart - {Capitalize(field)}</CardTitle>
-                    <CardDescription>{average}</CardDescription>
+                    <CardTitle>Noise Level</CardTitle>
                 </div>
-                <TimeRangeSelector field={field} />
+                <TimeRangeSelector field={'noise_level'} />
             </CardHeader>
             <CardContent className="px-2 sm:p-6">
-                {chartData && !error && connectionStatus == 'connected' && (
+                {sensorData && !error && connectionStatus == 'connected' && (
                     <ChartContainer
                         config={chartConfig}
                         className="aspect-auto h-[250px] w-full"
                     >
                         <BarChart
                             accessibilityLayer
-                            data={rawData}
+                            data={sensorData}
                             margin={{
                                 top: 20,
                                 right: 0,

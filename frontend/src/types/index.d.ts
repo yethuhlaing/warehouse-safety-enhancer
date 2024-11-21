@@ -107,7 +107,7 @@ export type TestimonialType = {
 
 
 // Dashboard Carts
-export type AirSensorData = {
+export type SensorData = {
     _time: Date;                 // Time as a Date object
     _value: number;              // Measurement value (e.g., 0.7077731111296438)
     _field?: string;              // 'co'
@@ -115,24 +115,23 @@ export type AirSensorData = {
     sensor_id?: string;           // 'TLM0201'
 };
 
-export type chartData = { 
-    meanData: AirSensorData[], 
-    rawData: AirSensorData[],
-    minData: AirSensorData[], 
-    maxData: AirSensorData[]
+
+export type aggregateData = { 
+    meanData: SensorData[], 
+    minData: SensorData[], 
+    maxData: SensorData[]
 } | null;
 
 export interface UseWebSocketResult {
-    chartData: chartData;
+    sensorData: SensorData[] | null;
     connectionStatus: 'connecting' | 'connected' | 'disconnected';
     error: Error | null;
     reconnect: () => void;
     sendMessage: (message: string) => void;
 }
 
-export type FormattedChartData = {
+export type FormattedAggregateData = {
     field: string | null
-    rawData: AirSensorData[]
     average: string | null
     minimum: string | null 
     maximum: string | null
@@ -140,9 +139,9 @@ export type FormattedChartData = {
 
 
 export const fields = [
-    'temperature', 'humidity', 'co', 'propane', 'methane', 'emergency',
+    'temperature', 'humidity', 'co', 'no2', 'pm10', 'propane', 'methane', 'emergency',
     'light_intensity', 'motion_detected', 'vibration', 'noise_level',
-    'water_level', 'pm10', 'pm2_5'
+    'water_level', 'storage-population', 'lobby-population', 'office-population', 'cafeteria-population', 'security-population', 'inspection-population', 'automation-population', 'maintenance-population'
 ]
 
 export type FieldType = typeof fields[number];
