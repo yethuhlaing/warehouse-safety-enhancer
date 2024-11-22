@@ -63,46 +63,44 @@ export function LineChartTemperature() {
                         <Button onClick={reconnect}>Reconnect</Button>
                     </div>
                 )}
-                {sensorData && !error && connectionStatus == 'connected' && (
-                    <ChartContainer config={chartConfig}>
-                        <LineChart
-                            accessibilityLayer
-                            data={sensorData}
-                            margin={{
-                                left: 12,
-                                right: 12,
-                            }}
-                        >
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                                dataKey="_time"
-                                tickLine={true}
-                                axisLine={false}
-                                tickMargin={12}
-                                tickFormatter={(value) => format(new Date(value), 'MMMd,HH:mm')} />
-                            <YAxis />
+                <ChartContainer config={chartConfig}>
+                    <LineChart
+                        accessibilityLayer
+                        data={sensorData || []}
+                        margin={{
+                            left: 12,
+                            right: 12,
+                        }}
+                    >
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                            dataKey="_time"
+                            tickLine={true}
+                            axisLine={false}
+                            tickMargin={12}
+                            tickFormatter={(value) => format(new Date(value), 'MMMd,HH:mm')} />
+                        <YAxis />
 
-                            <ChartTooltip
-                                cursor={false}
-                                content={<ChartTooltipContent />}
-                            />
-                            <Line
-                                dataKey="_value"
-                                type="monotone"
-                                stroke="var(--color-desktop)"
-                                strokeWidth={2}
-                                dot={false}
-                            />
-                            {/* <Line
-                                dataKey="temperature"
-                                type="monotone"
-                                stroke="var(--color-mobile)"
-                                strokeWidth={2}
-                                dot={false}
-                            /> */}
-                        </LineChart>
-                    </ChartContainer>
-                )}
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent />}
+                        />
+                        <Line
+                            dataKey="_value"
+                            type="monotone"
+                            stroke="var(--color-desktop)"
+                            strokeWidth={2}
+                            dot={false}
+                        />
+                        {/* <Line
+                            dataKey="temperature"
+                            type="monotone"
+                            stroke="var(--color-mobile)"
+                            strokeWidth={2}
+                            dot={false}
+                        /> */}
+                    </LineChart>
+                </ChartContainer>
 
             </CardContent>
             {/* <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">

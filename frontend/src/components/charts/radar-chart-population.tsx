@@ -48,39 +48,21 @@ type radarChartData = {
     population: number
     fill?: string
 }
-export function RadarChartVisitors() {
-    const { sensorData: lobbyData } = useWebSocketData('ws://localhost:3001/lobby-population')
-    const { sensorData: storageData } = useWebSocketData('ws://localhost:3001/storage-population')
-    const { sensorData: officeData} = useWebSocketData('ws://localhost:3001/office-population')
-    const { sensorData: securityData } = useWebSocketData('ws://localhost:3001/security-population')
-    const { sensorData: cafeteriaData } = useWebSocketData('ws://localhost:3001/cafeteria-population')
-    const { sensorData: inspectionData} = useWebSocketData('ws://localhost:3001/inspection-population')
-    const { sensorData: automationData } = useWebSocketData('ws://localhost:3001/automation-population')
-    const { sensorData: maintenanceData } = useWebSocketData('ws://localhost:3001/maintenance-population')
-    const [radarChartData, setRadarChartData] = useState<radarChartData[]>([])
+export function RadarChartPopulation() {
+    const { sensorData } = useWebSocketData('ws://localhost:3001/population')
     const [totalPopulation, setTotalPopulation] = useState<radarChartData[]>([])
     useEffect(() => {
-        if (lobbyData && storageData && officeData && securityData && cafeteriaData && maintenanceData && automationData && inspectionData) {
-            const radarChartData = [
-                { category: "Lobby", population: lobbyData[0]?._value },
-                { category: "Storage", population: storageData[0]?._value },
-                { category: "Office", population: officeData[0]?._value },
-                { category: "Security", population: securityData[0]?._value },
-                { category: "Cafeteria", population: cafeteriaData[0]?._value },
-                { category: "Maintenance", population: maintenanceData[0]?._value },
-                { category: "Automation", population: automationData[0]?._value },
-                { category: "Inspection", population: inspectionData[0]?._value },
-            ];
-            const visitors = radarChartData.reduce((sum, item) => sum + item?.population, 0);
+        if (sensorData) {
+
+            const populations = sensorData?.reduce((sum, item) => sum + item?._value, 0);
 
             setTotalPopulation([{
                 category: "Warehouse",
-                population: visitors,
+                population: populations,
                 fill: "var(--color-safari)"
             }])
-            setRadarChartData(radarChartData)
         }
-      }, [lobbyData , storageData ,officeData , securityData , cafeteriaData , maintenanceData , automationData , inspectionData])
+      }, [sensorData])
     return (
         <div className="flex flex-wrap gap-4">
             <Card>
@@ -89,15 +71,15 @@ export function RadarChartVisitors() {
                         config={chartConfig}
                         className="mx-auto aspect-square max-h-[450px] 2xl:max-h-[350px] "
                     >
-                        <RadarChart data={radarChartData} outerRadius={78}>
+                        <RadarChart data={sensorData || []} outerRadius={78}>
                             <ChartTooltip
                                 cursor={false}
                                 content={<ChartTooltipContent />}
                             />
-                            <PolarAngleAxis dataKey="category" domain={[0, 'dataMax']}/>
+                            <PolarAngleAxis dataKey="_field" domain={[0, 'dataMax']}/>
                             <PolarGrid />
                             <Radar
-                                dataKey="population"
+                                dataKey="_value"
                                 fill="var(--color-desktop)"
                                 fillOpacity={0.6}
                             />

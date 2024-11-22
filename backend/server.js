@@ -13,10 +13,10 @@ const app = express()
 const server = http.createServer(app)
 
 // Define the list of fields you want to track
-const fields = [
-    'temperature', 'humidity', 'co', 'no2', 'pm10', 'propane', 'methane', 'emergency',
-    'light_intensity', 'motion_detected', 'vibration', 'noise_level',
-    'water_level', 'storage-population', 'lobby-population', 'office-population', 'cafeteria-population', 'security-population', 'inspection-population', 'automation-population', 'maintenance-population'
+const sensors = [
+    'temperature', 'humidity', 'co', 'no2', 'pm10', 'gas', 'emergency',
+    'light-intensity', 'motion-detected', 'vibration', 'noise-level',
+    'water_level', 'population'
 ]
 
 // Define default time ranges for specific fields
@@ -26,44 +26,38 @@ const defaultTimeRanges = {
     'co': '1m',
     'no2': '1m',
     'pm10': '1m',
-    'propane': '1m',
-    'methane': '1m',
+    'gas': 'last',
     'emergency': 'last',
-    'light_intensity': '15m',
-    'motion_detected': 'last',
-    'vibration': '1m',
-    'noise_level': '15m',
-    'water_level': '15m',
-    'storage-population': 'last',
-    'lobby-population': 'last',
-    'office-population': 'last',
-    'cafeteria-population': 'last',
-    'security-population': 'last',
-    'inspection-population': 'last',
-    'automation-population': 'last',
-    'maintenance-population': 'last'
+    'light-intensity': 'last',
+    'motion-detected': 'last',
+    'vibration': 'last',
+    'noise-level': '15m',
+    'water-level': '15m',
+    'population': 'last',
 }
 
 // Create a WebSocket server for each field
 const wssMap = new Map()
 
-fields.forEach(field => {
+sensors.forEach(sensor => {
     const wss = new WebSocketServer({ noServer: true })
-    wssMap.set(field, wss)                                                                
-    let timeRange = defaultTimeRanges[field] || SENSOR_TIME_RANGE // Use default time range for the field, or 15m if not specified
+    wssMap.set(sensor, wss)                                                                
+    let timeRange = defaultTimeRanges[sensor] || SENSOR_TIME_RANGE // Use default time range for the field, or 15m if not specified
 
     wss.on('connection', (ws) => {
-        console.log(`Client connected to ${field} WebSocket`)
+        console.log(`Client connected to ${sensor} WebSocket`)
         let interval
 
 
         const sendData = async () => {
         try {
-            const data = await querySensorData(field, timeRange)
+            const data = await querySensorData(sensor, timeRange)
             if (ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify(data))
+                console.log(data)
+
             }} catch (error) {
-                console.error(`Error querying InfluxDB for ${field}:`, error)
+                console.error(`Error querying InfluxDB for ${sensor}:`, error)
                 if (ws.readyState === WebSocket.OPEN) {
                     ws.send(JSON.stringify({ error: 'Internal server error' }))
                 }
@@ -79,7 +73,7 @@ fields.forEach(field => {
                 const data = JSON.parse(message)
                 if (data.timeRange) {
                     timeRange = data.timeRange
-                    console.log(`Time range updated to: ${timeRange} for ${field}`)
+                    console.log(`Time range updated to: ${timeRange} for ${sensor}`)
 
                     clearInterval(interval)
                     await sendData()
@@ -91,12 +85,12 @@ fields.forEach(field => {
             })
 
             ws.on('close', () => {
-                console.log(`Client disconnected from ${field} WebSocket`)
+                console.log(`Client disconnected from ${sensor} WebSocket`)
                 clearInterval(interval)
             })
 
             ws.on('error', (error) => {
-                console.error(`WebSocket error for ${field}:`, error)
+                console.error(`WebSocket error for ${sensor}:`, error)
                 clearInterval(interval)
             })
     })
@@ -105,11 +99,11 @@ fields.forEach(field => {
 // Handle WebSocket upgrade requests
 server.on('upgrade', (request, socket, head) => {
     const { pathname } = url.parse(request.url)
-    const field = pathname.substring(1) // Extract field from URL (e.g., /temperature)
+    const sensor = pathname.substring(1) // Extract field from URL (e.g., /temperature)
 
-    if (wssMap.has(field)) {
-        wssMap.get(field).handleUpgrade(request, socket, head, (ws) => {
-        wssMap.get(field).emit('connection', ws, request)
+    if (wssMap.has(sensor)) {
+        wssMap.get(sensor).handleUpgrade(request, socket, head, (ws) => {
+        wssMap.get(sensor).emit('connection', ws, request)
     })
     } else {
         socket.destroy()

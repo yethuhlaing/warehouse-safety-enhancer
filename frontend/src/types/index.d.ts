@@ -139,8 +139,8 @@ export type FormattedAggregateData = {
 
 
 export const fields = [
-    'temperature', 'humidity', 'co', 'no2', 'pm10', 'propane', 'methane', 'emergency',
-    'light_intensity', 'motion_detected', 'vibration', 'noise_level',
+    'temperature', 'humidity', 'co', 'no2', 'pm10', 'gas', 'emergency',
+    'light-intensity', 'motion-detected', 'vibration', 'noise-level',
     'water_level', 'storage-population', 'lobby-population', 'office-population', 'cafeteria-population', 'security-population', 'inspection-population', 'automation-population', 'maintenance-population'
 ]
 

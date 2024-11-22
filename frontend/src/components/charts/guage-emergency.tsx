@@ -42,13 +42,15 @@ const chartConfig = {
 export function GuageEmergency() {
     const { sensorData } = useWebSocketData('ws://localhost:3001/emergency')
 
-    const [ emergencyValue, setEmergencyValue ] = useState<number | undefined>(undefined)
+
+    const [ emergencyValue, setEmergencyValue ] = useState<number>(0)
     useEffect(() => {
-        if (sensorData) {
-            setEmergencyValue(sensorData[sensorData.length-1]?._value)
+        if (sensorData && sensorData.length > 0) {
+            setEmergencyValue(sensorData[sensorData.length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
+        } else {
+            setEmergencyValue(0); // Default to 0 when no data
         }
     }, [sensorData])
-    console.log(sensorData)
     return (
         <Card className="flex flex-col">
 
@@ -57,53 +59,34 @@ export function GuageEmergency() {
                         config={chartConfig}
                         className="mx-auto max-h-[450px] 2xl:max-h-[350px] "
                         >
-                    <GaugeComponent
+                    <GaugeComponent 
                         type="semicircle"
                         arc={{
-                            colorArray: ['#00FF15', '#FF2121'],
+                            colorArray: ['#F2E2FB', '#DEC2F7', '#C7A6F3','#B486ED','#9F5FE1'],
                             padding: 0.02,
-                            subArcs:
-                            [
-                                {   limit: 40, 
-                                    tooltip: {
-                                        text: 'Safe!'
-                                    }, 
-                                },
-                                {   
-                                    limit: 60,
-                                    tooltip: {
-                                        text: 'Fire Suspected!'
-                                    }, 
-                                },
-                                {   
-                                    limit: 70,
-                                    tooltip: {
-                                        text: 'Fire Alarm Activated!'
-                                    },
-                                 },
-                                 {   
-                                    limit: 80,
-                                    tooltip: {
-                                        text: 'Emergency!'
-                                    },
-                                 },
+                            subArcs: [
+                                { limit: 40, showTick: true, tooltip: { text: 'Safe!' } },
+                                { limit: 60, showTick: true, tooltip: { text: 'Fire Suspected!' } },
+                                { limit: 70, showTick: true, tooltip: { text: 'Fire Alarm Activated!' } },
+                                { limit: 80, showTick: true, tooltip: { text: 'Emergency!' } },
+                                { limit: 90, showTick: true, tooltip: { text: 'Evacuation!' } },
                             ]
                         }}
-                        pointer={{type: "blob", animationDelay: 0 }}
-                        value={emergencyValue}
+                        pointer={{ type: "blob", animationDelay: 0 }}
+                        value={emergencyValue ?? 0} // Fallback to 0 if lightIntensity is undefined or null
                     />
                 </ChartContainer>
 
             </CardContent>
-            {/* <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
+            <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
                 <div className="flex items-center gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month{" "}
-                    <Flame size={4}/>
+                    Emergency Status Indicator{" "}
+                    <Flame size={18}/>
                 </div>
-                <div className="leading-none text-muted-foreground">
+                {/* <div className="leading-none text-muted-foreground">
                     Total visitors in the last 6 months
-                </div>
-            </CardFooter> */}
+                </div> */}
+            </CardFooter>
         </Card>
     );
 }

@@ -20,107 +20,93 @@ const queryApi = influxDB.getQueryApi(org)
 export const writeInfluxDB = () => {
     const now = new Date();
     return [
-
-        // Air Quality Sensors
-
         new Point('airSensors')
-            .tag('sensor_id', 'TLM0100')
+            .tag('sensor_type', 'airSensor')
+            .tag('sensor', 'co')
             .floatField('co', Math.random() * 100)
             .timestamp(now),
         new Point('airSensors')
-            .tag('sensor_id', 'TLM0103')
+            .tag('sensor_type', 'airSensor')
+            .tag('sensor', 'pm10')
             .floatField('pm10', Math.random() * 250)
             .timestamp(now),
         new Point('airSensors')
-            .tag('sensor_id', 'TLM0104')
+            .tag('sensor_type', 'airSensor')
+            .tag('sensor', 'no2')
             .floatField('no2', Math.random() * 300)
             .timestamp(now),
         new Point('airSensors')
-            .tag('sensor_id', 'TLM0101')
+            .tag('sensor_type', 'airSensor')
+            .tag('sensor', 'temperature')
             .floatField('temperature', Math.random() * 50 + 20)
             .timestamp(now),
-        new Point('airSensors')
-            .tag('sensor_id', 'TLM0102')
-            .floatField('humidity', Math.random() * 100)
-            .timestamp(now),
 
-
-        // Water Level Sensors
-        new Point('h2o_feet')
-            .tag('sensor_id', 'TLM0105')
-            .floatField('water_level', (6 + Math.random() * 3).toFixed(3)) // Water level field
-            .timestamp(now), 
-
+        
         // Noise Sensors
         new Point('noiseSensors')
-        .tag('sensor_id', 'TLM0200')
-        .floatField('noise_level', (50 + Math.random() * 40).toFixed(1)) // Noise level in dB
-        .timestamp(now),
-
+            .tag('sensor_type', 'noiseSensor')
+            .tag('sensor', 'noise-level')
+            .floatField('noise-level', (50 + Math.random() * 40).toFixed(1))
+            .timestamp(now),
+        
         // Vibration Sensors
         new Point('vibrationSensors')
-        .tag('sensor_id', 'TLM0300')
-        .floatField('vibration', Math.random() * 10) // Vibration intensity in m/s²
-        .timestamp(now),
-
+            .tag('sensor_type', 'vibrationSensor')
+            .tag('sensor', 'vibration')
+            .floatField('vibration', Math.random() * 7)
+            .timestamp(now),
+        
         // Motion Detectors
         new Point('motionSensors')
-            .tag('sensor_id', 'TLM0400')
-            .booleanField('motion_detected', Math.random() > 0.7) // Boolean for motion detection
+            .tag('sensor_type', 'motionSensor')
+            .tag('sensor', 'motion_detected')
+            .booleanField('motion_detected', Math.random() > 0.7)
             .timestamp(now),
-
-        // // Light Intensity Sensors
+        
+        // Light Intensity Sensors
         new Point('lightSensors')
-            .tag('sensor_id', 'TLM0500')
-            .floatField('light_intensity', (Math.random() * 1000).toFixed(2)) // Light intensity in lumens
+            .tag('sensor_type', 'lightSensor')
+            .tag('sensor', 'light-intensity')
+            .floatField('light-intensity', (Math.random() * 1000).toFixed(2))
             .timestamp(now),
-
-        // // Gas Leakage Detectors
+        
+        // Gas Leakage Detectors
         new Point('gasLeakage')
-            .tag('sensor_id', 'TLM0600')
-            .floatField('methane', Math.random() * 50) // Methane levels in ppm
-            .floatField('propane', Math.random() * 50) // Propane levels in ppm
+            .tag('sensor_type', 'gasSensor')
+            .tag('sensor', 'gas')
+            .floatField('methane', Math.random() * 50)
+            .floatField('propane', Math.random() * 50)
+            .floatField('hydrogen', Math.random() * 50)         // Hydrogen concentration
+            .floatField('ammonia', Math.random() * 50)          // Ammonia concentration
+            .floatField('ozone', Math.random() * 30)     
             .timestamp(now),
-
-        // Emergency Status
+        
+        // // Emergency Status
         new Point('emergency')
-            .tag('sensor_id', 'TLM0709')
-            .floatField('emergency', (Math.random() * 100).toFixed(2)) // Boolean for emergency detection
+            .tag('sensor_type', 'emergencySensor')
+            .tag('sensor', 'emergency')
+            .floatField('emergency', (Math.random() * 100).toFixed(2))
             .timestamp(now),
+        
+        // // Visitors
+        new Point('population')
+        .tag('sensor_type', 'populationSensor')
+        .tag('sensor', 'population')
+        .intField('lobby', Math.floor(40 + Math.random() * 20))         // Lobby population
+        .intField('storage', Math.floor(20 + Math.random() * 15))       // Storage population
+        .intField('office', Math.floor(60 + Math.random() * 20))        // Office population
+        .intField('security', Math.floor(60 + Math.random() * 20))      // Security population
+        .intField('cafeteria', Math.floor(60 + Math.random() * 20))     // Cafeteria population
+        .intField('inspection', Math.floor(60 + Math.random() * 20))    // Inspection population
+        .intField('automation', Math.floor(60 + Math.random() * 20))    // Automation population
+        .intField('maintenance', Math.floor(60 + Math.random() * 20))   // Maintenance population
+        .timestamp(now)
 
-        // Visitors
-        new Point('visitors')
-            .tag('sensor_id', 'TLM0700')
-            .intField('lobby-population', Math.floor(40 + Math.random() * 20)) // Visitors fluctuate between 40 and 60
-            .timestamp(now),
-        new Point('visitors')
-            .tag('location', 'StorageArea')
-            .intField('storage-population', Math.floor(20 + Math.random() * 15)) // Visitors fluctuate between 20 and 35
-            .timestamp(now),
-        new Point('visitors')
-            .tag('location', 'Office')
-            .intField('office-population', Math.floor(60 + Math.random() * 20)) // Visitors fluctuate between 60 and 80
-            .timestamp(now),
-        new Point('visitors')
-            .tag('location', 'Security')
-            .intField('security-population', Math.floor(60 + Math.random() * 20)) // Visitors fluctuate between 60 and 80
-            .timestamp(now),
-        new Point('visitors')
-            .tag('location', 'Cafeteria')
-            .intField('cafeteria-population', Math.floor(60 + Math.random() * 20)) // Visitors fluctuate between 60 and 80
-            .timestamp(now),
-        new Point('visitors')
-            .tag('location', 'Inspection_Zone')
-            .intField('inspection-population', Math.floor(60 + Math.random() * 20)) // Visitors fluctuate between 60 and 80
-            .timestamp(now),
-        new Point('visitors')
-            .tag('location', 'Automation_Zone')
-            .intField('automation-population', Math.floor(60 + Math.random() * 20)) // Visitors fluctuate between 60 and 80
-            .timestamp(now),
-        new Point('visitors')
-            .tag('location', 'Maintenance_Room')
-            .intField('maintenance-population', Math.floor(60 + Math.random() * 20)) // Visitors fluctuate between 60 and 80
-            .timestamp(now),
+        // new Point('airSensors')
+        // .tag('sensor_type', 'airSensor')
+        // .tag('sensor', 'humidity')
+        // .floatField('humidity', Math.random() * 100)
+        // .timestamp(now),
     ];
 };
 
@@ -169,37 +155,38 @@ export async function queryAggregateValue() {
         })
     })
 }
-export async function querySensorData(field, timeRange) {
+export async function querySensorData(sensor, timeRange) {
     let fluxQuery
     if (timeRange == 'last') {
         fluxQuery = `
             from(bucket: "${bucket}")
-                |> range(start: -5s)  // Use a reasonable time range to ensure we get the last value
-                |> filter(fn: (r) => r._field == "${field}")
+                |> range(start: -5m)  // Use a reasonable time range to ensure we get the last value
+                |> filter(fn: (r) => r.sensor == "${sensor}")
                 |> keep(columns: ["_value","_field"])
+                |> last()
                 |> yield(name: "instant_sensor_data")
         `
     } else {
         fluxQuery = `
         from(bucket: "${bucket}")
             |> range(start: -${timeRange})
-            |> filter(fn: (r) => r._field == "${field}")
+            |> filter(fn: (r) => r.sensor == "${sensor}")
             |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
             |> yield(name: "sensor_data")
         `
     }
     return new Promise((resolve, reject) => {
-        const sensorData = []
+        let sensorData = []
         queryApi.queryRows(fluxQuery, {
             next: (row, tableMeta) => {
                 const o = tableMeta.toObject(row)
+                console.log(o)
                 sensorData.push(o)
             },
                 error: (error) => {
                     reject(error)
             },
                 complete: () => {
-                    console.log(sensorData)
                     resolve(sensorData)
             },
         })

@@ -7,6 +7,7 @@ import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -21,6 +22,7 @@ import { format } from 'date-fns';
 import { FormattedAggregateData } from '@/types';
 import { Capitalize, formatChartData } from '@/lib/utils';
 import TimeRangeSelector from '../dashboard/time-range-selector';
+import { AudioLines } from 'lucide-react';
 
 
 const chartConfig = {
@@ -43,8 +45,7 @@ const chartConfig = {
 
 
 export function BarChartNoise() {
-    const [activeChart, setActiveChart] = useState<keyof typeof chartConfig>("desktop");
-    const { sensorData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/noise_level');
+    const { sensorData } = useWebSocketData('ws://localhost:3001/noise-level');
     // const { field, rawData, minimum, maximum, average } = formatChartData(chartData) as FormattedAggregateData  
     return (
         <Card>
@@ -55,14 +56,13 @@ export function BarChartNoise() {
                 <TimeRangeSelector field={'noise_level'} />
             </CardHeader>
             <CardContent className="px-2 sm:p-6">
-                {sensorData && !error && connectionStatus == 'connected' && (
-                    <ChartContainer
-                        config={chartConfig}
-                        className="aspect-auto h-[250px] w-full"
+                <ChartContainer
+                    config={chartConfig}
+                    className="aspect-auto h-[250px] w-full"
                     >
                         <BarChart
                             accessibilityLayer
-                            data={sensorData}
+                            data={sensorData || []}
                             margin={{
                                 top: 20,
                                 right: 0,
@@ -92,10 +92,17 @@ export function BarChartNoise() {
                             />
                             <Bar yAxisId="right" dataKey="_value" fill={`var(--color-desktop)`} name="noise_level" />
                         </BarChart>
-                    </ChartContainer>
-                )}
-
+                </ChartContainer>
             </CardContent>
+            <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
+                <div className="flex items-center gap-2 font-medium leading-none">
+                    Measured in Decibels (dB){" "}
+                    <AudioLines size={18}/>
+                </div>
+                <div className="leading-none text-muted-foreground">
+                    Optimal Noise Range: 50-85 dB
+                </div>
+            </CardFooter>
         </Card>
     );
 }
