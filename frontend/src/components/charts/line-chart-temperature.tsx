@@ -47,28 +47,19 @@ export function LineChartTemperature() {
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
-                <div className="flex flex-col space-y-2">
-                    <CardTitle>Temperature</CardTitle>
+            <div className="flex flex-col space-y-2">
+                    <CardTitle>Temperature Monitoring Graph</CardTitle>
+                    <CardDescription>Real-time temperature from multiple sensors</CardDescription>
                 </div>
                 <TimeRangeSelector field={'temperature'} />
             </CardHeader>
             <CardContent>
-                {connectionStatus !== 'connected' && (
-                    <div>Connecting to WebSocket...</div>
-                )}
-
-                {error && (
-                    <div>
-                        <p>Error: {error?.message}</p>
-                        <Button onClick={reconnect}>Reconnect</Button>
-                    </div>
-                )}
-                <ChartContainer config={chartConfig}>
+                <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">
                     <LineChart
                         accessibilityLayer
                         data={sensorData || []}
                         margin={{
-                            left: 12,
+                            left: -25,
                             right: 12,
                         }}
                     >
@@ -78,7 +69,7 @@ export function LineChartTemperature() {
                             tickLine={true}
                             axisLine={false}
                             tickMargin={12}
-                            tickFormatter={(value) => format(new Date(value), 'MMMd,HH:mm')} />
+                            tickFormatter={(value) => format(new Date(value), 'HH:mm')} />
                         <YAxis />
 
                         <ChartTooltip

@@ -53,7 +53,10 @@ export function GuageEmergency() {
     }, [sensorData])
     return (
         <Card className="flex flex-col">
-
+            <CardHeader className="flex flex-col space-y-2">
+                <CardTitle>Emergency Status Indicator</CardTitle>
+                <CardDescription>Showing the tendency for fire alert</CardDescription>
+            </CardHeader>
             <CardContent className="pb-0">
                 <ChartContainer
                         config={chartConfig}
@@ -80,12 +83,11 @@ export function GuageEmergency() {
             </CardContent>
             <CardFooter className="flex-col gap-2 text-pretty text-center text-sm">
                 <div className="flex items-center gap-2 font-medium leading-none">
-                    Emergency Status Indicator{" "}
-                    <Flame size={18}/>
+                    Fire Alert system detection{" "}<Flame size={18}/>
                 </div>
-                {/* <div className="leading-none text-muted-foreground">
-                    Total visitors in the last 6 months
-                </div> */}
+                <div className="leading-none text-muted-foreground">
+                    Integrated fire Alarm system
+                </div>
             </CardFooter>
         </Card>
     );

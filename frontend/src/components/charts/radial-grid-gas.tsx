@@ -52,55 +52,58 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function RadialGridGas() {
-    const { sensorData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/gas');
+    const { sensorData } = useWebSocketData('ws://localhost:3001/gas');
     console.log(sensorData)
     return (
-        <Card className="flex flex-col">
-
-            <CardContent className="flex-1 pb-0">
-                {sensorData && !error && connectionStatus == 'connected' && (
-                    <ChartContainer
-                        config={chartConfig}
-                        className="mx-auto max-h-[250px]"
+        <Card className="flex-1">
+            <CardHeader className="flex flex-row justify-between w-full items-center">
+                <div className="flex flex-col space-y-2">
+                    <CardTitle>Hazardous Gas Distribution</CardTitle>
+                    <CardDescription>Real-time monitoring of gas levels across multiple zones</CardDescription>
+                </div>
+            </CardHeader>
+            <CardContent className="pb-0">
+            <ChartContainer
+                    config={chartConfig}
+                    className="mx-auto aspect-square max-h-[450px] 2xl:max-h-[350px]"
+                >
+                    <RadialBarChart
+                        data={sensorData || []}
+                        innerRadius={40}
+                        outerRadius={120}
                     >
-                        <RadialBarChart
-                            data={sensorData}
-                            innerRadius={40}
-                            outerRadius={120}
-                        >
-                            <ChartTooltip
-                                cursor={false}
-                                content={
-                                    <ChartTooltipContent
-                                        hideLabel
-                                        nameKey="_field"
-                                    />
-                                }
-                            />
-                            <PolarGrid gridType="circle" />
-                            <RadialBar
-                                dataKey="_value"
-                                fill="hsl(var(--chart-1))"
-                                label={{ 
-                                    position: 'insideStart', 
-                                    fontWeight: 600,
-                                    fontSize: 8,
-                                    formatter: (value) => `${value.toFixed(2)}`
-                                }}
+                        <ChartTooltip
+                            cursor={false}
+                            content={
+                                <ChartTooltipContent
+                                    hideLabel
+                                    nameKey="_field"
                                 />
-                        </RadialBarChart>
-                    </ChartContainer>
-                )}
+                            }
+                        />
+                        <PolarGrid gridType="circle" />
+                        <RadialBar
+                            dataKey="_value"
+                            fill="hsl(var(--chart-1))"
+                            label={{ 
+                                position: 'insideStart', 
+                                fontWeight: 600,
+                                fontSize: 8,
+                                formatter: (value) => `${value.toFixed(2)}`
+                            }}
+                            />
+                    </RadialBarChart>
+                </ChartContainer>
             </CardContent>
-            <CardFooter className="flex-col gap-2 text-sm">
+            {/* <CardFooter className="flex-col gap-2 text-sm">
                 <div className="flex items-center gap-2 font-medium leading-none">
-                    Distribution of hazardous Gases {" "}
-                    <Skull size={14} />
+                    Hazardous Gas Distribution {" "}
+                    <Skull size={20} />
                 </div>
                 <div className="leading-none text-muted-foreground">
-                    If levels approach critical values, take immediate action to mitigate risks.
+                    
                 </div>
-            </CardFooter>
+            </CardFooter> */}
         </Card>
     );
 }

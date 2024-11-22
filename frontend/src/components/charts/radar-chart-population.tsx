@@ -50,10 +50,10 @@ type radarChartData = {
 }
 export function RadarChartPopulation() {
     const { sensorData } = useWebSocketData('ws://localhost:3001/population')
+    console.log(sensorData)
     const [totalPopulation, setTotalPopulation] = useState<radarChartData[]>([])
     useEffect(() => {
-        if (sensorData) {
-
+        if (Array.isArray(sensorData)) {
             const populations = sensorData?.reduce((sum, item) => sum + item?._value, 0);
 
             setTotalPopulation([{
@@ -64,8 +64,8 @@ export function RadarChartPopulation() {
         }
       }, [sensorData])
     return (
-        <div className="flex flex-wrap gap-4">
-            <Card>
+        <div className="flex flex-col sm:flex-row gap-4">
+            <Card className="flex-1">
                 <CardContent className="pb-0">
                     <ChartContainer
                         config={chartConfig}
@@ -96,11 +96,11 @@ export function RadarChartPopulation() {
                     </div>
                 </CardFooter>
             </Card>
-            <Card className="flex flex-col">
-                <CardContent className="flex-1 pb-0">
+            <Card className="flex-1">
+                <CardContent className="pb-0">
                     <ChartContainer
                         config={chartConfig}
-                        className="mx-auto max-h-[250px] aspect-square"
+                        className="mx-auto aspect-square max-h-[450px] 2xl:max-h-[350px] "
                     >
                         <RadialBarChart
                             data={totalPopulation}

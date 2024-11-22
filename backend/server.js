@@ -16,13 +16,13 @@ const server = http.createServer(app)
 const sensors = [
     'temperature', 'humidity', 'co', 'no2', 'pm10', 'gas', 'emergency',
     'light-intensity', 'motion-detected', 'vibration', 'noise-level',
-    'water_level', 'population'
+    'water-level', 'population', 'water-flow'
 ]
 
 // Define default time ranges for specific fields
 const defaultTimeRanges = {
     'temperature': '15m',
-    'humidity': '15m',
+    'humidity': 'last',
     'co': '1m',
     'no2': '1m',
     'pm10': '1m',
@@ -32,8 +32,9 @@ const defaultTimeRanges = {
     'motion-detected': 'last',
     'vibration': 'last',
     'noise-level': '15m',
-    'water-level': '15m',
+    'water-level': '5m',
     'population': 'last',
+    'water-flow': '1m',
 }
 
 // Create a WebSocket server for each field

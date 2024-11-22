@@ -20,6 +20,7 @@ const queryApi = influxDB.getQueryApi(org)
 export const writeInfluxDB = () => {
     const now = new Date();
     return [
+        // Gas
         new Point('airSensors')
             .tag('sensor_type', 'airSensor')
             .tag('sensor', 'co')
@@ -35,6 +36,8 @@ export const writeInfluxDB = () => {
             .tag('sensor', 'no2')
             .floatField('no2', Math.random() * 300)
             .timestamp(now),
+        
+        // Temperature
         new Point('airSensors')
             .tag('sensor_type', 'airSensor')
             .tag('sensor', 'temperature')
@@ -100,13 +103,37 @@ export const writeInfluxDB = () => {
         .intField('inspection', Math.floor(60 + Math.random() * 20))    // Inspection population
         .intField('automation', Math.floor(60 + Math.random() * 20))    // Automation population
         .intField('maintenance', Math.floor(60 + Math.random() * 20))   // Maintenance population
-        .timestamp(now)
+        .timestamp(now),
 
-        // new Point('airSensors')
-        // .tag('sensor_type', 'airSensor')
-        // .tag('sensor', 'humidity')
-        // .floatField('humidity', Math.random() * 100)
-        // .timestamp(now),
+        // humidity
+        new Point('airSensors')
+        .tag('sensor_type', 'airSensor')
+        .tag('sensor', 'humidity')
+        .floatField('lobby',  Math.random() * 100)         // Lobby humidity
+        .floatField('storage',  Math.random() * 100)       // Storage humidity
+        .floatField('office',  Math.random() * 100)        // Office humidity
+        .floatField('security',  Math.random() * 100)      // Security humidity
+        .floatField('cafeteria',  Math.random() * 100)     // Cafeteria humidity
+        .floatField('inspection',  Math.random() * 100)    // Inspection humidity
+        .floatField('automation',  Math.random() * 100)    // Automation humidity
+        .floatField('maintenance',  Math.random() * 100)   // Maintenance humidity
+        .timestamp(now),
+
+        // Water Flow
+        new Point('water-flow')
+        .tag('sensor_type', 'water-flow_detector')
+        .tag('sensor', 'water-flow')
+        .tag('location', 'reservoir')
+        .floatField('water-flow', Math.random() * 60) // Flow rate in liters per minute
+        .timestamp(now),
+
+        // Water Level
+        new Point('waterLevel')
+        .tag('sensor_type', 'water-level_detector')
+        .tag('sensor', 'water-level')
+        .tag('location', 'reservoir')
+        .floatField('water-level', Math.random() * 10) // Water level in meters
+        .timestamp(now),
     ];
 };
 

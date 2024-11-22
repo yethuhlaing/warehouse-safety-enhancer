@@ -73,7 +73,7 @@ export function AreaChartStacked() {
     }
 
     useEffect(() => {
-        if (coData && pm10Data && no2Data) {
+        if (Array.isArray(coData) && Array.isArray(pm10Data) && Array.isArray(no2Data)) {
             const combined = coData?.map((item, index) => ({
                 time: item._time,
                 co: item._value,
@@ -122,7 +122,7 @@ export function AreaChartStacked() {
                 </div>
             </CardHeader>
             <CardContent className="flex-1 pt-4">
-                <ChartContainer config={chartConfig}>
+                <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">
                     <AreaChart
                         accessibilityLayer
                         data={combinedData}

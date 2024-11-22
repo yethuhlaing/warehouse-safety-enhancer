@@ -49,7 +49,10 @@ export function GuageLightIntensity() {
     console.log(sensorData)
     return (
         <Card className="flex flex-col">
-
+            <CardHeader className="flex flex-col space-y-2">
+                <CardTitle>Light Intensity Tracking</CardTitle>
+                <CardDescription>Real time light intensity inside warehouse</CardDescription>
+            </CardHeader>
             <CardContent className="pb-0">
                 <ChartContainer
                         config={chartConfig}

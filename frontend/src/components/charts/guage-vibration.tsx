@@ -49,7 +49,10 @@ export function GuageVibration() {
     console.log(sensorData)
     return (
         <Card className="flex flex-col">
-
+            <CardHeader className="flex flex-col space-y-2">
+                <CardTitle>Vibration Sensor</CardTitle>
+                <CardDescription>Real-time vibration for production area</CardDescription>
+            </CardHeader>
             <CardContent className="pb-0">
                 <ChartContainer
                     config={chartConfig}
@@ -114,7 +117,7 @@ export function GuageVibration() {
                     <AudioWaveform size={18}/>
                 </div>
                 <div className="leading-none text-muted-foreground">
-                    Moderate Vibration: Between 1.5 m/s² and 3.0 m/s² (Potential for minor wear and tear)
+                    Optimal Range between 1.5 m/s² and 3.0 m/s²
                 </div>
             </CardFooter>
         </Card>

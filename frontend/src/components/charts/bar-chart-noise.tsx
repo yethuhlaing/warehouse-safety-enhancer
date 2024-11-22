@@ -51,7 +51,8 @@ export function BarChartNoise() {
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
                 <div className="flex flex-col space-y-2">
-                    <CardTitle>Noise Level</CardTitle>
+                    <CardTitle>Noise Level Tracking Chart</CardTitle>
+                    <CardDescription>Live noise level data across different areas to maintain operational safety and comply with noise regulations.</CardDescription>
                 </div>
                 <TimeRangeSelector field={'noise_level'} />
             </CardHeader>
