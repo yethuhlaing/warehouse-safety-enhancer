@@ -158,7 +158,16 @@ export function AreaChartStacked() {
                             tickLine={false}
                             axisLine={false}
                             tickMargin={8}
-                            tickFormatter={(value) => format(new Date(value), 'HH:mm')}                            
+                            tickFormatter={(value) => {
+                                // Check if the value is a valid date
+                                const date = new Date(value);
+                                if (!isNaN(date.getTime())) {
+                                  // Format only if the value is a valid date
+                                  return format(date, 'HH:mm');
+                                }
+                                // Return the value as is if it's not a date
+                                return value;
+                            }}                                                 
                         />
                         {visibleAreas.co && (
                             <Area

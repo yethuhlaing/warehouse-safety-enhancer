@@ -39,6 +39,7 @@ const defaultTimeRanges = {
 
 // Create a WebSocket server for each field
 const wssMap = new Map()
+const lastSentData = new Map()
 
 sensors.forEach(sensor => {
     const wss = new WebSocketServer({ noServer: true })
@@ -48,13 +49,19 @@ sensors.forEach(sensor => {
     wss.on('connection', (ws) => {
         console.log(`Client connected to ${sensor} WebSocket`)
         let interval
-
+        let lastSent = null
 
         const sendData = async () => {
         try {
             const data = await querySensorData(sensor, timeRange)
             if (ws.readyState === WebSocket.OPEN) {
+                const updates = getUpdates(data, lastSent)
+                if (Object.keys(updates).length > 0) {
+                    ws.send(JSON.stringify({ type: 'update', data: updates }))
+                    lastSent = data
+                }
                 ws.send(JSON.stringify(data))
+
             }} catch (error) {
                 console.error(`Error querying InfluxDB for ${sensor}:`, error)
                 if (ws.readyState === WebSocket.OPEN) {

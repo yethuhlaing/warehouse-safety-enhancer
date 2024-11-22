@@ -78,7 +78,16 @@ export function BarChartNoise() {
                                 axisLine={false}
                                 tickMargin={8}
                                 minTickGap={32}
-                                tickFormatter={(value) => format(new Date(value), 'MMMd,HH:mm')}                            
+                                tickFormatter={(value) => {
+                                    // Check if the value is a valid date
+                                    const date = new Date(value);
+                                    if (!isNaN(date.getTime())) {
+                                      // Format only if the value is a valid date
+                                      return format(date, 'MMMd,HH:mm');
+                                    }
+                                    // Return the value as is if it's not a date
+                                    return value;
+                                }}                      
                             />
                             <YAxis yAxisId="right" orientation="right" label={{ value: 'decibels (dB)', angle: 90, position: 'insideRight' }} />
                             <ChartTooltip
