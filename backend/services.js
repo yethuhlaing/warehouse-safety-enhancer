@@ -207,7 +207,6 @@ export async function querySensorData(sensor, timeRange) {
         queryApi.queryRows(fluxQuery, {
             next: (row, tableMeta) => {
                 const o = tableMeta.toObject(row)
-                console.log(o)
                 sensorData.push(o)
             },
                 error: (error) => {

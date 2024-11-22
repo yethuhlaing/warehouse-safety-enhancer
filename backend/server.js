@@ -55,8 +55,6 @@ sensors.forEach(sensor => {
             const data = await querySensorData(sensor, timeRange)
             if (ws.readyState === WebSocket.OPEN) {
                 ws.send(JSON.stringify(data))
-                console.log(data)
-
             }} catch (error) {
                 console.error(`Error querying InfluxDB for ${sensor}:`, error)
                 if (ws.readyState === WebSocket.OPEN) {

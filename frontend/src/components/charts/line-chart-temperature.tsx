@@ -39,7 +39,6 @@ const chartConfig = {
 
 export function LineChartTemperature() {
     const { sensorData, connectionStatus, error, reconnect } = useWebSocketData('ws://localhost:3001/temperature');
-    console.log(sensorData)
     // const { 
     //     field, minimum, maximum, average
     // } = formatChartData(chartData) as FormattedAggregateData  
