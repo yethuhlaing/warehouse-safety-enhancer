@@ -187,7 +187,7 @@ export async function querySensorData(sensor, timeRange) {
     if (timeRange == 'last') {
         fluxQuery = `
             from(bucket: "${bucket}")
-                |> range(start: -5m)  // Use a reasonable time range to ensure we get the last value
+                |> range(start: -1m)  // Use a reasonable time range to ensure we get the last value
                 |> filter(fn: (r) => r.sensor == "${sensor}")
                 |> keep(columns: ["_value","_field"])
                 |> last()
@@ -208,6 +208,7 @@ export async function querySensorData(sensor, timeRange) {
             next: (row, tableMeta) => {
                 const o = tableMeta.toObject(row)
                 sensorData.push(o)
+                console.log(o)
             },
                 error: (error) => {
                     reject(error)
