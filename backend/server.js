@@ -55,11 +55,6 @@ sensors.forEach(sensor => {
         try {
             const data = await querySensorData(sensor, timeRange)
             if (ws.readyState === WebSocket.OPEN) {
-                const updates = getUpdates(data, lastSent)
-                if (Object.keys(updates).length > 0) {
-                    ws.send(JSON.stringify({ type: 'update', data: updates }))
-                    lastSent = data
-                }
                 ws.send(JSON.stringify(data))
 
             }} catch (error) {

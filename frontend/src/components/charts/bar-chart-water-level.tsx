@@ -77,7 +77,7 @@ export function BarChartWaterLevel() {
                     />
                     <YAxis />
                     <Bar dataKey="_value">
-                    {sensorData?.map((item) => (
+                    { Array.isArray(sensorData) && sensorData?.map((item) => (
                         <Cell
                         key={item._field}
                         fill={
