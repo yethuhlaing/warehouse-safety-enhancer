@@ -11,22 +11,32 @@ const influxDB = new InfluxDB({
     url: influx_url, 
     token,   
     transportOptions: {
-        gzipThreshold: 1, // Compress all requests
-    }, })
+        gzipThreshold: 1,
+    },
+    debug: true
+ })
 const writeApi = influxDB.getWriteApi(org, bucket)
 
 const WRITE_INTERVAL = 5 * 1000 // 5 seconds
 
-function writeData() {
+async function writeData() {
     const points = writeInfluxDB()
-    points.forEach(point => writeApi.writePoint(point))
+    points.forEach(point => writeApi.writePoints(point))
     console.log(`Wrote ${points} points to InfluxDB at ${new Date().toISOString()}`)
+    await writeApi.flush(); // Force send buffered points
 }
 
-const writeInterval = setInterval(writeData, WRITE_INTERVAL)
+function scheduleWrite() {
+    writeData().then(() => {
+        setTimeout(scheduleWrite, WRITE_INTERVAL);
+    }).catch(err => {
+        console.error('Error writing to InfluxDB:', err);
+        process.exit(1);
+    });
+}
 
 process.on('SIGINT', () => {
-    clearInterval(writeInterval)
+    scheduleWrite()
     writeApi.close().then(() => {
         console.log('InfluxDB write API closed')
         process.exit(0)
