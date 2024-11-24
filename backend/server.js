@@ -1,9 +1,8 @@
 import express from 'express'
 import { WebSocketServer, WebSocket } from 'ws'
 import http from 'http'
-import { InfluxDB } from '@influxdata/influxdb-client'
 import 'dotenv/config'
-import { querySensorData, writeInfluxDB } from './services.js'
+import { querySensorData } from './services.js'
 import url from 'url'
 
 const SERVER_RESPONSE_INTERVAL = 5 * 1000
@@ -21,25 +20,26 @@ const sensors = [
 
 // Define default time ranges for specific fields
 const defaultTimeRanges = {
-    'temperature': '15m',
+    'temperature': '5m',
     'humidity': 'last',
-    'co': '1m',
-    'no2': '1m',
-    'pm10': '1m',
+    'co': '5m',
+    'no2': '5m',
+    'pm10': '5m',
     'gas': 'last',
     'emergency': 'last',
     'light-intensity': 'last',
     'motion-detected': 'last',
     'vibration': 'last',
-    'noise-level': '15m',
+    'noise-level': '5m',
     'water-level': '5m',
     'population': 'last',
-    'water-flow': '1m',
+    'water-flow': '5m',
 }
 
 // Create a WebSocket server for each field
 const wssMap = new Map()
 const lastSentData = new Map()
+const clientDataCache = new Map();
 
 sensors.forEach(sensor => {
     const wss = new WebSocketServer({ noServer: true })
@@ -49,13 +49,24 @@ sensors.forEach(sensor => {
     wss.on('connection', (ws) => {
         console.log(`Client connected to ${sensor} WebSocket`)
         let interval
-        let lastSent = null
 
-        const sendData = async () => {
+        const sendData = async (lastTimestamp = null) => {
         try {
-            const data = await querySensorData(sensor, timeRange)
+            const data = await querySensorData(sensor, timeRange, lastTimestamp);
             if (ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify(data))
+                if (!lastTimestamp) {
+                    // Send full data for initial connection
+                    ws.send(JSON.stringify({
+                        type: 'fullData',
+                        data: data
+                    }));
+                } else if (data.length > 0) {
+                    // Send only updates
+                    ws.send(JSON.stringify({
+                        type: 'update',
+                        data: data
+                    }));
+                }
 
             }} catch (error) {
                 console.error(`Error querying InfluxDB for ${sensor}:`, error)
@@ -64,10 +75,6 @@ sensors.forEach(sensor => {
                 }
             }
         }
-
-        // Send initial data
-        sendData()
-        interval = setInterval(sendData, SERVER_RESPONSE_INTERVAL)
 
         ws.on('message', async (message) => {
             try {
@@ -78,22 +85,36 @@ sensors.forEach(sensor => {
 
                     clearInterval(interval)
                     await sendData()
-                    interval = setInterval(sendData, SERVER_RESPONSE_INTERVAL)
+                    interval = setInterval(() => sendData(clientDataCache.get(ws)), SERVER_RESPONSE_INTERVAL);
+                } else if (data.lastTimestamp) {
+                    clientDataCache.set(ws, data.lastTimestamp);
+                    await sendData(data.lastTimestamp);
                 }
             } catch (error) {
                 console.error('Error parsing message:', error)
             }
-            })
+        })
 
-            ws.on('close', () => {
-                console.log(`Client disconnected from ${sensor} WebSocket`)
-                clearInterval(interval)
-            })
+        // Send initial full data
+        sendData();
 
-            ws.on('error', (error) => {
-                console.error(`WebSocket error for ${sensor}:`, error)
-                clearInterval(interval)
-            })
+        // Set up interval for updates
+        interval = setInterval(() => {
+            const lastTimestamp = clientDataCache.get(ws);
+            sendData(lastTimestamp);
+        }, SERVER_RESPONSE_INTERVAL);
+
+        ws.on('close', () => {
+            console.log(`Client disconnected from ${sensor} WebSocket`);
+            clearInterval(interval);
+            clientDataCache.delete(ws);
+        });
+
+        ws.on('error', (error) => {
+            console.error(`WebSocket error for ${sensor}:`, error);
+            clearInterval(interval);
+            clientDataCache.delete(ws);
+        });
     })
 })
 

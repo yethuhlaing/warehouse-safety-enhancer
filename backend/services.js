@@ -17,7 +17,7 @@ const influxDB = new InfluxDB(
     })
 const queryApi = influxDB.getQueryApi(org)
 
-export const writeInfluxDB = () => {
+export const generateSensorData = () => {
     const now = new Date();
     return [
         // Gas
@@ -182,25 +182,27 @@ export async function queryAggregateValue() {
         })
     })
 }
-export async function querySensorData(sensor, timeRange) {
-    let fluxQuery
-    if (timeRange == 'last') {
+export async function querySensorData(sensor, timeRange, lastTimestamp = null) {
+    let fluxQuery;
+    
+    if (timeRange === 'last') {
         fluxQuery = `
             from(bucket: "${bucket}")
-                |> range(start: -1m)  // Use a reasonable time range to ensure we get the last value
+                |> range(start: -5s)  // Since your data updates every 5s
                 |> filter(fn: (r) => r.sensor == "${sensor}")
                 |> keep(columns: ["_value","_field"])
                 |> last()
-                |> yield(name: "instant_sensor_data")
-        `
+        `;
     } else {
+        const start = lastTimestamp ? lastTimestamp : `-${timeRange}`;
         fluxQuery = `
-        from(bucket: "${bucket}")
-            |> range(start: -${timeRange})
-            |> filter(fn: (r) => r.sensor == "${sensor}")
-            |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
-            |> yield(name: "sensor_data")
-        `
+            from(bucket: "${bucket}")
+                |> range(start: ${start})
+                |> filter(fn: (r) => r.sensor == "${sensor}")
+                |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
+                // Add aggregation if querying large time ranges
+                ${timeRange > '1h' ? '|> aggregateWindow(every: 5s, fn: mean)' : ''}
+        `;
     }
     return new Promise((resolve, reject) => {
         let sensorData = []
@@ -210,11 +212,11 @@ export async function querySensorData(sensor, timeRange) {
                 sensorData.push(o)
                 console.log(o)
             },
-                error: (error) => {
-                    reject(error)
+            error: (error) => {
+                reject(error)
             },
-                complete: () => {
-                    resolve(sensorData)
+            complete: () => {
+                resolve(sensorData)
             },
         })
     })

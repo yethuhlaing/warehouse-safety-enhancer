@@ -7,20 +7,20 @@ import { toast } from "@/components/ui/use-toast";
 import { FieldType } from '@/types';
 
 const defaultTimeRanges = {
-    'temperature': '15m',
+    'temperature': '5m',
     'humidity': 'last',
-    'co': '1m',
-    'no2': '1m',
-    'pm10': '1m',
+    'co': '5m',
+    'no2': '5m',
+    'pm10': '5m',
     'gas': 'last',
     'emergency': 'last',
     'light-intensity': 'last',
     'motion-detected': 'last',
     'vibration': 'last',
-    'noise-level': '15m',
+    'noise-level': '5m',
     'water-level': '5m',
     'population': 'last',
-    'water-flow': '1m',
+    'water-flow': '5m',
 }
 const timeRanges = [
     '1m', '5m', '15m', '30m', '1h', '4h', '8h', '12h', '1d'
