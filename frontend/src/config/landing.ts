@@ -2,145 +2,170 @@ import { FeatureLdg, InfoLdg, TestimonialType } from "@/types";
 
 export const infos: InfoLdg[] = [
     {
-        title: "Empower your projects",
+        title: "Revolutionize Warehouse Safety",
         description:
-            "Unlock the full potential of your projects with our open-source SaaS platform. Collaborate seamlessly, innovate effortlessly, and scale limitlessly.",
-        image: "/_static/illustrations/work-from-home.jpg",
+        "Harness real-time analytics, 3D visualization, and predictive insights to create a safer, more efficient work environment.",
+        image: "/_static/illustrations/warehouse.png",
         list: [
             {
-                title: "Collaborative",
+                title: "Real-Time Monitoring",
                 description:
-                    "Work together with your team members in real-time.",
-                icon: "laptop",
+                "Get instant alerts and actionable insights from our advanced sensor network.",
+                icon: 'Eye',
             },
             {
-                title: "Innovative",
+                title: "AI-Driven Analytics",
                 description:
-                    "Stay ahead of the curve with access constant updates.",
-                icon: "settings",
+                    "Leverage machine learning for predictive risk assessment and proactive safety measures.",
+                icon: 'Cpu',
             },
             {
-                title: "Scalable",
+                title: "3D Warehouse Mapping",
                 description:
-                    "Our platform offers the scalability needed to adapt to your needs.",
-                icon: "search",
+                    "Navigate your facility virtually and access item details with a single tap.",
+                icon: 'TrendingUp',
             },
-        ],
+            {
+                title: "IoT Integration",
+                description:
+                "Seamlessly connect and manage all your warehouse IoT devices from a central hub.",
+                icon: 'Zap',
+            },
+        ]
     },
     {
-        title: "Seamless Integration",
+        title: "Seamless Safety Integration",
         description:
-            "Integrate our open-source SaaS seamlessly into your existing workflows. Effortlessly connect with your favorite tools and services for a streamlined experience.",
-        image: "/_static/illustrations/work-from-home.jpg",
+          "Integrate our AI-powered warehouse safety platform effortlessly into your existing operations. Connect with your current systems and IoT devices for a comprehensive safety solution that enhances your workflow.",
+        image: "/_static/illustrations/warehouse-integration.jpg",
         list: [
-            {
-                title: "Flexible",
-                description:
-                    "Customize your integrations to fit your unique requirements.",
-                icon: "laptop",
-            },
-            {
-                title: "Efficient",
-                description:
-                    "Streamline your processes and reducing manual effort.",
-                icon: "search",
-            },
-            {
-                title: "Reliable",
-                description:
-                    "Rely on our robust infrastructure and comprehensive documentation.",
-                icon: "settings",
-            },
+          {
+            title: "IoT Compatibility",
+            description:
+              "Easily connect with a wide range of sensors and IoT devices for real-time monitoring.",
+            icon: 'Puzzle',
+          },
+          {
+            title: "Rapid Deployment",
+            description:
+              "Get up and running quickly with our streamlined setup process and expert support.",
+            icon: 'Zap',
+          },
+          {
+            title: "Data Security",
+            description:
+              "Ensure your sensitive data is protected with our robust encryption and compliance measures.",
+            icon: 'Shield',
+          },
+          {
+            title: "API Flexibility",
+            description:
+              "Customize integrations with our comprehensive API to fit your unique warehouse needs.",
+            icon: 'Layers',
+          },
+          {
+            title: "Workflow Automation",
+            description:
+              "Automate safety protocols and alerts to streamline your processes and reduce manual effort.",
+            icon: 'Workflow',
+          },
+          {
+            title: "Comprehensive Documentation",
+            description:
+              "Access detailed guides and API documentation for smooth implementation and maintenance.",
+            icon: 'BookOpen',
+          },
         ],
-    },
+      }
 ];
+
 
 export const features: FeatureLdg[] = [
     {
-        title: "Feature 1",
-        description:
-            "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
-        link: "/",
-        icon: "nextjs",
+      title: "Real-Time Safety Analytics",
+      description:
+        "Monitor warehouse conditions in real-time with advanced sensors, providing instant alerts and actionable insights to prevent accidents and optimize safety protocols.",
+      link: "/analytics",
+      icon: "Cpu",
     },
     {
-        title: "Feature 2",
-        description:
-            "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
-        link: "/",
-        icon: "google",
+      title: "3D Item Mapping",
+      description:
+        "Navigate your warehouse virtually with our interactive 3D IFC model. Tap on items to view detailed information, improving inventory management and spatial awareness.",
+      link: "/3d-mapping",
+      icon: 'Box',
     },
     {
-        title: "Feature 3",
-        description:
-            "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
-        link: "/",
-        icon: "gitHub",
+      title: "AI-Powered Safety Assistant",
+      description:
+        "Interact with our intelligent chatbot or voice assistant for instant safety recommendations, equipment locations, and procedural guidance, enhancing operational efficiency.",
+      link: "/ai-assistant",
+      icon: 'BotIcon',
     },
     {
-        title: "Feature 4",
-        description:
-            "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
-        link: "/",
-        icon: "laptop",
+      title: "IoT Integration Hub",
+      description:
+        "Seamlessly connect and manage all your warehouse IoT devices from a central dashboard, ensuring comprehensive safety coverage and data synchronization.",
+      link: "/iot-hub",
+      icon: 'Cpu',
     },
     {
-        title: "Feature 5",
-        description:
-            "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
-        link: "/",
-        icon: "user",
+      title: "Predictive Risk Assessment",
+      description:
+        "Leverage advanced machine learning algorithms to predict potential safety hazards before they occur, allowing proactive measures to maintain a secure work environment.",
+      link: "/risk-assessment",
+      icon: 'Shield',
     },
     {
-        title: "Feature 6",
-        description:
-            "Amet praesentium deserunt ex commodi tempore fuga voluptatem. Sit, sapiente.",
-        link: "/",
-        icon: "copy",
+      title: "Multilingual Safety Insights",
+      description:
+        "Break language barriers with NLP-powered translations of sensor data and safety instructions, ensuring clear communication across your diverse workforce.",
+      link: "/multilingual",
+      icon: 'Megaphone',
     },
-];
+  ]
 
 export const testimonials: TestimonialType[] = [
     {
         name: "John Doe",
         job: "Full Stack Developer",
         image: "https://randomuser.me/api/portraits/men/1.jpg",
-        review: "The next-saas-stripe-starter repo has truly revolutionized my development workflow. With its comprehensive features and seamless integration with Stripe, I've been able to build and deploy projects faster than ever before. The documentation is clear and concise, making it easy to navigate through the setup process. I highly recommend next-saas-stripe-starter to any developer.",
+        review: "The real-time analytics have revolutionized our safety protocols. We've seen a 40% reduction in workplace incidents since implementing this solution.",
     },
     {
         name: "Alice Smith",
         job: "UI/UX Designer",
         image: "https://randomuser.me/api/portraits/women/2.jpg",
-        review: "Thanks to next-saas-stripe-starter, I've been able to create modern and attractive user interfaces in record time. The starter kit provides a solid foundation for building sleek and intuitive designs, allowing me to focus more on the creative aspects of my work.",
+        review: "The 3D item mapping feature has dramatically improved our inventory management. We can locate items faster and optimize space utilization like never before.",
     },
     {
         name: "David Johnson",
         job: "DevOps Engineer",
         image: "https://randomuser.me/api/portraits/men/3.jpg",
-        review: "Thanks to next-saas-stripe-starter, I was able to streamline the entire process and get payments up and running in no time. ",
+        review: "The AI-powered safety assistant has become an indispensable tool for our team. It's like having a safety expert on call 24/7.",
     },
     {
         name: "Michael Wilson",
         job: "Project Manager",
         image: "https://randomuser.me/api/portraits/men/5.jpg",
-        review: "I'm impressed by the quality of code and clear documentation of next-saas-stripe-starter. Kudos to the team!",
+        review: "Integrating our existing IoT devices was seamless. The centralized dashboard gives us unprecedented visibility into our warehouse operations.",
     },
     {
         name: "Sophia Garcia",
         job: "Data Analyst",
         image: "https://randomuser.me/api/portraits/women/6.jpg",
-        review: "next-saas-stripe-starter provided me with the tools I needed to efficiently manage user data. Thank you so much!",
+        review: "The predictive risk assessment feature has transformed how we approach warehouse insurance. It's proactive, data-driven, and incredibly accurate.",
     },
     {
         name: "Emily Brown",
         job: "Marketing Manager",
         image: "https://randomuser.me/api/portraits/women/4.jpg",
-        review: "next-saas-stripe-starter has been an invaluable asset in my role as a marketing manager. With its seamless integration with Stripe, I've been able to launch targeted marketing campaigns with built-in payment functionality, allowing us to monetize our products and services more effectively.",
+        review: "The multilingual capabilities have been a game-changer for our diverse workforce. Safety instructions are now clearly understood by all, regardless of language barriers.",
     },
     {
         name: "Jason Stan",
         job: "Web Designer",
         image: "https://randomuser.me/api/portraits/men/9.jpg",
-        review: "Thanks to next-saas-stripe-starter, I've been able to create modern and attractive user interfaces in record time. The starter kit provides a solid foundation for building sleek and intuitive designs, allowing me to focus more on the creative aspects of my work.",
+        review: "Implementing this system has not only enhanced our safety standards but also significantly improved our operational efficiency. It's been a worthwhile investment with tangible ROI.",
     },
 ];

@@ -14,8 +14,7 @@ export default function Features() {
                     <HeaderSection
                         label="Features"
                         title="Discover all features."
-                        subtitle="Harum quae dolore inventore repudiandae? orrupti aut temporibus
-          ariatur."
+                        subtitle="Elevate your warehouse operations with our cutting-edge safety platform. Combining real-time sensor data, 3D visualization, and AI-driven analytics, we provide unparalleled safety management and operational efficiency. Stay ahead of potential risks, optimize your workflow, and ensure a secure environment for your team and assets."
                     />
 
                     <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

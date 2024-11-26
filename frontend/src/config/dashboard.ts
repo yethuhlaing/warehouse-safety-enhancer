@@ -27,13 +27,6 @@ export const sidebarLinks: SidebarNavItem[] = [
                 badge: 2,
                 authorizeOnly: UserRole.ADMIN,
             },
-            {
-                href: "#/dashboard/posts",
-                icon: "post",
-                title: "User Posts",
-                authorizeOnly: UserRole.USER,
-                disabled: true,
-            },
         ],
     },
     {
@@ -45,7 +38,6 @@ export const sidebarLinks: SidebarNavItem[] = [
                 title: "Settings",
             },
             { href: "/", icon: "home", title: "Homepage" },
-            { href: "/docs", icon: "bookOpen", title: "Documentation" },
             {
                 href: "#",
                 icon: "messages",

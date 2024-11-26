@@ -93,12 +93,10 @@ export default function BentoGrid() {
                             </div>
                             <div className="relative z-10 mt-8 space-y-1.5 text-center">
                                 <h2 className="text-lg font-medium text-foreground">
-                                    Secure by default
+                                    Enterprise-Grade Security
                                 </h2>
                                 <p className="text-muted-foreground">
-                                    Provident fugit and vero voluptate. magnam
-                                    magni doloribus dolores voluptates a
-                                    sapiente nisi.
+                                Your warehouse data is protected with state-of-the-art encryption, secure authentication, and compliance with industry standards.
                                 </p>
                             </div>
                         </div>
@@ -194,8 +192,7 @@ export default function BentoGrid() {
                                     Faster than light
                                 </h2>
                                 <p className="text-muted-foreground">
-                                    Provident fugit vero voluptate. magnam magni
-                                    doloribus dolores voluptates inventore nisi.
+                                Get instant insights with our high-performance monitoring system that processes sensor data in milliseconds for immediate safety alerts.
                                 </p>
                             </div>
                         </div>
@@ -223,11 +220,10 @@ export default function BentoGrid() {
                                 </div>
                                 <div className="space-y-2">
                                     <h2 className="text-lg font-medium text-foreground">
-                                        Faster than light
+                                    Predictive Analytics
                                     </h2>
                                     <p className="text-muted-foreground">
-                                        Provident fugit vero voluptate.
-                                        Voluptates a sapiente inventore nisi.
+                                    Stay ahead of potential safety issues with our AI-powered predictive analytics that identify risks before they become incidents.
                                     </p>
                                 </div>
                             </div>
@@ -308,11 +304,10 @@ export default function BentoGrid() {
                                 </div>
                                 <div className="space-y-2">
                                     <h2 className="text-lg font-medium text-foreground">
-                                        Keep your loved ones safe
+                                    Team Safety Tracking
                                     </h2>
                                     <p className="text-muted-foreground">
-                                        Voluptate. magnam magni doloribus
-                                        dolores voluptates a sapiente.
+                                    Monitor your team's safety in real-time with our advanced personnel tracking system, ensuring everyone stays protected in your warehouse environmen
                                     </p>
                                 </div>
                             </div>

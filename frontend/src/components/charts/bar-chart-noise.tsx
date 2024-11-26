@@ -54,7 +54,7 @@ export function BarChartNoise() {
                     <CardTitle>Noise Level Tracking Chart</CardTitle>
                     <CardDescription>Live noise level data across different areas to maintain operational safety and comply with noise regulations.</CardDescription>
                 </div>
-                <TimeRangeSelector field={'noise_level'} />
+                <TimeRangeSelector field={'noise-level'} />
             </CardHeader>
             <CardContent className="px-2 sm:p-6">
                 <ChartContainer

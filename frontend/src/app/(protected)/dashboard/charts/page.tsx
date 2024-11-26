@@ -15,7 +15,7 @@ import { BarChartWaterLevel } from "@/components/charts/bar-chart-water-level";
 import { StepChartWaterFlow } from "@/components/charts/step-chart-water-flow";
 
 export const metadata = constructMetadata({
-    title: "Charts – SaaS Starter",
+    title: "Charts – SenseIQ",
     description: "List of charts by shadcn-ui",
 });
 
@@ -30,21 +30,23 @@ export default function ChartsPage() {
             />
             <div className="flex flex-col gap-5">
                 <LineChartTemperature />
-                <BarChartWaterLevel />
-                <StepChartWaterFlow />
-                <RadarChartPopulation />
+
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 2xl:grid-cols-2">
-                    <BarChartHumidity />
-                    <RadialGridGas />
-                </div>  
-                <AreaChartStacked />
-                <BarChartNoise />
+                    <BarChartNoise />
+                    <StepChartWaterFlow />
+                </div> 
+                <BarChartWaterLevel />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 2xl:grid-cols-3">
                     <GuageLightIntensity />
                     <GuageVibration />
                     <GuageEmergency />
                 </div>
-
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-1 2xl:grid-cols-2">
+                    <BarChartHumidity />
+                    <RadialGridGas />
+                </div>  
+                <AreaChartStacked />
+                <RadarChartPopulation />
             </div>
         </>
     );

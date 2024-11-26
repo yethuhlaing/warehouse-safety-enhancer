@@ -50,7 +50,7 @@ function TimeRangeSelector({ field } : { field : FieldType | null} ) {
 
     return (
         <Select value={selectedTimeRange} onValueChange={handleTimeRangeChange}>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-[100px] md:w-[180px]">
             <SelectValue placeholder="Select time range" />
             </SelectTrigger>
             <SelectContent>

@@ -57,7 +57,7 @@ export async function GET(req: Request) {
                             color: "transparent",
                         }}
                     >
-                        SaaS Starter
+                        SenseIQ
                     </div>
 
                     <div tw="flex flex-col flex-1 py-16">

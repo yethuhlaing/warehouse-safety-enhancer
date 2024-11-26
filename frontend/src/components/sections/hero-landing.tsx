@@ -42,14 +42,13 @@ export default async function HeroLanding() {
                     <span className="hidden md:flex">
                         Introducing&nbsp;
                     </span>{" "}
-                    Next Auth Roles Template on{" "}
-                    <Icons.twitter className="ml-2 size-3.5" />
+                    transformative impact on warehouse management{" "}
                 </Link>
 
                 <h1 className="text-balance font-urban text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-[66px]">
-                    Kick off with a bang with{" "}
+                    Revolutionize warehouse safety with{" "}
                     <span className="text-gradient_indigo-purple font-extrabold">
-                        SaaS Starter
+                        SenseIQ
                     </span>
                 </h1>
 
@@ -60,8 +59,7 @@ export default async function HeroLanding() {
                         animationFillMode: "forwards",
                     }}
                 >
-                    Build your next project using Next.js 14, Prisma, Neon,
-                    Auth.js v5, Resend, React Email, Shadcn/ui, Stripe.
+                    Our cutting-edge platform provides 3D mapping, predictive risk assessment, and multilingual safety insights, ensuring a secure environment for your team and optimizing your operations.
                 </p>
 
                 <div
@@ -83,7 +81,7 @@ export default async function HeroLanding() {
                         <Icons.arrowRight className="size-4" />
                     </Link>
                     <Link
-                        href={siteConfig.links.github}
+                        href='/login'
                         target="_blank"
                         rel="noreferrer"
                         className={cn(
@@ -95,15 +93,8 @@ export default async function HeroLanding() {
                             "px-5",
                         )}
                     >
-                        <Icons.gitHub className="mr-2 size-4" />
                         <p>
-                            <span className="hidden sm:inline-block">
-                                Star on
-                            </span>{" "}
-                            GitHub{" "}
-                            <span className="font-semibold">
-                                {nFormatter(stars)}
-                            </span>
+                            Get Started{" "}
                         </p>
                     </Link>
                 </div>

@@ -26,16 +26,29 @@ import {
     Plus,
     Puzzle,
     Search,
+    TrendingUp, Users, Zap, Eye,
+    Cpu, Box, BarChart3, BotIcon, Shield,
+    Layers, Workflow,
     Settings,
     SunMedium,
     Trash,
     User,
     X,
+    Megaphone,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+    TrendingUp, Users, Zap, Eye,
+    Layers, Workflow, BookOpen,
+    Cpu: Cpu,
+    Puzzle,
+    Shield: Shield, 
+    Megaphone: Megaphone,
+    Box: Box, 
+    BarChart3: BarChart3, 
+    BotIcon: BotIcon,
     add: Plus,
     arrowRight: ArrowRight,
     arrowUpRight: ArrowUpRight,
