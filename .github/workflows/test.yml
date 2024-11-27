@@ -1,0 +1,20 @@
+name: testing Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+    debug:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout repository
+                uses: actions/checkout@v4
+            -   name: Debug Contentlayer
+                run: |
+                    npx contentlayer2 build
+                    ls -la .contentlayer/generated
+                    cat .contentlayer/generated/index.mjs
