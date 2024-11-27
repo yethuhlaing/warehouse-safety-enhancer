@@ -10,6 +10,9 @@ WORKDIR /app
 # Copy the source files
 COPY . .
 
+# Copy the .env files
+COPY .env .env
+
 # Install dependencies using npm
 RUN npm install --only=production
 
