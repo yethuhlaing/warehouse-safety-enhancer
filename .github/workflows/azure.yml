@@ -1,164 +1,164 @@
-# # This workflow will build and push a Docker container to an Azure Web App when a commit is pushed to your default branch.
-# #
-# # This workflow assumes you have already created the target Azure App Service web app.
-# # For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-custom-container?tabs=dotnet&pivots=container-linux
-# #
-# # To configure this workflow:
-# #
-# # 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
-# #    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
-# #
-# # 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
-# #    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
-# #
-# # 3. Create a GitHub Personal access token with "repo" and "read:packages" permissions.
-# #
-# # 4. Create three app settings on your Azure Web app:
-# #       DOCKER_REGISTRY_SERVER_URL: Set this to "https://ghcr.io"
-# #       DOCKER_REGISTRY_SERVER_USERNAME: Set this to the GitHub username or organization that owns the repository
-# #       DOCKER_REGISTRY_SERVER_PASSWORD: Set this to the value of your PAT token from the previous step
-# #
-# # 5. Change the value for the AZURE_WEBAPP_NAME.
-# #
-# # For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
-# # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
+# This workflow will build and push a Docker container to an Azure Web App when a commit is pushed to your default branch.
+#
+# This workflow assumes you have already created the target Azure App Service web app.
+# For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-custom-container?tabs=dotnet&pivots=container-linux
+#
+# To configure this workflow:
+#
+# 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
+#    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
+#
+# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
+#    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
+#
+# 3. Create a GitHub Personal access token with "repo" and "read:packages" permissions.
+#
+# 4. Create three app settings on your Azure Web app:
+#       DOCKER_REGISTRY_SERVER_URL: Set this to "https://ghcr.io"
+#       DOCKER_REGISTRY_SERVER_USERNAME: Set this to the GitHub username or organization that owns the repository
+#       DOCKER_REGISTRY_SERVER_PASSWORD: Set this to the value of your PAT token from the previous step
+#
+# 5. Change the value for the AZURE_WEBAPP_NAME.
+#
+# For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
+# For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
 
-# name: Build and deploy a container to an Azure Web App
+name: Build and deploy a container to an Azure Web App
 
-# env:
-#   REGISTRY: ghcr.io
-#   IMAGE_NAME: ${{ github.repository }}
-#   AZURE_WEBAPP_NAME: iot-edge  # set this to the name of your Azure Web App
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  AZURE_WEBAPP_NAME: iot-edge  # set this to the name of your Azure Web App
 
-#   GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
-#   GOOGLE_CLIENT_SECRET: ${{ vars.GOOGLE_CLIENT_SECRET }}
-#   NEXTAUTH_GITHUB_ID: ${{ vars.NEXTAUTH_GITHUB_ID }}
-#   NEXTAUTH_GITHUB_SECRET: ${{ vars.NEXTAUTH_GITHUB_SECRET }}
-#   DATABASE_URL: ${{ vars.DATABASE_URL }}
-#   RESEND_API_KEY: ${{ vars.RESEND_API_KEY }}
-#   EMAIL_FROM: ${{ vars.EMAIL_FROM }}
-#   SENDGRID_API: ${{ vars.SENDGRID_API }}
-#   STRIPE_API_KEY: ${{ vars.STRIPE_API_KEY }}
-#   STRIPE_WEBHOOK_SECRET: ${{ vars.STRIPE_WEBHOOK_SECRET }}
-#   NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
-#   NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
-#   NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
-#   NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
-#   NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
+  # GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+  # GOOGLE_CLIENT_SECRET: ${{ vars.GOOGLE_CLIENT_SECRET }}
+  # NEXTAUTH_GITHUB_ID: ${{ vars.NEXTAUTH_GITHUB_ID }}
+  # NEXTAUTH_GITHUB_SECRET: ${{ vars.NEXTAUTH_GITHUB_SECRET }}
+  # DATABASE_URL: ${{ vars.DATABASE_URL }}
+  # RESEND_API_KEY: ${{ vars.RESEND_API_KEY }}
+  # EMAIL_FROM: ${{ vars.EMAIL_FROM }}
+  # SENDGRID_API: ${{ vars.SENDGRID_API }}
+  # STRIPE_API_KEY: ${{ vars.STRIPE_API_KEY }}
+  # STRIPE_WEBHOOK_SECRET: ${{ vars.STRIPE_WEBHOOK_SECRET }}
+  # NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+  # NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
+  # NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
+  # NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
+  # NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
 
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
-#   workflow_dispatch:
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
 
-# jobs:
-#   lint:
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v4
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
 
-#     - name: Frontend Lint
-#       working-directory: ./frontend
-#       run: |
-#         npm ci
-#         npm run lint
+    - name: Frontend Lint
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npm run lint
       
-#     - name: Backend Lint
-#       working-directory: ./backend
-#       run: |
-#         npm ci
-#         npm run lint
+    - name: Backend Lint
+      working-directory: ./backend
+      run: |
+        npm ci
+        npm run lint
 
-#   build-and-push:
-#     runs-on: ubuntu-latest
-#     environment: production
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v4
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-#       # - name: Set up Docker Buildx
-#         # uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
-#       # Debug step to check if variables are set
-#       - name: Debug Environment Variables
-#         run: |
-#           if [ -n "$NEXT_PUBLIC_APP_URL" ]; then
-#             echo "NEXT_PUBLIC_APP_URL is set"
-#           else
-#             echo "NEXT_PUBLIC_APP_URL is not set"
-#           fi
-#           # Add more checks as needed
-#           env | grep -i "NEXT_PUBLIC" || true
-#       - name: Log in to GitHub container registry
-#         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-#         with:
-#           registry: ${{ env.REGISTRY }}
-#           username: ${{ github.actor }}
-#           password: ${{ github.token }}
+      # - name: Set up Docker Buildx
+        # uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+      # Debug step to check if variables are set
+      - name: Debug Environment Variables
+        run: |
+          if [ -n "$NEXT_PUBLIC_APP_URL" ]; then
+            echo "NEXT_PUBLIC_APP_URL is set"
+          else
+            echo "NEXT_PUBLIC_APP_URL is not set"
+          fi
+          # Add more checks as needed
+          env | grep -i "NEXT_PUBLIC" || true
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
 
-#       - name: Build and Push Frontend Image
-#         uses: docker/build-push-action@v5
-#         with:
-#           context: ./frontend
-#           push: true
-#           tags: |
-#             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
-#             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
-#           build-args: |
-#             GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}
-#             GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }}
-#             NEXTAUTH_GITHUB_ID=${{ env.NEXTAUTH_GITHUB_ID }}
-#             NEXTAUTH_GITHUB_SECRET=${{ env.NEXTAUTH_GITHUB_SECRET }}
-#             DATABASE_URL=${{ env.DATABASE_URL }}
-#             RESEND_API_KEY=${{ env.RESEND_API_KEY }}
-#             EMAIL_FROM=${{ env.EMAIL_FROM }}
-#             SENDGRID_API=${{ env.SENDGRID_API }}
-#             STRIPE_API_KEY=${{ env.STRIPE_API_KEY }}
-#             STRIPE_WEBHOOK_SECRET=${{ env.STRIPE_WEBHOOK_SECRET }}
-#             NEXT_PUBLIC_APP_URL=${{ env.NEXT_PUBLIC_APP_URL }}
-#             NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
-#             NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
-#             NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
-#             NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
-#       - name: Build and Push Backend Image
-#         uses: docker/build-push-action@v5
-#         with:
-#           context: ./backend
-#           push: true
-#           tags: |
-#             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
-#             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+      - name: Build and Push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+          build-args: |
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            NEXTAUTH_GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}
+            NEXTAUTH_GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
+            EMAIL_FROM=${{ secrets.EMAIL_FROM }}
+            SENDGRID_API=${{ secrets.SENDGRID_API }}
+            STRIPE_API_KEY=${{ secrets.STRIPE_API_KEY }}
+            STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}
+            NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
+            NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
+      - name: Build and Push Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
 
-#       - name: Lowercase the repo name and username
-#         run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+      - name: Lowercase the repo name and username
+        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
-#   deploy:
-#     needs: build-and-push
-#     runs-on: ubuntu-latest
-#     environment:
-#     steps:
-#       - name: Deploy to Azure VM
-#         uses: azure/webapps-deploy@v2
-#         with:
-#           host: ${{ secrets.VM_HOST }}
-#           username: ${{ secrets.VM_USERNAME }}
-#           key: ${{ secrets.VM_SSH_KEY }}
-#           script: |
-#             # Login to GHCR
-#             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment:
+    steps:
+      - name: Deploy to Azure VM
+        uses: azure/webapps-deploy@v2
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            # Login to GHCR
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-#             # Pull and run Frontend
-#             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
-#             docker stop frontend-container || true
-#             docker rm frontend-container || true
-#             docker run -d --name frontend-container -p 3000:3000 \
-#               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+            # Pull and run Frontend
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+            docker stop frontend-container || true
+            docker rm frontend-container || true
+            docker run -d --name frontend-container -p 3000:3000 \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
-#             # Pull and run Backend
-#             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
-#             docker stop backend-container || true
-#             docker rm backend-container || true
-#             docker run -d --name backend-container -p 5000:5000 \
-#               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
+            # Pull and run Backend
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+            docker stop backend-container || true
+            docker rm backend-container || true
+            docker run -d --name backend-container -p 5000:5000 \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
