@@ -10,9 +10,9 @@ export default async function HeroLanding() {
     const { stargazers_count: stars } = await fetch(
         "https://api.github.com/repos/mickasmt/next-saas-stripe-starter",
         {
-            ...(env.GITHUB_OAUTH_TOKEN && {
+            ...(env.NEXTAUTH_GITHUB_ID && {
                 headers: {
-                    Authorization: `Bearer ${process.env.GITHUB_OAUTH_TOKEN}`,
+                    Authorization: `Bearer ${process.env.NEXTAUTH_GITHUB_ID}`,
                     "Content-Type": "application/json",
                 },
             }),

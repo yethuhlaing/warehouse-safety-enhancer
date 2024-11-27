@@ -22,8 +22,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               }
         }),
         Github( {
-            clientId: env.GITHUB_ID,   
-            clientSecret: env.GITHUB_SECRET,
+            clientId: env.NEXTAUTH_GITHUB_ID,   
+            clientSecret: env.NEXTAUTH_GITHUB_SECRET,
         }),
     ],
     callbacks: {

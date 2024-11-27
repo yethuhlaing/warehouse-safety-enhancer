@@ -31,6 +31,22 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   AZURE_WEBAPP_NAME: iot-edge  # set this to the name of your Azure Web App
 
+  GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ vars.GOOGLE_CLIENT_SECRET }}
+  NEXTAUTH_GITHUB_ID: ${{ vars.NEXTAUTH_GITHUB_ID }}
+  NEXTAUTH_GITHUB_SECRET: ${{ vars.NEXTAUTH_GITHUB_SECRET }}
+  DATABASE_URL: ${{ vars.DATABASE_URL }}
+  RESEND_API_KEY: ${{ vars.RESEND_API_KEY }}
+  EMAIL_FROM: ${{ vars.EMAIL_FROM }}
+  SENDGRID_API: ${{ vars.SENDGRID_API }}
+  STRIPE_API_KEY: ${{ vars.STRIPE_API_KEY }}
+  STRIPE_WEBHOOK_SECRET: ${{ vars.STRIPE_WEBHOOK_SECRET }}
+  NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+  NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
+  NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
+  NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
+  NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID: ${{ vars.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
+
 on:
   push:
     branches: [ "main" ]
@@ -81,7 +97,22 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
-    
+          build-args: |
+            GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }}
+            NEXTAUTH_GITHUB_ID=${{ env.NEXTAUTH_GITHUB_ID }}
+            NEXTAUTH_GITHUB_SECRET=${{ env.NEXTAUTH_GITHUB_SECRET }}
+            DATABASE_URL=${{ env.DATABASE_URL }}
+            RESEND_API_KEY=${{ env.RESEND_API_KEY }}
+            EMAIL_FROM=${{ env.EMAIL_FROM }}
+            SENDGRID_API=${{ env.SENDGRID_API }}
+            STRIPE_API_KEY=${{ env.STRIPE_API_KEY }}
+            STRIPE_WEBHOOK_SECRET=${{ env.STRIPE_WEBHOOK_SECRET }}
+            NEXT_PUBLIC_APP_URL=${{ env.NEXT_PUBLIC_APP_URL }}
+            NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ env.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
