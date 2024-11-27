@@ -18,7 +18,7 @@ ENV NODE_ENV=production
 
 # Build the application
 FROM base AS build
-RUN npm install --legacy-peer-deps
+RUN npm install
 RUN npm run build
 
 # Create a new layer for the production runner
