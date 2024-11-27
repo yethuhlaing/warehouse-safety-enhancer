@@ -76,5 +76,8 @@ USER yethuhlaing
 EXPOSE 3000
 ENV PORT 3000
 
+# Run the build
+RUN npm run build
+
 # Define the command to start the application
 CMD ["npm", "run", "start"]
