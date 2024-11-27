@@ -63,6 +63,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 yethuhlaing
 
 # Copy the build output and node_modules from the build stage
+COPY --from=build /app/.contentlayer /app/.contentlayer
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/.next /app/.next
 
@@ -75,9 +76,6 @@ USER yethuhlaing
 # Set the port and expose it
 EXPOSE 3000
 ENV PORT 3000
-
-# Run the build
-RUN npm run build
 
 # Define the command to start the application
 CMD ["npm", "run", "start"]
