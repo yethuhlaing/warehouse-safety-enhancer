@@ -1,0 +1,30 @@
+name: testing
+on:
+    push:
+        branches: [ "main" ]
+    pull_request:
+        branches: [ "main" ]
+    workflow_dispatch:
+env:
+  DATABASE_URL: ${{ vars.DATABASE_URL }}
+
+jobs:
+    print:
+        runs-on: ubuntu-latest
+        steps:
+        -   name: Checkout repository
+            uses: actions/checkout@v4
+    
+          # - name: Set up Docker Buildx
+            # uses: docker/setup-buildx-action@f95db51fddba0c2d1ec667646a06c2ce06100226 # v3.0.0
+          # Debug step to check if variables are set
+        -   name: Debug Environment Variables
+            run: |
+              if [ -n "$DATABASE_URL" ]; then
+                echo "DATABASE_URL is set"
+              else
+                echo "DATABASE_URL is not set"
+              fi
+              # Add more checks as needed
+              env | grep -i "DATABASE_URL" || true
+        
