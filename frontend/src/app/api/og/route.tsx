@@ -1,6 +1,6 @@
+import { ogImageSchema } from "@/lib/zod";
 import { ImageResponse } from "@vercel/og";
 
-import { ogImageSchema } from "@/validations/og";
 
 export const runtime = "edge";
 
