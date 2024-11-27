@@ -27,21 +27,21 @@ WORKDIR /app
 
 # Set up a non-root user
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN adduser --system --uid 1001 yethuhlaing
 
 # Copy the build output and node_modules from the build stage
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/.next /app/.next
 
-# Set permissions for the nextjs user
-RUN chown -R nextjs:nodejs /app/.next
+# Set permissions for the yethuhlaing user
+RUN chown -R yethuhlaing:nodejs /app/.next
 
-# Switch to the nextjs user
-USER nextjs
+# Switch to the yethuhlaing user
+USER yethuhlaing
 
 # Set the port and expose it
 EXPOSE 3000
 ENV PORT 3000
 
 # Define the command to start the application
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
