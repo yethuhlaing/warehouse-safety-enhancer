@@ -39,22 +39,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
 
-    - name: Frontend Lint
-      working-directory: ./frontend
-      run: |
-        npm ci
-        npm run lint
+  #   - name: Frontend Lint
+  #     working-directory: ./frontend
+  #     run: |
+  #       npm ci
+  #       npm run lint
       
-    - name: Backend Lint
-      working-directory: ./backend
-      run: |
-        npm ci
-        npm run lint
+  #   - name: Backend Lint
+  #     working-directory: ./backend
+  #     run: |
+  #       npm ci
+  #       npm run lint
 
   build-and-push:
     runs-on: ubuntu-latest

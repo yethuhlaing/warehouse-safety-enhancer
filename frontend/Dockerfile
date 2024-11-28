@@ -98,6 +98,8 @@ COPY --from=builder --chown=yethuhlaing:nodejs /app/src/prisma ./src/prisma
 COPY --from=builder /app/contentlayer.config.ts ./contentlayer.config.ts
 COPY --from=builder /app/.contentlayer ./contentlayer
 
+COPY --from=builder /app/src/prisma ./src/prisma
+
 # Generate Prisma client in final stage
 RUN npx prisma generate
 
