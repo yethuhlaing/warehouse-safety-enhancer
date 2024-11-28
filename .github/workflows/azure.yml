@@ -39,22 +39,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v4
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
 
-  #   - name: Frontend Lint
-  #     working-directory: ./frontend
-  #     run: |
-  #       npm ci
-  #       npm run lint
+    - name: Frontend Lint
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npm run lint
       
-  #   - name: Backend Lint
-  #     working-directory: ./backend
-  #     run: |
-  #       npm ci
-  #       npm run lint
+    - name: Backend Lint
+      working-directory: ./backend
+      run: |
+        npm ci
+        npm run lint
 
   build-and-push:
     runs-on: ubuntu-latest
@@ -71,30 +71,30 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ github.token }}
 
-      # - name: Build and Push Frontend Image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     context: ./frontend
-      #     push: true
-      #     tags: |
-      #       ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
-      #       ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
-      #     build-args: |
-      #       GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-      #       GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
-      #       NEXTAUTH_GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}
-      #       NEXTAUTH_GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}
-      #       DATABASE_URL=${{ secrets.DATABASE_URL }}
-      #       RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
-      #       EMAIL_FROM=${{ secrets.EMAIL_FROM }}
-      #       SENDGRID_API=${{ secrets.SENDGRID_API }}
-      #       STRIPE_API_KEY=${{ secrets.STRIPE_API_KEY }}
-      #       STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}
-      #       NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
-      #       NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
-      #       NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
-      #       NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
-      #       NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
+      - name: Build and Push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+          build-args: |
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            NEXTAUTH_GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}
+            NEXTAUTH_GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
+            EMAIL_FROM=${{ secrets.EMAIL_FROM }}
+            SENDGRID_API=${{ secrets.SENDGRID_API }}
+            STRIPE_API_KEY=${{ secrets.STRIPE_API_KEY }}
+            STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}
+            NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
+            NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
