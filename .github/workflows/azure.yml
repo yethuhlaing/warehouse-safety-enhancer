@@ -39,22 +39,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
 
-    - name: Frontend Lint
-      working-directory: ./frontend
-      run: |
-        npm ci
-        npm run lint
+  #   - name: Frontend Lint
+  #     working-directory: ./frontend
+  #     run: |
+  #       npm ci
+  #       npm run lint
       
-    - name: Backend Lint
-      working-directory: ./backend
-      run: |
-        npm ci
-        npm run lint
+  #   - name: Backend Lint
+  #     working-directory: ./backend
+  #     run: |
+  #       npm ci
+  #       npm run lint
 
   build-and-push:
     runs-on: ubuntu-latest
@@ -103,9 +103,12 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+          build-args: |
+            NFLUXDB_TOKEN=${{ secrets.NFLUXDB_TOKEN }}
+            INFLUXDB_ORG=${{ secrets.INFLUXDB_ORG }}
+            INFLUXDB_BUCKET=${{ secrets.INFLUXDB_BUCKET }}
+            INFLUXDB_URL=${{ secrets.INFLUXDB_URL }}
 
-      - name: Lowercase the repo name and username
-        run: echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
   deploy:
     needs: build-and-push

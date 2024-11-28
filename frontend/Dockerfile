@@ -13,7 +13,7 @@ COPY package.json package-lock.json* ./
 COPY prisma/schema.prisma ./prisma/schema.prisma
 
 # Install dependencies and generate Prisma client
-RUN npm ci
+RUN npm install
 RUN npx prisma generate 
 
 
@@ -107,4 +107,4 @@ EXPOSE 3000
 ENV PORT 3000
 
 # Define the command to start the application
-CMD ["npm", "run", "start"]
+CMD ["npm", "start"]
