@@ -69,7 +69,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.NEXTAUTH_GITHUB_ID }}
+          password: ${{ github.token }}
 
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
