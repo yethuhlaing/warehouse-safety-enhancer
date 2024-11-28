@@ -118,22 +118,23 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
-          script: |
-            # Login to GHCR
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-${{github.token}}
+          script: whoami
+          # script: |
+          #   # Login to GHCR
+          #   echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-${{github.token}}
 
-            # Pull and run Frontend
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
-            docker stop frontend-container || true
-            docker rm frontend-container || true
-            docker run -d --name frontend-container -p 3000:3000 \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+          #   # Pull and run Frontend
+          #   docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+          #   docker stop frontend-container || true
+          #   docker rm frontend-container || true
+          #   docker run -d --name frontend-container -p 3000:3000 \
+          #     ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
-            # Pull and run Backend
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
-            docker stop backend-container || true
-            docker rm backend-container || true
-            docker run -d --name backend-container -p 5000:5000 \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
+          #   # Pull and run Backend
+          #   docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+          #   docker stop backend-container || true
+          #   docker rm backend-container || true
+          #   docker run -d --name backend-container -p 5000:5000 \
+          #     ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
 
 
