@@ -10,7 +10,11 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
-RUN npm install 
+COPY src/prisma ./src/prisma
+
+# Install dependencies and generate Prisma client
+RUN npm ci
+RUN npx prisma generate 
 
 
 
@@ -18,6 +22,9 @@ RUN npm install
 # Build the application
 FROM base AS builder
 WORKDIR /app
+
+# Install build dependencies
+RUN apk add --no-cache openssl
 
 # Set build-time arguments for environment variables
 ARG GOOGLE_CLIENT_ID
@@ -55,8 +62,12 @@ ENV NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${NEXT_PUBLIC_STRIPE_BUSINESS_YEA
 
 # Copy dependencies and source code
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/src/prisma ./src/prisma
 COPY . .
 
+
+# Generate Prisma client again (for build stage)
+RUN npx prisma generate
 # Build the application
 RUN npm run build
 
@@ -70,6 +81,9 @@ WORKDIR /app
 
 ENV NODE_ENV production
 
+# Install production dependencies for Prisma
+RUN apk add --no-cache openssl
+
 # Set up a non-root user
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 yethuhlaing
@@ -79,13 +93,16 @@ COPY --from=builder --chown=yethuhlaing:nodejs /app/public ./public
 COPY --from=builder --chown=yethuhlaing:nodejs /app/.contentlayer /app/.contentlayer
 COPY --from=builder --chown=yethuhlaing:nodejs /app/node_modules /app/node_modules
 COPY --from=builder --chown=yethuhlaing:nodejs /app/.next /app/.next
+COPY --from=builder --chown=yethuhlaing:nodejs /app/src/prisma ./src/prisma
+
 COPY --from=builder /app/contentlayer.config.ts ./contentlayer.config.ts
 COPY --from=builder /app/.contentlayer ./contentlayer
 
+# Generate Prisma client in final stage
+RUN npx prisma generate
+
 # Switch to the yethuhlaing user
 USER yethuhlaing
-
-# Set the port and expose it
 EXPOSE 3000
 ENV PORT 3000
 
