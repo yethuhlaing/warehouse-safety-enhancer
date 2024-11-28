@@ -42,4 +42,4 @@ USER yethuhlaing
 EXPOSE 5000
 
 # Default command to run the application
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start"]
