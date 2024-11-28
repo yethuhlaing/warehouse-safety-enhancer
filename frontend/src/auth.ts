@@ -4,9 +4,6 @@ import prisma from "./lib/prisma";
 import { UserRole } from "@prisma/client";
 import { env } from "./env.mjs";
 import Google from "next-auth/providers/google";
-import Resend from "next-auth/providers/resend";
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { sendVerificationRequest } from "@/lib/email";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [

@@ -1,14 +1,11 @@
 "use client";
 
-import { Footprints, Gem, UsersRound  } from "lucide-react";
+import { Footprints, UsersRound  } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Label,RadialBar,RadialBarChart, } from "recharts";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
-    CardHeader,
-    CardTitle,
 } from "@/components/ui/card";
 import {
     ChartConfig,
@@ -19,15 +16,6 @@ import {
 import { useEffect , useState } from "react";
 import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { getCurrentDateTime } from "@/lib/utils";
-
-const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 273 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
-];
 
 const chartConfig = {
     desktop: {

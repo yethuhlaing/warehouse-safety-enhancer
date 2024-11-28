@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { NavItem } from "types";
 import { docsConfig } from "@/config/docs";
 import { cn } from "@/lib/utils";
+import { NavItem } from "@/types";
 
 export interface DocsSidebarNavProps {
     setOpen?: (boolean) => void;
@@ -48,7 +48,7 @@ export function DocsSidebarNavItems({
 }: DocsSidebarNavItemsProps) {
     return items?.length > 0 ? (
         <div className="grid grid-flow-row auto-rows-max text-[15px] md:text-sm">
-            {items.map((item, index) =>
+            {items.map((item, _) =>
                 !item.disabled && item.href ? (
                     <Link
                         key={item.title + item.href}

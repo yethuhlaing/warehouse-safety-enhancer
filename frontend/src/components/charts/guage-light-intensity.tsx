@@ -14,12 +14,6 @@ import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { useState, useEffect } from 'react';
 import GaugeComponent from 'react-gauge-component';
 
-
-type radarChartData = {
-    category: string
-    value: number
-    fill?: string
-}
 const chartConfig = {
 
     safari: {

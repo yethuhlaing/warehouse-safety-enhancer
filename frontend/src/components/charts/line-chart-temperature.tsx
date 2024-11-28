@@ -1,14 +1,11 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
-import { useEffect, useState } from "react";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import React from 'react'
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -19,10 +16,7 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useWebSocketData } from "@/hooks/use-websocket-data";
-import { Button } from "../ui/button";
-import { Capitalize, formatChartData, formatSensorDate } from "@/lib/utils";
 import { format } from "date-fns";
-import { FormattedAggregateData } from "@/types";
 import TimeRangeSelector from "../dashboard/time-range-selector";
 
 

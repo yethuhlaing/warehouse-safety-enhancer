@@ -307,7 +307,7 @@ export default function BentoGrid() {
                                     Team Safety Tracking
                                     </h2>
                                     <p className="text-muted-foreground">
-                                    Monitor your team's safety in real-time with our advanced personnel tracking system, ensuring everyone stays protected in your warehouse environmen
+                                    Monitor your team&apos;s safety in real-time with our advanced personnel tracking system, ensuring everyone stays protected in your warehouse environmen
                                     </p>
                                 </div>
                             </div>

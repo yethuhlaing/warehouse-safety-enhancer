@@ -1,27 +1,11 @@
 import Link from "next/link";
 
 import { env } from "@/env.mjs";
-import { siteConfig } from "@/config/site";
-import { cn, nFormatter } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/shared/icons";
 
 export default async function HeroLanding() {
-    const { stargazers_count: stars } = await fetch(
-        "https://api.github.com/repos/mickasmt/next-saas-stripe-starter",
-        {
-            ...(env.NEXTAUTH_GITHUB_ID && {
-                headers: {
-                    Authorization: `Bearer ${process.env.NEXTAUTH_GITHUB_ID}`,
-                    "Content-Type": "application/json",
-                },
-            }),
-            // data will revalidate every hour
-            next: { revalidate: 3600 },
-        },
-    )
-        .then((res) => res.json())
-        .catch((e) => console.log(e));
 
     return (
         <section className="space-y-6 py-12 sm:py-20 lg:py-20">

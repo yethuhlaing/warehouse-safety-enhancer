@@ -34,6 +34,6 @@ export async function updateUserName(userId: string, data: FormData) {
         return { status: "success" };
     } catch (error) {
         // console.log(error)
-        return { status: "error" };
+        return { status: error };
     }
 }

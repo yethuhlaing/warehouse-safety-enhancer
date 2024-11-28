@@ -1,4 +1,3 @@
-import { NextRequest } from "next/server";
 import { auth } from "@/auth";
 
 import prisma from "@/lib/prisma";
@@ -20,6 +19,7 @@ export const DELETE = auth(async (req: any) => {
             },
         });
     } catch (error) {
+        console.log(error)
         return new Response("Internal server error", { status: 500 });
     }
 
