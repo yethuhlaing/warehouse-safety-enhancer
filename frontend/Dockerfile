@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
-COPY src/prisma/schema.prisma ./prisma/schema.prisma
+COPY src/prisma/ ./prisma/
 
 # Install dependencies and generate Prisma client
 RUN npm ci
@@ -95,8 +95,8 @@ COPY --from=builder --chown=yethuhlaing:nodejs /app/node_modules /app/node_modul
 COPY --from=builder --chown=yethuhlaing:nodejs /app/.next /app/.next
 COPY --from=builder --chown=yethuhlaing:nodejs /app/prisma ./prisma
 
-COPY --from=builder /app/contentlayer.config.ts ./contentlayer.config.ts
-COPY --from=builder /app/.contentlayer ./contentlayer
+# COPY --from=builder /app/contentlayer.config.ts ./contentlayer.config.ts
+# COPY --from=builder /app/.contentlayer ./contentlayer
 
 # Generate Prisma client in final stage
 RUN npx prisma generate
