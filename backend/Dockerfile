@@ -1,45 +1,25 @@
-# Backend Dockerfile (Node.js)
-FROM node:20-alpine AS base
+Untitled
+
+# Use official Node.js LTS image
+FROM node:20-alpine
 
 # Create app directory
-WORKDIR /app
+WORKDIR /usr/src/app
+
+# Copy package files
+COPY package*.json ./
 
 # Install dependencies
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
-COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm ci --only=production
 
-# Build stage
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copy application code
 COPY . .
 
-# Build TypeScript if applicable
-RUN npm run build
-
-# Production stage
-FROM base AS runner
-WORKDIR /app
-
-# Set environment to production
-ENV NODE_ENV production
-
-# Create non-root user
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 yethuhlaing
-
-# Copy built files and node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
-# Change to non-root user
-USER yethuhlaing
-
-# Expose the port the app runs on
+# Expose port (adjust as needed)
 EXPOSE 5000
 
-# Default command to run the application
-CMD ["npm", "run", "start"]
+# Set environment to production
+ENV NODE_ENV=production
+
+# Run the application
+CMD ["node", "server.js"]
