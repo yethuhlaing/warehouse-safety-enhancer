@@ -10,7 +10,7 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
-COPY src/prisma ./src/prisma
+COPY src/prisma/schema.prisma ./prisma/schema.prisma
 
 # Install dependencies and generate Prisma client
 RUN npm ci
@@ -62,7 +62,7 @@ ENV NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${NEXT_PUBLIC_STRIPE_BUSINESS_YEA
 
 # Copy dependencies and source code
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/src/prisma ./src/prisma
+COPY --from=deps /app/prisma ./prisma
 COPY . .
 
 
@@ -93,11 +93,10 @@ COPY --from=builder --chown=yethuhlaing:nodejs /app/public ./public
 COPY --from=builder --chown=yethuhlaing:nodejs /app/.contentlayer /app/.contentlayer
 COPY --from=builder --chown=yethuhlaing:nodejs /app/node_modules /app/node_modules
 COPY --from=builder --chown=yethuhlaing:nodejs /app/.next /app/.next
-COPY --from=builder --chown=yethuhlaing:nodejs /app/src/prisma /app/src/prisma
+COPY --from=builder --chown=yethuhlaing:nodejs /app/prisma ./prisma
 
 COPY --from=builder /app/contentlayer.config.ts ./contentlayer.config.ts
 COPY --from=builder /app/.contentlayer ./contentlayer
-COPY --from=deps /app/src/prisma ./src/prisma
 
 # Generate Prisma client in final stage
 RUN npx prisma generate
