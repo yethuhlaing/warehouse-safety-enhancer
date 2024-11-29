@@ -27,7 +27,7 @@ const timeRanges = [
 ];
 function TimeRangeSelector({ field } : { field : FieldType | null} ) {
     const [selectedTimeRange, setSelectedTimeRange] = useState<string | undefined>();
-    const { error, sendMessage } = useWebSocketData(`ws://localhost:3001/${field}`);
+    const { error, sendMessage } = useWebSocketData(`ws://localhost:5000/${field}`);
 
     useEffect(() => {
         if (field) {

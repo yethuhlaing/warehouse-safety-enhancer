@@ -23,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageEmergency() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/emergency')
+    const { sensorData } = useWebSocketData('ws://localhost:5000/emergency')
 
 
     const [ emergencyValue, setEmergencyValue ] = useState<number>(0)

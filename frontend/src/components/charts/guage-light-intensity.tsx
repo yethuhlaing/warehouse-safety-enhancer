@@ -23,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageLightIntensity() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/light-intensity')
+    const { sensorData } = useWebSocketData('ws://localhost:5000/light-intensity')
 
     const [ lightIntensity, setLightIntensity ] = useState<number>(0)
     useEffect(() => {

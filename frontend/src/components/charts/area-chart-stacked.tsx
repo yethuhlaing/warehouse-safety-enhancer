@@ -46,9 +46,9 @@ type CombinedDataType = {
     no2: number,
 }
 export function AreaChartStacked() {
-    const { sensorData: coData } = useWebSocketData('ws://localhost:3001/co')
-    const { sensorData: pm10Data} = useWebSocketData('ws://localhost:3001/pm10')
-    const { sensorData: no2Data } = useWebSocketData('ws://localhost:3001/no2')
+    const { sensorData: coData } = useWebSocketData('ws://localhost:5000/co')
+    const { sensorData: pm10Data} = useWebSocketData('ws://localhost:5000/pm10')
+    const { sensorData: no2Data } = useWebSocketData('ws://localhost:5000/no2')
     const [visibleAreas, setVisibleAreas] = useState({
         co: true,
         pm10: false,

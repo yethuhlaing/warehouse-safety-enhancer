@@ -37,7 +37,7 @@ type radarChartData = {
     fill?: string
 }
 export function RadarChartPopulation() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/population')
+    const { sensorData } = useWebSocketData('ws://localhost:5000/population')
     console.log(sensorData)
     const [totalPopulation, setTotalPopulation] = useState<radarChartData[]>([])
     useEffect(() => {

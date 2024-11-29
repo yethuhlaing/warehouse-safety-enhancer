@@ -33,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function StepChartWaterFlow() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/water-flow');
+    const { sensorData } = useWebSocketData('ws://localhost:5000/water-flow');
     console.log(sensorData)
     // const { 
     //     field, minimum, maximum, average

@@ -43,7 +43,7 @@ const chartConfig = {
 
 
 export function BarChartNoise() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/noise-level');
+    const { sensorData } = useWebSocketData('ws://localhost:5000/noise-level');
     // const { field, rawData, minimum, maximum, average } = formatChartData(chartData) as FormattedAggregateData  
     return (
         <Card>

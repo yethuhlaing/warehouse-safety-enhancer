@@ -50,7 +50,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function RadialGridGas() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/gas');
+    const { sensorData } = useWebSocketData('ws://localhost:5000/gas');
     console.log(sensorData)
     return (
         <Card className="flex-1">

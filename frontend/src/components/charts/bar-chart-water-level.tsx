@@ -33,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BarChartWaterLevel() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/water-level');
+    const { sensorData } = useWebSocketData('ws://localhost:5000/water-level');
     console.log(sensorData)
     // const { 
     //     field, minimum, maximum, average

@@ -23,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageVibration() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/vibration')
+    const { sensorData } = useWebSocketData('ws://localhost:5000/vibration')
 
     const [ vibration, setVibration ] = useState<number>(0)
     useEffect(() => {
