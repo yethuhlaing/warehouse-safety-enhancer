@@ -1,30 +1,19 @@
-# Dockerfile for Next.js with Contentlayer 2
+# Base stage for shared settings
 FROM node:20-alpine AS base
-
-
-
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
-# Install dependencies
+
+# Dependencies stage
+FROM base AS deps
 COPY package.json package-lock.json* ./
 COPY prisma/schema.prisma ./prisma/schema.prisma
+RUN npm ci --only=production
+RUN npx prisma generate
 
-# Install dependencies and generate Prisma client
-RUN npm install
-RUN npx prisma generate 
-
-
-
-
-# Build the application
+# Builder stage
 FROM base AS builder
 WORKDIR /app
-
-# Install build dependencies
-RUN apk add --no-cache openssl
 
 # Set build-time arguments for environment variables
 ARG GOOGLE_CLIENT_ID
@@ -65,17 +54,12 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
 COPY . .
 
-
 # Generate Prisma client again (for build stage)
 RUN npx prisma generate
-# Build the application
 RUN npm run build
 
 
-
-
-
-# Production image, copy all the files and run next
+# Production stage
 FROM base AS runner
 WORKDIR /app
 
