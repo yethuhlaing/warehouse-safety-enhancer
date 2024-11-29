@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Dependencies stage
 FROM base AS deps
-COPY package.json package-lock.json* ./
+COPY package*.json ./
 COPY prisma/schema.prisma ./prisma/schema.prisma
 RUN npm ci --only=production
 RUN npx prisma generate
@@ -51,6 +51,7 @@ ENV NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${NEXT_PUBLIC_STRIPE_BUSINESS_YEA
 
 # Copy dependencies and source code
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
 COPY --from=deps /app/prisma ./prisma
 COPY . .
 
@@ -74,6 +75,7 @@ RUN adduser --system --uid 1001 yethuhlaing
 
 # Copy the build output and node_modules from the build stage
 COPY --from=builder --chown=yethuhlaing:nodejs /app/public ./public
+COPY --from=builder --chown=yethuhlaing:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=yethuhlaing:nodejs /app/.contentlayer /app/.contentlayer
 COPY --from=builder --chown=yethuhlaing:nodejs /app/node_modules /app/node_modules
 COPY --from=builder --chown=yethuhlaing:nodejs /app/.next /app/.next
