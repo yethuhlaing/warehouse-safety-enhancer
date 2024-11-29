@@ -6,6 +6,7 @@ import { env } from "./env.mjs";
 import Google from "next-auth/providers/google";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+    trustHost: true,
     providers: [
         Google({
             clientId: env.GOOGLE_CLIENT_ID,
