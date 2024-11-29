@@ -129,14 +129,39 @@ jobs:
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
             docker stop frontend-container || true
             docker rm frontend-container || true
-            docker run -d --name frontend-container -p 3000:3000 \
+            docker run -d \
+              --name frontend-container \
+              --network app-network \
+              -p 3000:3000 \
+              -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+              -e GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
+              -e GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
+              -e NEXTAUTH_GITHUB_ID='${{ secrets.NEXTAUTH_GITHUB_ID }}' \
+              -e NEXTAUTH_GITHUB_SECRET='${{ secrets.NEXTAUTH_GITHUB_SECRET }}' \
+              -e RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
+              -e EMAIL_FROM='${{ secrets.EMAIL_FROM }}' \
+              -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
+              -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
+              -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
+              -e NEXTAUTH_URL='${{ secrets.NEXT_PUBLIC_APP_URL }}' \
+              -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
             # Pull and run Backend
             docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
             docker stop backend-container || true
             docker rm backend-container || true
-            docker run -d --name backend-container -p 5000:5000 \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
+            docker run -d \
+              --name backend-container \
+              --network app-network \
+              -p 5000:5000 \
+              -e INFLUXDB_TOKEN='${{ secrets.INFLUXDB_TOKEN }}' \
+              -e INFLUXDB_ORG='${{ secrets.INFLUXDB_ORG }}' \
+              -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
+              -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+
+            # Cleanup unused images
+            docker image prune -f
 
 
