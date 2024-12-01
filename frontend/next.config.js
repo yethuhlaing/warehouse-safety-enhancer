@@ -8,7 +8,7 @@ const nextConfig = {
     reactStrictMode: true,
     swcMinify: true,
     env: {
-        NEXTAUTH_URL: this.env.NEXTAUTH_URL,
+        NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     },
     images: {
         remotePatterns: [
