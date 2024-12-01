@@ -7,6 +7,9 @@ const nextConfig = {
     output: 'standalone', 
     reactStrictMode: true,
     swcMinify: true,
+    env: {
+        NEXTAUTH_URL: this.env.NEXTAUTH_URL,
+    },
     images: {
         remotePatterns: [
             {

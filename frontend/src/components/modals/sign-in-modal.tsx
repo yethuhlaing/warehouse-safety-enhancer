@@ -11,6 +11,7 @@ import { siteConfig } from "@/config/site";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { Icons } from "@/components/shared/icons";
+import { env } from "@/env.mjs";
 
 function SignInModal({
     showSignInModal,
@@ -19,8 +20,22 @@ function SignInModal({
     showSignInModal: boolean;
     setShowSignInModal: Dispatch<SetStateAction<boolean>>;
 }) {
-    const [signInClickedGoogle, setSignInClickedGoogle] = useState(false);
-    const [signInClickedGithub, setSignInClickedGithub] = useState(false);
+    const [signInClicked, setSignInClicked] = useState<string | null>(null);
+
+    const handleSignIn = (provider: string) => {
+        setSignInClicked(provider);
+        signIn(provider, { callbackUrl: env.NEXTAUTH_URL || 'http://localhost:3000' })
+            .then(() => {
+                setTimeout(() => {
+                    setShowSignInModal(false);
+                    setSignInClicked(null);
+                }, 400);
+            })
+            .catch((error) => {
+                console.error("Sign in error:", error);
+                setSignInClicked(null);
+            });
+    };
 
     return (
         <Modal showModal={showSignInModal} setShowModal={setShowSignInModal}>
@@ -35,17 +50,10 @@ function SignInModal({
                 <div className="flex flex-col space-y-4 bg-secondary/50 px-4 py-8 md:px-16">
                     <Button
                         variant="default"
-                        disabled={signInClickedGoogle}
-                        onClick={() => {
-                            setSignInClickedGoogle(true);
-                            signIn("google", { redirect: false }).then(() =>
-                                setTimeout(() => {
-                                    setShowSignInModal(false);
-                                }, 400),
-                            );
-                        }}
+                        disabled={signInClicked === "google"}
+                        onClick={() => handleSignIn("google")}
                     >
-                        {signInClickedGoogle ? (
+                        {signInClicked === "google" ? (
                             <Icons.spinner className="mr-2 size-4 animate-spin" />
                         ) : (
                             <Icons.google className="mr-2 size-4" />
@@ -54,17 +62,10 @@ function SignInModal({
                     </Button>
                     <Button
                         variant="default"
-                        disabled={signInClickedGithub}
-                        onClick={() => {
-                            setSignInClickedGithub(true);
-                            signIn("github", { redirect: false }).then(() =>
-                                setTimeout(() => {
-                                    setShowSignInModal(false);
-                                }, 400),
-                            );
-                        }}
+                        disabled={signInClicked === "github"}
+                        onClick={() => handleSignIn("github")}
                     >
-                        {signInClickedGithub ? (
+                        {signInClicked === "github" ? (
                             <Icons.spinner className="mr-2 size-4 animate-spin" />
                         ) : (
                             <Icons.gitHub className="mr-2 size-4" />
@@ -97,3 +98,4 @@ export function useSignInModal() {
         [setShowSignInModal, SignInModalCallback],
     );
 }
+
