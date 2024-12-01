@@ -19,7 +19,7 @@ export const env = createEnv({
         STRIPE_WEBHOOK_SECRET: z.string().min(1),
     },
     client: {
-        NEXTAUTH_URL: z.string().min(1),
+        NEXT_PUBLIC_APP_URL: z.string().min(1),
         NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID: z.string().min(1),
         NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID: z.string().min(1),
         NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID: z.string().min(1),
@@ -27,6 +27,7 @@ export const env = createEnv({
     },
     runtimeEnv: {
         NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+        NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
         // AUTH_SECRET: process.env.AUTH_SECRET,
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
         GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,

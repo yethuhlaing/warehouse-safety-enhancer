@@ -24,7 +24,7 @@ function SignInModal({
 
     const handleSignIn = (provider: string) => {
         setSignInClicked(provider);
-        signIn(provider, { callbackUrl: env.NEXTAUTH_URL || 'http://localhost:3000' })
+        signIn(provider, { callbackUrl: env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000' })
             .then(() => {
                 setTimeout(() => {
                     setShowSignInModal(false);
