@@ -100,6 +100,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}}
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             NEXTAUTH_GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}
             NEXTAUTH_GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}
@@ -167,6 +168,7 @@ jobs:
               -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
               -e GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
               -e GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
+              -e NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}} \
               -e NEXTAUTH_GITHUB_ID='${{ secrets.NEXTAUTH_GITHUB_ID }}' \
               -e NEXTAUTH_GITHUB_SECRET='${{ secrets.NEXTAUTH_GITHUB_SECRET }}' \
               -e RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
