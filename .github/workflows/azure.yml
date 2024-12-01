@@ -143,7 +143,7 @@ jobs:
               -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
               -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
               -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
-              -e NEXTAUTH_URL='${{ secrets.NEXT_PUBLIC_APP_URL }}' \
+              -e NEXT_PUBLIC_APP_URL='${{ secrets.NEXT_PUBLIC_APP_URL }}' \
               -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 

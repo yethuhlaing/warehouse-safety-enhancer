@@ -12,13 +12,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         Google({
             clientId: env.GOOGLE_CLIENT_ID,
             clientSecret: env.GOOGLE_CLIENT_SECRET,
-            authorization: {
-                params: {
-                  prompt: "consent",
-                  access_type: "offline",
-                  response_type: "code"
-                }
-              }
+            // authorization: {
+            //     params: {
+            //         prompt: "consent",
+            //         access_type: "offline",
+            //         response_type: "code"
+            //     }
+            // }
         }),
         Github( {
             clientId: env.NEXTAUTH_GITHUB_ID,   
@@ -26,18 +26,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }),
     ],
     callbacks: {
-        // authorized({ request: { nextUrl }, auth }) {
-        //     const isLoggedIn = !!auth?.user;
-        //     const { pathname } = nextUrl;
-        //     const role = auth?.user.role || 'user';
-        //     if (pathname.startsWith('/auth/signin') && isLoggedIn) {
-        //         return Response.redirect(new URL('/', nextUrl));
-        //     }
-        //     if (pathname.startsWith("/page2") && role !== "ADMIN") {
-        //         return Response.redirect(new URL('/', nextUrl));
-        //     }
-        //     return !!auth;
-        // },
         async signIn({ user }) {
             try{
                 const existingUser = await prisma.user.findUnique({
@@ -70,10 +58,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
       
             return true
-          },
+        },
         jwt({ token, user, trigger, session }) {
             if (user) {
-                console.log("User", user)
                 token.id = user.id as string;
                 token.role = user.role
             }
