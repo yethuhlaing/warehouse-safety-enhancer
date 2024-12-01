@@ -90,7 +90,7 @@ jobs:
             SENDGRID_API=${{ secrets.SENDGRID_API }}
             STRIPE_API_KEY=${{ secrets.STRIPE_API_KEY }}
             STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}
-            NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
             NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
             NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
             NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
@@ -122,7 +122,6 @@ jobs:
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            # Create Docker network if it doesn't exist
             docker network create app-network || true
 
             # Login to GHCR
@@ -143,7 +142,7 @@ jobs:
               -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
               -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
               -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
-              -e NEXT_PUBLIC_APP_URL='${{ secrets.NEXT_PUBLIC_APP_URL }}' \
+              -e NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}' \
               -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
@@ -157,5 +156,7 @@ jobs:
               -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
               -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
+          
+            docker image prune -f
 
 
