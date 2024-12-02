@@ -193,7 +193,6 @@ jobs:
               -e INFLUXDB_ORG='${{ secrets.INFLUXDB_ORG }}' \
               -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
               -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
-              -e SEED=true
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
 
             echo "Pruning old Docker images..."
