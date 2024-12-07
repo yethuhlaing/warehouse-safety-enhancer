@@ -8,7 +8,7 @@ WORKDIR /app
 FROM base AS deps
 COPY package*.json ./
 COPY prisma/schema.prisma ./prisma/schema.prisma
-RUN npm ci --only=production
+RUN npm install --only=production
 RUN npx prisma generate
 
 # Builder stage
