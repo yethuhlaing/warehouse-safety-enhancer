@@ -2,7 +2,7 @@ import { InfluxDB, Point } from '@influxdata/influxdb-client'
 import 'dotenv/config'
 import { generateSensorData } from './services.js'
 
-const token = process.env.INFLUXDB_TOKEN
+const token = process.env.IINFLUXDB_TOKEN
 const influx_url = process.env.INFLUXDB_URL
 const org = process.env.INFLUXDB_ORG
 const bucket = process.env.INFLUXDB_BUCKET
