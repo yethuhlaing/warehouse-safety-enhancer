@@ -1,0 +1,201 @@
+# This workflow will build and push a Docker container to an Azure Web App when a commit is pushed to your default branch.
+#
+# This workflow assumes you have already created the target Azure App Service web app.
+# For instructions see https://docs.microsoft.com/en-us/azure/app-service/quickstart-custom-container?tabs=dotnet&pivots=container-linux
+#
+# To configure this workflow:
+#
+# 1. Download the Publish Profile for your Azure Web App. You can download this file from the Overview page of your Web App in the Azure Portal.
+#    For more information: https://docs.microsoft.com/en-us/azure/app-service/deploy-github-actions?tabs=applevel#generate-deployment-credentials
+#
+# 2. Create a secret in your repository named AZURE_WEBAPP_PUBLISH_PROFILE, paste the publish profile contents as the value of the secret.
+#    For instructions on obtaining the publish profile see: https://docs.microsoft.com/azure/app-service/deploy-github-actions#configure-the-github-secret
+#
+# 3. Create a GitHub Personal access token with "repo" and "read:packages" permissions.
+#
+# 4. Create three app settings on your Azure Web app:
+#       DOCKER_REGISTRY_SERVER_URL: Set this to "https://ghcr.io"
+#       DOCKER_REGISTRY_SERVER_USERNAME: Set this to the GitHub username or organization that owns the repository
+#       DOCKER_REGISTRY_SERVER_PASSWORD: Set this to the value of your PAT token from the previous step
+#
+# 5. Change the value for the AZURE_WEBAPP_NAME.
+#
+# For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
+# For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
+
+name: Build and deploy a container to an Azure Web App
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  AZURE_WEBAPP_NAME: iot-edge  # set this to the name of your Azure Web App
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+
+  #   - name: Frontend Lint
+  #     working-directory: ./frontend
+  #     run: |
+  #       npm ci
+  #       npm run lint
+      
+  #   - name: Backend Lint
+  #     working-directory: ./backend
+  #     run: |
+  #       npm ci
+  #       npm run lint
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and Push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          build-args: |
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            NEXTAUTH_GITHUB_ID=${{ secrets.NEXTAUTH_GITHUB_ID }}
+            NEXTAUTH_GITHUB_SECRET=${{ secrets.NEXTAUTH_GITHUB_SECRET }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}
+            EMAIL_FROM=${{ secrets.EMAIL_FROM }}
+            SENDGRID_API=${{ secrets.SENDGRID_API }}
+            STRIPE_API_KEY=${{ secrets.STRIPE_API_KEY }}
+            STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+            NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
+            NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
+
+      - name: Build and Push Backend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+          build-args: |
+            INFLUXDB_TOKEN=${{ secrets.INFLUXDB_TOKEN }}
+            INFLUXDB_ORG=${{ secrets.INFLUXDB_ORG }}
+            INFLUXDB_BUCKET=${{ secrets.INFLUXDB_BUCKET }}
+            INFLUXDB_URL=${{ secrets.INFLUXDB_URL }}
+
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Deploy to Azure VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            set -e
+            echo "Creating Docker network if it doesn't exist..."
+            docker network create app-network || true
+
+            echo "Logging in to GitHub Container Registry..."
+            echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            echo "Pulling latest frontend image..."
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+
+            echo "Stopping and removing existing frontend container..."
+            docker stop frontend-container || true
+            docker rm frontend-container || true
+
+            echo "Running new frontend container..."
+            docker run -d --name frontend-container --network app-network -p 3000:3000 \
+              -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+              -e GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
+              -e GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
+              -e NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}} \
+              -e NEXTAUTH_GITHUB_ID='${{ secrets.NEXTAUTH_GITHUB_ID }}' \
+              -e NEXTAUTH_GITHUB_SECRET='${{ secrets.NEXTAUTH_GITHUB_SECRET }}' \
+              -e RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
+              -e EMAIL_FROM='${{ secrets.EMAIL_FROM }}' \
+              -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
+              -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
+              -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
+              -e NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}' \
+              -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+
+            echo "Pulling latest backend image..."
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+
+            echo "Stopping and removing existing backend container..."
+            docker stop backend-container || true
+            docker rm backend-container || true
+
+            echo "Running new backend container..."
+            docker run -d --name backend-container --network app-network -p 5000:5000 \
+              -e IINFLUXDB_TOKEN='${{ secrets.IINFLUXDB_TOKEN }}' \
+              -e INFLUXDB_ORG='${{ secrets.INFLUXDB_ORG }}' \
+              -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
+              -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
+
+            echo "Pruning old Docker images..."
+            docker image prune -f
+
+            echo "Deployment completed successfully!"

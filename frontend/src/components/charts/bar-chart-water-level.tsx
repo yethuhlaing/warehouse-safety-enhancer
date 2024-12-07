@@ -1,13 +1,10 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { useEffect, useState } from "react";
 import React from 'react'
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -20,7 +17,7 @@ import {
 import { useWebSocketData } from "@/hooks/use-websocket-data";
 
 import TimeRangeSelector from "../dashboard/time-range-selector";
-import { Bar, BarChart, CartesianGrid, Cell, LabelList, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts"
 import { format } from "date-fns";
 
 
@@ -36,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BarChartWaterLevel() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/water-level');
+    const { sensorData } = useWebSocketData('ws://localhost:5000/water-level');
     console.log(sensorData)
     // const { 
     //     field, minimum, maximum, average

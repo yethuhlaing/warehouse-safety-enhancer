@@ -14,12 +14,6 @@ import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { useState, useEffect } from 'react';
 import GaugeComponent from 'react-gauge-component';
 
-
-type radarChartData = {
-    category: string
-    value: number
-    fill?: string
-}
 const chartConfig = {
 
     safari: {
@@ -29,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageLightIntensity() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/light-intensity')
+    const { sensorData } = useWebSocketData('ws://localhost:5000/light-intensity')
 
     const [ lightIntensity, setLightIntensity ] = useState<number>(0)
     useEffect(() => {

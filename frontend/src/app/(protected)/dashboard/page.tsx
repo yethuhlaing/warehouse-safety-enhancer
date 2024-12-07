@@ -3,6 +3,7 @@ import { constructMetadata } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { EmptyPlaceholder } from "@/components/shared/empty-placeholder";
+import BIMViewer from "./Dashboard";
 
 export const metadata = constructMetadata({
     title: "Dashboard – SenseIQ",
@@ -10,24 +11,14 @@ export const metadata = constructMetadata({
 });
 
 export default async function DashboardPage() {
-    const user = await getCurrentUser();
 
     return (
         <>
-            <DashboardHeader
-                heading="Dashboard"
-                text={`Current Role : ${user?.role} — Change your role in settings.`}
-            />
-            <EmptyPlaceholder>
-                <EmptyPlaceholder.Icon name="post" />
-                <EmptyPlaceholder.Title>
-                    No content created
-                </EmptyPlaceholder.Title>
-                <EmptyPlaceholder.Description>
-                    You don&apos;t have any content yet. Start creating content.
-                </EmptyPlaceholder.Description>
-                <Button>Add Content</Button>
-            </EmptyPlaceholder>
+            <DashboardHeader  
+                heading="Interactive Dashboard"  
+                text="Interact with your IFC model, add items, and make real-time updates with ease."  
+            /> 
+            <BIMViewer />
         </>
     );
 }

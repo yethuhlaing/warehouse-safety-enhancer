@@ -1,13 +1,10 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
-import { useEffect, useState } from "react";
 import React from 'react'
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -36,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function StepChartWaterFlow() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/water-flow');
+    const { sensorData } = useWebSocketData('ws://localhost:5000/water-flow');
     console.log(sensorData)
     // const { 
     //     field, minimum, maximum, average

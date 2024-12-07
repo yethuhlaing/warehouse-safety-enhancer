@@ -116,7 +116,7 @@ export function formatAggregateOutput(type: string ,field: string, aggregateValu
 } 
 export function formatChartData(chartData: aggregateData) {
 
-    let result: FormattedAggregateData = {
+    const result: FormattedAggregateData = {
         field: '',
         average: '',
         minimum: '',
@@ -130,21 +130,21 @@ export function formatChartData(chartData: aggregateData) {
     result.field = field
 
 
-    if (meanData && meanData.length > 0) {
-        const aggregateTime = formatAggregateDate(meanData?.[meanData.length - 1]?._time)
-        const aggregateValue = formatAggregateValue(meanData?.[meanData.length - 1]?._value) 
-        result.average = formatAggregateOutput("Average",field, aggregateValue)
-    }
-    if (minData && minData.length > 0) {
-        const aggregateTime = formatAggregateDate(minData?.[minData.length-1]?._time)
-        const aggregateValue = formatAggregateValue(minData?.[minData.length-1]?._value) 
-        result.minimum = formatAggregateOutput("Minimum", field, aggregateValue)
-    }
-    if (maxData && maxData.length > 0) {
-        const aggregateTime = formatAggregateDate(maxData?.[maxData.length-1]?._time)
-        const aggregateValue = formatAggregateValue(maxData?.[maxData.length-1]?._value) 
-        result.maximum = formatAggregateOutput("Maximum", field, aggregateValue)
-    }
+    // if (meanData && meanData.length > 0) {
+    //     const aggregateTime = formatAggregateDate(meanData?.[meanData.length - 1]?._time)
+    //     const aggregateValue = formatAggregateValue(meanData?.[meanData.length - 1]?._value) 
+    //     result.average = formatAggregateOutput("Average",field, aggregateValue)
+    // }
+    // if (minData && minData.length > 0) {
+    //     const aggregateTime = formatAggregateDate(minData?.[minData.length-1]?._time)
+    //     const aggregateValue = formatAggregateValue(minData?.[minData.length-1]?._value) 
+    //     result.minimum = formatAggregateOutput("Minimum", field, aggregateValue)
+    // }
+    // if (maxData && maxData.length > 0) {
+    //     const aggregateTime = formatAggregateDate(maxData?.[maxData.length-1]?._time)
+    //     const aggregateValue = formatAggregateValue(maxData?.[maxData.length-1]?._value) 
+    //     result.maximum = formatAggregateOutput("Maximum", field, aggregateValue)
+    // }
 
     return result
 
@@ -195,7 +195,7 @@ export function nFormatter(num: number, digits?: number) {
         { value: 1e18, symbol: "E" },
     ];
     const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    var item = lookup
+    const item = lookup
         .slice()
         .reverse()
         .find(function (item) {
@@ -235,6 +235,7 @@ export const getBlurDataURL = async (url: string | null) => {
 
         return `data:image/png;base64,${base64}`;
     } catch (error) {
+        console.log(error)
         return "data:image/webp;base64,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     }
 };

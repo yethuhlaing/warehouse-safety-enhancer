@@ -32,6 +32,7 @@ export function useWebSocketData(url: string): UseWebSocketResult {
         ].sort((a, b) => new Date(a._time).getTime() - new Date(b._time).getTime());
 
         setSensorData(dataCacheRef.current.historicalData);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const connect = useCallback(() => {
@@ -73,6 +74,7 @@ export function useWebSocketData(url: string): UseWebSocketResult {
                         dataCacheRef.current.lastTimestamp = latestTimestamp;
                     }
                 } catch (err) {
+                    console.log(err)
                     setError(new Error('Failed to parse WebSocket data'));
                 }
             };

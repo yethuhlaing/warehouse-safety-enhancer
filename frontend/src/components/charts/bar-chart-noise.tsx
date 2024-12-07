@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -19,8 +19,6 @@ import {
 } from "@/components/ui/chart";
 import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { format } from 'date-fns';
-import { FormattedAggregateData } from '@/types';
-import { Capitalize, formatChartData } from '@/lib/utils';
 import TimeRangeSelector from '../dashboard/time-range-selector';
 import { AudioLines } from 'lucide-react';
 
@@ -45,7 +43,7 @@ const chartConfig = {
 
 
 export function BarChartNoise() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/noise-level');
+    const { sensorData } = useWebSocketData('ws://localhost:5000/noise-level');
     // const { field, rawData, minimum, maximum, average } = formatChartData(chartData) as FormattedAggregateData  
     return (
         <Card>

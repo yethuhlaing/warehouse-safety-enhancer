@@ -1,13 +1,11 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -22,16 +20,6 @@ import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { format } from "date-fns";
-import { Button } from "../ui/button";
-
-const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-];
 
 const chartConfig = {
     views: {
@@ -58,9 +46,9 @@ type CombinedDataType = {
     no2: number,
 }
 export function AreaChartStacked() {
-    const { sensorData: coData, connectionStatus: coStatus, error: coError, reconnect: coReconnect } = useWebSocketData('ws://localhost:3001/co')
-    const { sensorData: pm10Data, connectionStatus: pm10Status, error: pm10Error, reconnect: pm10Reconnect } = useWebSocketData('ws://localhost:3001/pm10')
-    const { sensorData: no2Data, connectionStatus: pm25Status, error: no2Error, reconnect: no2Reconnect } = useWebSocketData('ws://localhost:3001/no2')
+    const { sensorData: coData } = useWebSocketData('ws://localhost:5000/co')
+    const { sensorData: pm10Data} = useWebSocketData('ws://localhost:5000/pm10')
+    const { sensorData: no2Data } = useWebSocketData('ws://localhost:5000/no2')
     const [visibleAreas, setVisibleAreas] = useState({
         co: true,
         pm10: false,

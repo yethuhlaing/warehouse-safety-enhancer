@@ -5,8 +5,8 @@ export default function ChartsLoading() {
     return (
         <>
             <DashboardHeader
-                heading="Charts"
-                text="List of charts by shadcn-ui."
+                heading="Comprehensive Monitoring Dashboard"
+                text="Real Time Dashboard"
             />
             <div className="flex flex-col gap-5">
                 <Skeleton className="h-80 w-full rounded-lg" /> {/* LineChartTemperature */}

@@ -1,6 +1,6 @@
+import { ogImageSchema } from "@/lib/zod";
 import { ImageResponse } from "@vercel/og";
 
-import { ogImageSchema } from "@/validations/og";
 
 export const runtime = "edge";
 
@@ -172,6 +172,7 @@ export async function GET(req: Request) {
             },
         );
     } catch (error) {
+        console.log(error)
         return new Response(`Failed to generate image`, {
             status: 500,
         });

@@ -46,6 +46,7 @@ export const sendVerificationRequest: EmailConfig["sendVerificationRequest"] =
 
       console.log(data)
     } catch (error) {
+      console.log(error)
       throw new Error("Failed to send verification email.");
     }
   };

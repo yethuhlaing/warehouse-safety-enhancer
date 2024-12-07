@@ -1,6 +1,6 @@
 "use client";
 
-import { AudioLines, AudioWaveform } from 'lucide-react';
+import { AudioWaveform } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -14,12 +14,6 @@ import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { useState, useEffect } from 'react';
 import GaugeComponent from 'react-gauge-component';
 
-
-type radarChartData = {
-    category: string
-    value: number
-    fill?: string
-}
 const chartConfig = {
 
     safari: {
@@ -29,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageVibration() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/vibration')
+    const { sensorData } = useWebSocketData('ws://localhost:5000/vibration')
 
     const [ vibration, setVibration ] = useState<number>(0)
     useEffect(() => {

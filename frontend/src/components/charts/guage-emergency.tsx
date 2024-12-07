@@ -2,17 +2,6 @@
 
 import { Flame } from 'lucide-react';
 import {
-    Cell,
-    Label,
-    Pie,
-    PieChart,
-    PolarGrid,
-    PolarRadiusAxis,
-    RadialBar,
-    RadialBarChart,
-} from "recharts";
-
-import {
     Card,
     CardContent,
     CardDescription,
@@ -25,12 +14,6 @@ import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { useState, useEffect } from 'react';
 import GaugeComponent from 'react-gauge-component';
 
-
-type radarChartData = {
-    category: string
-    value: number
-    fill?: string
-}
 const chartConfig = {
 
     safari: {
@@ -40,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageEmergency() {
-    const { sensorData } = useWebSocketData('ws://localhost:3001/emergency')
+    const { sensorData } = useWebSocketData('ws://localhost:5000/emergency')
 
 
     const [ emergencyValue, setEmergencyValue ] = useState<number>(0)

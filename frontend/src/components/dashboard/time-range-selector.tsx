@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { toast } from "@/components/ui/use-toast";
@@ -27,7 +27,7 @@ const timeRanges = [
 ];
 function TimeRangeSelector({ field } : { field : FieldType | null} ) {
     const [selectedTimeRange, setSelectedTimeRange] = useState<string | undefined>();
-    const { error, sendMessage } = useWebSocketData(`ws://localhost:3001/${field}`);
+    const { error, sendMessage } = useWebSocketData(`ws://localhost:5000/${field}`);
 
     useEffect(() => {
         if (field) {
