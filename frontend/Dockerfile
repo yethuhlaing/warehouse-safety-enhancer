@@ -8,7 +8,7 @@ WORKDIR /app
 FROM base AS deps
 COPY package*.json ./
 COPY prisma/schema.prisma ./prisma/schema.prisma
-RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
 RUN npx prisma generate
 
 # Builder stage

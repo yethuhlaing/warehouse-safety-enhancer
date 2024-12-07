@@ -219,9 +219,9 @@ export default function BIMViewer() {
     const world = worldRef.current;
     if (!world) return;
 
-    let cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-    let cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-    let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    const cubeGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    const cubeMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
     cube.position.set(item.x, item.y, item.z);
 
     world.scene.three.add(cube);
