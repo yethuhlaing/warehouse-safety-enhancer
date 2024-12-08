@@ -53,8 +53,7 @@ jobs:
           export GITHUB_SHA=${{ github.sha }}
           export IMAGE_NAME=${{ env.IMAGE_NAME }}
           
-          docker compose build frontend
-          docker compose build backend 
+          docker compose -f production.yml build
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           NEXT_PUBLIC_APP_URL: ${{secrets.NEXT_PUBLIC_APP_URL}}
