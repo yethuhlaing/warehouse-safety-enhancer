@@ -114,6 +114,7 @@ jobs:
 
             echo "Start new containers"
             docker ps
+            docker images
             docker compose up backend-container
             docker compose up frontend-container
 
