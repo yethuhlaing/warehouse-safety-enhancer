@@ -282,7 +282,6 @@ export default function BIMViewer() {
     })
   }
 
-
   return (
     <div className="flex flex-col lg:flex-row h-full w-full p-2 lg:space-x-4 space-y-4 lg:space-y-0">
       <div className="lg:w-1/3">
@@ -376,8 +375,6 @@ export default function BIMViewer() {
           )}
       </div> */}
       </div>
-
-      
     </div>
   )
 }
