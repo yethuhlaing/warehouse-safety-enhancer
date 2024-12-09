@@ -15,7 +15,7 @@ export default async function DashboardPage() {
     return (
         <>
             <DashboardHeader  
-                heading="Interactive Dashboard"  
+                heading="Dashboard"  
                 text="Interact with your IFC model, add items, and make real-time updates with ease."  
             /> 
             <BIMViewer />

@@ -282,137 +282,100 @@ export default function BIMViewer() {
     })
   }
 
-  const handlePointerEvents = useCallback((event: MouseEvent) => {
-    const world = worldRef.current;
-    if (!world) return;
-
-    const canvas = containerRef.current?.querySelector('canvas');
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const pointer = new THREE.Vector2(
-      ((event.clientX - rect.left) / rect.width) * 2 - 1,
-      -((event.clientY - rect.top) / rect.height) * 2 + 1
-    );
-
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(pointer, world.camera.three);
-
-    const intersects = raycaster.intersectObjects(Object.values(itemMarkersRef.current));
-
-    if (intersects.length > 0) {
-      const object = intersects[0].object;
-      if (event.type === 'pointermove') {
-        object.userData.onPointerEnter?.();
-        setTooltipPosition({ x: event.clientX, y: event.clientY });
-      }
-    } else {
-      setHoveredItem(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    container.addEventListener('pointermove', handlePointerEvents);
-
-    return () => {
-      container.removeEventListener('pointermove', handlePointerEvents);
-    };
-  }, [handlePointerEvents]);
-
   return (
-    <div className="flex flex-col md:flex-row h-full w-full p-2 space-x-4">
-    <div className="w-full md:w-1/3">
-      <Input 
-        type="file" 
-        accept=".ifc"
-        onChange={handleFileUpload}
-        className="flex-grow"
-      />
-      {loadedModel && (
-        <Button onClick={exportFragments} variant="secondary" className='my-2 w-full'>
-          Export Fragments
-        </Button>
-      )}
-      <form className="space-y-2 mt-4" onSubmit={handleSubmit}>
-        <Input
-          id="name"
-          placeholder='Name'
-          name="name"
-          value={newItem.name}
-          onChange={handleInputChange}
-          required
+    <div className="flex flex-col lg:flex-row h-full w-full p-2 lg:space-x-4 space-y-4 lg:space-y-0">
+      <div className="lg:w-1/3">
+        <Input 
+          type="file" 
+          accept=".ifc"
+          onChange={handleFileUpload}
+          className="flex-grow"
         />
-        <Input
-          id="serialCode"
-          placeholder='Serial Code'
-          name="serialCode"
-          value={newItem.serialCode}
-          onChange={handleInputChange}
-          required
-        />
-        <Input
-          id="manufacturer"
-          placeholder='Manufacturer'
-          name="manufacturer"
-          value={newItem.manufacturer}
-          onChange={handleInputChange}
-        />
-        <Input
-          id="installationDate"
-          placeholder="Installation Date"
-          type="date"
-          name='installationDate'
-          value={newItem.installationDate}
-          onChange={handleInputChange}
-        />
-        <Input
-          id="warranty"
-          placeholder="Warranty"
-          name='warranty'
-          value={newItem.warranty}
-          onChange={handleInputChange}
-        />
-        <Input
-          id="comment"
-          name='comment'
-          placeholder="Comment"
-          value={newItem.comment}
-          onChange={handleInputChange}
-        />
-        <Button className='w-full' type="submit" disabled={!latitude || !longitude || !!error}>Add Item at Current Location</Button>
-      </form>
+        {loadedModel && (
+          <Button onClick={exportFragments} variant="secondary" className='my-2 w-full'>
+            Export Fragments
+          </Button>
+        )}
+        <form className="space-y-2 mt-4" onSubmit={handleSubmit}>
+          <Input
+            id="name"
+            placeholder='Name'
+            name="name"
+            value={newItem.name}
+            onChange={handleInputChange}
+            required
+          />
+          <Input
+            id="serialCode"
+            placeholder='Serial Code'
+            name="serialCode"
+            value={newItem.serialCode}
+            onChange={handleInputChange}
+            required
+          />
+          <Input
+            id="manufacturer"
+            placeholder='Manufacturer'
+            name="manufacturer"
+            value={newItem.manufacturer}
+            onChange={handleInputChange}
+          />
+          <Input
+            id="installationDate"
+            placeholder="Installation Date"
+            type="date"
+            name='installationDate'
+            value={newItem.installationDate}
+            onChange={handleInputChange}
+          />
+          <Input
+            id="warranty"
+            placeholder="Warranty"
+            name='warranty'
+            value={newItem.warranty}
+            onChange={handleInputChange}
+          />
+          <Input
+            id="comment"
+            name='comment'
+            placeholder="Comment"
+            value={newItem.comment}
+            onChange={handleInputChange}
+          />
+          <Button className='w-full' type="submit" disabled={!latitude || !longitude || !!error}>Add Item at Current Location</Button>
+        </form>
+      </div>
+      
+      <div className='w-[90vw] lg:w-full lg:h-full ' ref={containerRef}>
+              {/* <div className='w-full' >
+          {hoveredItem && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div 
+                  style={{
+                    position: 'absolute',
+                    left: `${tooltipPosition.x}px`,
+                    top: `${tooltipPosition.y}px`,
+                    width: '1px',
+                    height: '1px',
+                  }}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <div>
+                  <strong>{hoveredItem.name}</strong><br />
+                  Serial: {hoveredItem.serialCode}<br />
+                  Manufacturer: {hoveredItem.manufacturer}<br />
+                  Installation: {hoveredItem.installationDate}<br />
+                  Warranty: {hoveredItem.warranty}<br />
+                  Comment: {hoveredItem.comment}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          )}
+      </div> */}
+      </div>
     </div>
-    <div className="w-full h-full relative" ref={containerRef}>
-      {hoveredItem && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div 
-              style={{
-                position: 'absolute',
-                left: `${tooltipPosition.x}px`,
-                top: `${tooltipPosition.y}px`,
-                width: '1px',
-                height: '1px',
-              }}
-            />
-          </TooltipTrigger>
-          <TooltipContent>
-            <div>
-              <strong>{hoveredItem.name}</strong><br />
-              Serial: {hoveredItem.serialCode}<br />
-              Manufacturer: {hoveredItem.manufacturer}<br />
-              Installation: {hoveredItem.installationDate}<br />
-              Warranty: {hoveredItem.warranty}<br />
-              Comment: {hoveredItem.comment}
-            </div>
-          </TooltipContent>
-        </Tooltip>
-      )}
-    </div>
-  </div>
   )
 }
 
