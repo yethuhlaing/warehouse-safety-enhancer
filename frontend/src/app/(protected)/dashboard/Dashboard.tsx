@@ -282,51 +282,9 @@ export default function BIMViewer() {
     })
   }
 
-  const handlePointerEvents = useCallback((event: MouseEvent) => {
-    const world = worldRef.current;
-    if (!world) return;
-
-    const canvas = containerRef.current?.querySelector('canvas');
-    if (canvas) {
-      canvas.width = window.innerWidth; // Set width to screen width
-    }
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    const pointer = new THREE.Vector2(
-      ((event.clientX - rect.left) / rect.width) * 2 - 1,
-      -((event.clientY - rect.top) / rect.height) * 2 + 1
-    );
-
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(pointer, world.camera.three);
-
-    const intersects = raycaster.intersectObjects(Object.values(itemMarkersRef.current));
-
-    if (intersects.length > 0) {
-      const object = intersects[0].object;
-      if (event.type === 'pointermove') {
-        object.userData.onPointerEnter?.();
-        setTooltipPosition({ x: event.clientX, y: event.clientY });
-      }
-    } else {
-      setHoveredItem(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    container.addEventListener('pointermove', handlePointerEvents);
-
-    return () => {
-      container.removeEventListener('pointermove', handlePointerEvents);
-    };
-  }, [handlePointerEvents]);
 
   return (
-    <div className="flex flex-col lg:flex-row p-2 space-x-4">
+    <div className="flex flex-col lg:flex-row h-full w-full p-2 lg:space-x-4 space-y-4 lg:space-y-0">
       <div className="lg:w-1/3">
         <Input 
           type="file" 
@@ -388,9 +346,9 @@ export default function BIMViewer() {
           <Button className='w-full' type="submit" disabled={!latitude || !longitude || !!error}>Add Item at Current Location</Button>
         </form>
       </div>
-      <div className="w-screen lg:w-2/3 h-full relative">
-        <div ref={containerRef}>
-          <canvas></canvas> 
+      
+      <div className='w-[90vw] lg:w-full lg:h-full ' ref={containerRef}>
+              {/* <div className='w-full' >
           {hoveredItem && (
             <Tooltip>
               <TooltipTrigger asChild>
@@ -416,8 +374,10 @@ export default function BIMViewer() {
               </TooltipContent>
             </Tooltip>
           )}
-        </div>
+      </div> */}
       </div>
+
+      
     </div>
   )
 }
