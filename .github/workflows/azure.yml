@@ -158,7 +158,7 @@ jobs:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
-          source: "setup_iot_stack.sh"
+          source: "deploy.sh"
           target: "/home/${{ secrets.VM_USERNAME }}"
           script: |
             sudo ls
@@ -170,8 +170,8 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
             sudo ls
-            chmod +x /home/${{ secrets.VM_USERNAME }}/setup_iot_stack.sh
-            /home/${{ secrets.VM_USERNAME }}/setup_iot_stack.sh update ${{ secrets.INFLUXDB_TOKEN }}
+            chmod +x /home/${{ secrets.VM_USERNAME }}/deploy.sh
+            /home/${{ secrets.VM_USERNAME }}/deploy.sh update ${{ secrets.INFLUXDB_TOKEN }}
     
       # - name: Deploy Web App to Azure VM
       #   uses: appleboy/ssh-action@v1.0.3
