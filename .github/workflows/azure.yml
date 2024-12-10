@@ -160,6 +160,8 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           source: "setup_iot_stack.sh"
           target: "/home/${{ secrets.VM_USERNAME }}"
+          script: |
+            sudo ls
       - name: Execute script on VM
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -167,6 +169,7 @@ jobs:
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
+            sudo ls
             chmod +x /home/${{ secrets.VM_USERNAME }}/setup_iot_stack.sh
             /home/${{ secrets.VM_USERNAME }}/setup_iot_stack.sh update ${{ secrets.INFLUXDB_TOKEN }}
     
