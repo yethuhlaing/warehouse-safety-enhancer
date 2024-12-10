@@ -133,10 +133,10 @@ jobs:
       #       INFLUXDB_BUCKET=${{ secrets.INFLUXDB_BUCKET }}
       #       INFLUXDB_URL=${{ secrets.INFLUXDB_URL }}
 
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      # - name: Move cache
+      #   run: |
+      #     rm -rf /tmp/.buildx-cache
+      #     mv /tmp/.buildx-cache-new /tmp/.buildx-cache
       
       - name: Build and push Docker images
         env:
