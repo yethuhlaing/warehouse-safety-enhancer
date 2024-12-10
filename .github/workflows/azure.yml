@@ -150,74 +150,79 @@ jobs:
     environment: production
     env:
       INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
-    steps:
-      # Step 1: Check out the repository
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Copy Docker-compose File
-        run: | 
-          sudo ls
-          sudo scp docker-compose.yml yethuhlaing@20.107.241.202:warehouse-safety-enhancer
-          
-      - name: Deploy to Azure VM
+    steps:   
+      - uses: actions/checkout@v3
+      - name: Deploy Edge to Azure VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          source: "setup_iot_stack.sh"
+          target: "/home/${{ secrets.VM_USERNAME }}"
+      - name: Execute script on VM
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            export INFLUXDB_TOKEN='${{ secrets.INFLUXDB_TOKEN }}'
-            echo "Creating Docker network if it doesn't exist..."
-            docker network create app-network || true
+            chmod +x /home/${{ secrets.VM_USERNAME }}/setup_iot_stack.sh
+            /home/${{ secrets.VM_USERNAME }}/setup_iot_stack.sh update ${{ secrets.INFLUXDB_TOKEN }}
+    
+      # - name: Deploy Web App to Azure VM
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.VM_HOST }}
+      #     username: ${{ secrets.VM_USERNAME }}
+      #     key: ${{ secrets.VM_SSH_KEY }}
+      #     script: |
+      #       echo "Creating Docker network if it doesn't exist..."
+      #       docker network create iot-network || true
 
-            echo "Logging in to GitHub Container Registry..."
-            echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      #       echo "Logging in to GitHub Container Registry..."
+      #       echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            sudo ls
-            cd warehouse-safety-enhancer
-            docker compose pull
-            docker compose up -d
-            docker compose ps
-            # echo "Pulling latest frontend image..."
-            # docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+      #       echo "Pulling latest frontend image..."
+      #       docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
-            # echo "Stopping and removing existing frontend container..."
-            # docker stop frontend-container || true
-            # docker rm frontend-container || true
+      #       echo "Stopping and removing existing frontend container..."
+      #       docker stop frontend-container || true
+      #       docker rm frontend-container || true
 
-            # echo "Running new frontend container..."
-            # docker run -d --name frontend-container --network app-network -p 3000:3000 \
-            #   -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
-            #   -e GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
-            #   -e GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
-            #   -e NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}} \
-            #   -e NEXTAUTH_GITHUB_ID='${{ secrets.NEXTAUTH_GITHUB_ID }}' \
-            #   -e NEXTAUTH_GITHUB_SECRET='${{ secrets.NEXTAUTH_GITHUB_SECRET }}' \
-            #   -e RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
-            #   -e EMAIL_FROM='${{ secrets.EMAIL_FROM }}' \
-            #   -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
-            #   -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
-            #   -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
-            #   -e NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}' \
-            #   -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
-            #   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+      #       echo "Running new frontend container..."
+      #       docker run -d --name frontend-container --network iot-network -p 3000:3000 \
+      #         -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+      #         -e GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
+      #         -e GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
+      #         -e NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}} \
+      #         -e NEXTAUTH_GITHUB_ID='${{ secrets.NEXTAUTH_GITHUB_ID }}' \
+      #         -e NEXTAUTH_GITHUB_SECRET='${{ secrets.NEXTAUTH_GITHUB_SECRET }}' \
+      #         -e RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
+      #         -e EMAIL_FROM='${{ secrets.EMAIL_FROM }}' \
+      #         -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
+      #         -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
+      #         -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
+      #         -e NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}' \
+      #         -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
+      #         ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
-            # echo "Pulling latest backend image..."
-            # docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+      #       echo "Pulling latest backend image..."
+      #       docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
 
-            # echo "Stopping and removing existing backend container..."
-            # docker stop backend-container || true
-            # docker rm backend-container || true
+      #       echo "Stopping and removing existing backend container..."
+      #       docker stop backend-container || true
+      #       docker rm backend-container || true
 
-            # echo "Running new backend container..."
-            # docker run -d --name backend-container --network app-network -p 5000:5000 \
-            #   -e INFLUXDB_TOKEN='${{ secrets.INFLUXDB_TOKEN }}' \
-            #   -e INFLUXDB_ORG='${{ secrets.INFLUXDB_ORG }}' \
-            #   -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
-            #   -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
-            #   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
+      #       echo "Running new backend container..."
+      #       docker run -d --name backend-container --network iot-network -p 5000:5000 \
+      #         -e INFLUXDB_TOKEN='${{ secrets.INFLUXDB_TOKEN }}' \
+      #         -e INFLUXDB_ORG='${{ secrets.INFLUXDB_ORG }}' \
+      #         -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
+      #         -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
+      #         ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
 
-            # echo "Pruning old Docker images..."
-            # docker image prune -f
+      #       echo "Pruning old Docker images..."
+      #       docker image prune -f
 
-            # echo "Deployment completed successfully!"
+      #       echo "Deployment completed successfully!"
