@@ -137,10 +137,19 @@ jobs:
         run: |
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      
+      - name: Build and push Docker images
+        env:
+          INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
+        run: |
+          docker compose build
+          docker compose push
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
     environment: production
+    env:
+      INFLUXDB_TOKEN: ${{ secrets.INFLUXDB_TOKEN }}
     steps:
       - name: Deploy to Azure VM
         uses: appleboy/ssh-action@v1.0.3
@@ -156,46 +165,51 @@ jobs:
             echo "Logging in to GitHub Container Registry..."
             echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            echo "Pulling latest frontend image..."
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+            git pull origin main
+            echo "INFLUXDB_TOKEN=$INFLUXDB_TOKEN" > .env
+            docker compose pull
+            docker compose up -d
+            
+            # echo "Pulling latest frontend image..."
+            # docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
-            echo "Stopping and removing existing frontend container..."
-            docker stop frontend-container || true
-            docker rm frontend-container || true
+            # echo "Stopping and removing existing frontend container..."
+            # docker stop frontend-container || true
+            # docker rm frontend-container || true
 
-            echo "Running new frontend container..."
-            docker run -d --name frontend-container --network app-network -p 3000:3000 \
-              -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
-              -e GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
-              -e GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
-              -e NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}} \
-              -e NEXTAUTH_GITHUB_ID='${{ secrets.NEXTAUTH_GITHUB_ID }}' \
-              -e NEXTAUTH_GITHUB_SECRET='${{ secrets.NEXTAUTH_GITHUB_SECRET }}' \
-              -e RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
-              -e EMAIL_FROM='${{ secrets.EMAIL_FROM }}' \
-              -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
-              -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
-              -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
-              -e NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}' \
-              -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
+            # echo "Running new frontend container..."
+            # docker run -d --name frontend-container --network app-network -p 3000:3000 \
+            #   -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
+            #   -e GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}' \
+            #   -e GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}' \
+            #   -e NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}} \
+            #   -e NEXTAUTH_GITHUB_ID='${{ secrets.NEXTAUTH_GITHUB_ID }}' \
+            #   -e NEXTAUTH_GITHUB_SECRET='${{ secrets.NEXTAUTH_GITHUB_SECRET }}' \
+            #   -e RESEND_API_KEY='${{ secrets.RESEND_API_KEY }}' \
+            #   -e EMAIL_FROM='${{ secrets.EMAIL_FROM }}' \
+            #   -e SENDGRID_API='${{ secrets.SENDGRID_API }}' \
+            #   -e STRIPE_API_KEY='${{ secrets.STRIPE_API_KEY }}' \
+            #   -e STRIPE_WEBHOOK_SECRET='${{ secrets.STRIPE_WEBHOOK_SECRET }}' \
+            #   -e NEXTAUTH_URL='${{ secrets.NEXTAUTH_URL }}' \
+            #   -e NEXTAUTH_SECRET='${{ secrets.NEXTAUTH_SECRET }}' \
+            #   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
 
-            echo "Pulling latest backend image..."
-            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
+            # echo "Pulling latest backend image..."
+            # docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
 
-            echo "Stopping and removing existing backend container..."
-            docker stop backend-container || true
-            docker rm backend-container || true
+            # echo "Stopping and removing existing backend container..."
+            # docker stop backend-container || true
+            # docker rm backend-container || true
 
-            echo "Running new backend container..."
-            docker run -d --name backend-container --network app-network -p 5000:5000 \
-              -e INFLUXDB_TOKEN='${{ secrets.INFLUXDB_TOKEN }}' \
-              -e INFLUXDB_ORG='${{ secrets.INFLUXDB_ORG }}' \
-              -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
-              -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
+            # echo "Running new backend container..."
+            # docker run -d --name backend-container --network app-network -p 5000:5000 \
+            #   -e INFLUXDB_TOKEN='${{ secrets.INFLUXDB_TOKEN }}' \
+            #   -e INFLUXDB_ORG='${{ secrets.INFLUXDB_ORG }}' \
+            #   -e INFLUXDB_BUCKET='${{ secrets.INFLUXDB_BUCKET }}' \
+            #   -e INFLUXDB_URL='${{ secrets.INFLUXDB_URL }}' \
+            #   ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest  
 
-            echo "Pruning old Docker images..."
-            docker image prune -f
+            # echo "Pruning old Docker images..."
+            # docker image prune -f
 
-            echo "Deployment completed successfully!"
+            # echo "Deployment completed successfully!"
