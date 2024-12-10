@@ -168,9 +168,12 @@ jobs:
             echo "Logging in to GitHub Container Registry..."
             echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+            mkdir -p /warehouse-safety-enhancer
+            scp docker-compose.yml yethuhlaing@20.107.241.202:warehouse-safety-enhancer/
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/deployment
+
             sudo ls
-            git pull origin main
-            echo "INFLUXDB_TOKEN=$INFLUXDB_TOKEN" > .env
+            cd warehouse-safety-enhancer
             docker compose pull
             docker compose up -d
             docker compose ps
