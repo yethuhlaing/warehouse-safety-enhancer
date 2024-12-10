@@ -169,9 +169,9 @@ jobs:
           username: ${{ secrets.VM_USERNAME }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            sudo ls
-            sudo chmod +x /home/${{ secrets.VM_USERNAME }}/deploy.sh
-            sudo /home/${{ secrets.VM_USERNAME }}/deploy.sh update ${{ secrets.INFLUXDB_TOKEN }}
+            ls
+            chmod +x /home/${{ secrets.VM_USERNAME }}/deploy.sh
+            /home/${{ secrets.VM_USERNAME }}/deploy.sh update ${{ secrets.INFLUXDB_TOKEN }}
     
       # - name: Deploy Web App to Azure VM
       #   uses: appleboy/ssh-action@v1.0.3
