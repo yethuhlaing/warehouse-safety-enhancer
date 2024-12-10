@@ -154,6 +154,11 @@ jobs:
       # Step 1: Check out the repository
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Copy Docker-compose File
+        run: | 
+          mkdir -p /warehouse-safety-enhancer
+          scp docker-compose.yml yethuhlaing@20.107.241.202:warehouse-safety-enhancer/
+          sudo chown -R ubuntu:ubuntu /home/ubuntu/deployment
       - name: Deploy to Azure VM
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -167,10 +172,6 @@ jobs:
 
             echo "Logging in to GitHub Container Registry..."
             echo "${{ github.token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-            mkdir -p /warehouse-safety-enhancer
-            scp docker-compose.yml yethuhlaing@20.107.241.202:warehouse-safety-enhancer/
-            sudo chown -R ubuntu:ubuntu /home/ubuntu/deployment
 
             sudo ls
             cd warehouse-safety-enhancer
