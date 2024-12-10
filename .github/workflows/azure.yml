@@ -157,7 +157,7 @@ jobs:
       - name: Copy Docker-compose File
         run: | 
           sudo mkdir -p /warehouse-safety-enhancer
-          sudo scp docker-compose.yml yethuhlaing@20.107.241.202:warehouse-safety-enhancer/
+          sudo scp docker-compose.yml iot-edge-influx:warehouse-safety-enhancer/
           sudo chown -R ubuntu:ubuntu /home/ubuntu/deployment
           sudo ls
       - name: Deploy to Azure VM
