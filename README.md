@@ -21,6 +21,7 @@ Warehouse Safety Enhancer is an advanced real-time monitoring and visualization 
 ![fa](https://github.com/user-attachments/assets/2e9006f6-355e-4061-a0e4-422dda907ed8)
 
 ## Architecture
+This modern architecture integrates IoT data collection with real-time 3D visualization for building management. At its core, MQTT enables seamless device communication, while Telegraf collects and forwards sensor data to InfluxDB for time-series storage. The Node.js backend processes this data and maintains WebSocket connections for real-time updates to the Next.js frontend, where users interact with 3D BIM models and visualize live sensor data. User authentication and management are handled through Supabase. The infrastructure leverages containerization with Docker. For further implementation, orchestration tool Kubernetes will be accompanied with GitOps principles for deployment through GitHub Actions and ArgoCD. Infrastructure as Code will be implemented using Terraform and Ansible, with monitoring handled by Grafana. The system spans multiple cloud providers (Azure and AWS) to ensure reliability and scalability.
 
 ### Data Pipeline
 
@@ -49,9 +50,10 @@ Warehouse Safety Enhancer is an advanced real-time monitoring and visualization 
 
 
 ## Demonstration
-[![Demonstration](https://img.youtube.com/vi/MLYDQCEAPv4/0.jpg)](https://www.youtube.com/watch?v=MLYDQCEAPv4)
+[![Demonstration](https://img.youtube.com/vi/dgH2xlIkEqQ/0.jpg)](https://www.youtube.com/watch?v=dgH2xlIkEqQ)
 
-
+Project Final Slide - https://www.canva.com/design/DAGY7ckWFxU/tXnf0kJy1Eakq5AL_J-Eg/edit  
+Project Plan Slide - https://www.canva.com/design/DAGS6XLTJxk/BPoehz30m9eLH11323KpnA/edit?ui=eyJIIjp7IkEiOnRydWV9fQ 
 ## Installation
 
 Clone & create this repo locally with the following command:
