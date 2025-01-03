@@ -1,7 +1,7 @@
 import { constructMetadata } from "@/lib/utils";
 
 import { DashboardHeader } from "@/components/dashboard/header";
-import { AreaChartStacked } from "@/components/charts/area-chart-stacked";
+import { AreaChartStacked } from "@/components/charts/area-chart-air-quality";
 import { BarChartHumidity } from "@/components/charts/bar-chart-humidity";
 import { BarChartNoise } from "@/components/charts/bar-chart-noise";
 import { LineChartTemperature } from "@/components/charts/line-chart-temperature";

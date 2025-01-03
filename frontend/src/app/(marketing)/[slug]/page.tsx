@@ -18,9 +18,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
     params,
 }: {
-    params: { slug: string };
+    params: { slug: string | undefined };
 }): Promise<Metadata | undefined> {
-    const page = allPages.find((page) => page.slugAsParams === params.slug);
+    const page = allPages.find((page) => page.slugAsParams === params?.slug);
     if (!page) {
         return;
     }

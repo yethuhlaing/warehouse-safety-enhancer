@@ -25,7 +25,6 @@ export const env = createEnv({
         NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID: z.string().min(1),
     },
     runtimeEnv: {
-        NEXTAUTH_URL: process.env.NEXTAUTH_URL,
         NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
         // AUTH_SECRET: process.env.AUTH_SECRET,
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

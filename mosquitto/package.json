@@ -1,0 +1,16 @@
+{
+  "name": "mosquitto",
+  "version": "1.0.0",
+  "main": "data.js",
+  "scripts": {
+    "seed": "node seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "mqtt": "^5.10.3"
+  }
+}

@@ -34,7 +34,8 @@ yarn-error.log*
 # Environment variables (opt-in if needed)
 frontend/.env*
 backend/.env*
-
+mosquitto/.env*
+telegraf/.env*
 # Vercel deployment directory
 /.vercel
 
@@ -50,6 +51,8 @@ frontend/node_modules/
 backend/node_modules/
 frontend/.next/
 frontend/out/
+mosquitto/node_modules
+influxdb/.env*
 
 # Optional: Ignore IDE-specific files (if not already covered)
 frontend/.vscode/
@@ -66,3 +69,9 @@ backend/.idea
 # Optional: Ignore editor temporary files
 frontend/*.swp
 backend/*.swp
+
+
+mosquitto/data
+mosquitto/log
+
+influxdb/data

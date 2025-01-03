@@ -23,18 +23,14 @@ import BlurImage from "@/components/shared/blur-image";
 import MaxWidthWrapper from "@/components/shared/max-width-wrapper";
 import { DashboardTableOfContents } from "@/components/shared/toc";
 
-export async function generateStaticParams() {
-    return allPosts.map((post) => ({
-        slug: post.slugAsParams,
-    }));
-}
 
 export async function generateMetadata({
     params,
 }: {
-    params: { slug: string };
+    params: { slug: string | undefined };
 }): Promise<Metadata | undefined> {
     const post = allPosts.find((post) => post.slugAsParams === params.slug);
+
     if (!post) {
         return;
     }

@@ -188,8 +188,8 @@ export async function querySensorData(sensor, timeRange, lastTimestamp = null) {
     if (timeRange === 'last') {
         fluxQuery = `
             from(bucket: "${bucket}")
-                |> range(start: -5s)  // Since your data updates every 5s
-                |> filter(fn: (r) => r.sensor == "${sensor}")
+                |> range(start: -5s) 
+                |> filter(fn: (r) => r._field == "${sensor}")
                 |> keep(columns: ["_value","_field"])
                 |> last()
         `;
@@ -198,7 +198,7 @@ export async function querySensorData(sensor, timeRange, lastTimestamp = null) {
         fluxQuery = `
             from(bucket: "${bucket}")
                 |> range(start: ${start})
-                |> filter(fn: (r) => r.sensor == "${sensor}")
+                |> filter(fn: (r) => r._field == "${sensor}")
                 |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
                 // Add aggregation if querying large time ranges
                 ${timeRange > '1h' ? '|> aggregateWindow(every: 5s, fn: mean)' : ''}
@@ -210,7 +210,6 @@ export async function querySensorData(sensor, timeRange, lastTimestamp = null) {
             next: (row, tableMeta) => {
                 const o = tableMeta.toObject(row)
                 sensorData.push(o)
-                console.log(o)
             },
             error: (error) => {
                 reject(error)

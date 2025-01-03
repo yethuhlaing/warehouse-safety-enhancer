@@ -1,0 +1,184 @@
+services:
+  frontend:
+    container_name: frontend
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - ./frontend/.env
+    ports:  
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - app-network
+    develop:
+      watch:
+        - action: rebuild
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 64M
+    depends_on:
+      - backend
+
+  backend:
+    container_name: backend
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - app-network
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend
+          target: /app
+          ignore:
+            - node_modules/
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 64M
+    depends_on:
+      - mosquitto
+      - influxdb
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:latest
+    restart: unless-stopped
+    ports:
+      - 1883:1883
+      - 8883:8883
+      - 9001:9001
+    env_file:
+      - ./mosquitto/.env
+    volumes:
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/config/passwd/passwd.txt:/mosquitto/config/passwd/passwd.txt
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - ./mosquitto/init.sh:/init.sh
+    entrypoint: ["./init.sh"]
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3", "-u", "${MOSQUITTO_USERNAME:-yethuhlaing}", "-P", "${MOSQUITTO_PASSWORD:-yethuhlaing}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./mosquitto
+          target: /app
+          ignore:
+            - node_modules/
+            - data/
+            - log/
+        - action: rebuild
+          path: package.json
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 64M
+  
+  mosquitto-publisher:
+    container_name: mosquitto-publisher
+    build:
+      context: ./mosquitto
+      dockerfile: Dockerfile
+    env_file:
+      - ./mosquitto/.env
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./mosquitto
+          target: /app
+          ignore:
+            - node_modules/
+            - data/
+            - log/
+        - action: rebuild
+          path: package.json
+
+  influxdb:
+    container_name: influxdb
+    image: influxdb:latest
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb2
+      - ./influxdb/config:/etc/influxdb2
+    networks:
+      - app-network
+    env_file:
+      - ./influxdb/.env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  telegraf:
+    container_name: telegraf
+    image: telegraf:latest
+    restart: unless-stopped
+    env_file:
+      - ./telegraf/.env
+    ports: 
+      - "5050:5050"
+    networks:
+      - app-network
+    volumes:
+      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    depends_on:
+      influxdb:
+        condition: service_healthy
+      mosquitto:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./telegraf
+          target: /etc/telegraf/
+networks:
+  app-network:
+    driver: bridge

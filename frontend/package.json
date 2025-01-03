@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "contentlayer2 build && next build",
-    "start": "next start",
+    "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "webhook": "stripe listen --forward-to localhost:4242/webhook",
     "postinstall": "prisma generate",
@@ -100,7 +100,8 @@
     "use-position": "^1.0.0",
     "vaul": "^0.9.1",
     "web-ifc": "^0.0.66",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "prisma": "^5.22.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -109,7 +110,6 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
     "postcss": "^8.4.47",
-    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   }

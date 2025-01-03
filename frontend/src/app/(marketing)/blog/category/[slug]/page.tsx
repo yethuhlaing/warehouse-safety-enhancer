@@ -15,10 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
     params,
 }: {
-    params: { slug: string };
+    params: { slug: string | undefined };
 }): Promise<Metadata | undefined> {
     const category = BLOG_CATEGORIES.find(
-        (category) => category.slug === params.slug,
+        (category) => category.slug === params?.slug,
     );
     if (!category) {
         return;
