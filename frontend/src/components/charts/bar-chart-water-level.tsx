@@ -33,7 +33,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BarChartWaterLevel() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/water-level');
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+
     console.log(sensorData)
     // const { 
     //     field, minimum, maximum, average
@@ -50,7 +51,7 @@ export function BarChartWaterLevel() {
             </CardHeader>
             <CardContent>
             <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">
-                <BarChart accessibilityLayer data={sensorData || []}>
+                <BarChart accessibilityLayer data={sensorData['water-level'] || []}>
                     <CartesianGrid vertical={false} />
                     <ChartTooltip
                         cursor={false}

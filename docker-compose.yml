@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   frontend:
     container_name: frontend
@@ -17,11 +19,14 @@ services:
       - app-network
     develop:
       watch:
-        - action: rebuild
+        - action: sync
           path: ./frontend
           target: /app
           ignore:
             - node_modules/
+            - .next/
+        - action: rebuild
+          path: ./frontend/package.json
     deploy:
       resources:
         limits:
@@ -50,11 +55,13 @@ services:
       - app-network
     develop:
       watch:
-        - action: rebuild
+        - action: sync
           path: ./backend
           target: /app
           ignore:
             - node_modules/
+        - action: rebuild
+          path: ./backend/package.json
     deploy:
       resources:
         limits:
@@ -96,13 +103,12 @@ services:
       watch:
         - action: sync+restart
           path: ./mosquitto
-          target: /app
+          target: /mosquitto
           ignore:
-            - node_modules/
             - data/
             - log/
         - action: rebuild
-          path: package.json
+          path: ./mosquitto/Dockerfile
     deploy:
       resources:
         limits:
@@ -132,10 +138,8 @@ services:
           target: /app
           ignore:
             - node_modules/
-            - data/
-            - log/
         - action: rebuild
-          path: package.json
+          path: ./mosquitto/Dockerfile
 
   influxdb:
     container_name: influxdb
@@ -177,8 +181,9 @@ services:
     develop:
       watch:
         - action: sync+restart
-          path: ./telegraf
-          target: /etc/telegraf/
+          path: ./telegraf/telegraf.conf
+          target: /etc/telegraf/telegraf.conf
+
 networks:
   app-network:
     driver: bridge

@@ -23,12 +23,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageVibration() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/vibration')
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
 
     const [ vibration, setVibration ] = useState<number>(0)
     useEffect(() => {
-        if (sensorData && sensorData.length > 0) {
-            setVibration(sensorData[sensorData.length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
+        if (sensorData['vibration'] && sensorData['vibration'].length > 0) {
+            setVibration(sensorData['vibration'][sensorData['vibration'].length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
         } else {
             setVibration(0); // Default to 0 when no data
         }

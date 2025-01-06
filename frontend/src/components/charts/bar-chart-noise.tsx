@@ -43,8 +43,8 @@ const chartConfig = {
 
 
 export function BarChartNoise() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/noise-level');
-    // const { field, rawData, minimum, maximum, average } = formatChartData(chartData) as FormattedAggregateData  
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
@@ -61,7 +61,7 @@ export function BarChartNoise() {
                     >
                         <BarChart
                             accessibilityLayer
-                            data={sensorData || []}
+                            data={sensorData['noise-level'] || []}
                             margin={{
                                 top: 20,
                                 right: 0,

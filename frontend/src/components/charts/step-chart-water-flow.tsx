@@ -33,7 +33,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function StepChartWaterFlow() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/water-flow');
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+
     console.log(sensorData)
     // const { 
     //     field, minimum, maximum, average
@@ -52,7 +53,7 @@ export function StepChartWaterFlow() {
             <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">
                 <AreaChart
                     accessibilityLayer
-                    data={sensorData || []}
+                    data={sensorData['water-flow'] || []}
                     margin={{
                         left: 12,
                         right: 12,

@@ -23,12 +23,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageLightIntensity() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/light-intensity')
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
 
     const [ lightIntensity, setLightIntensity ] = useState<number>(0)
     useEffect(() => {
-        if (sensorData && sensorData.length > 0) {
-            setLightIntensity(sensorData[sensorData.length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
+        if (sensorData['light-intensity'] && sensorData['light-intensity'].length > 0) {
+            setLightIntensity(sensorData['light-intensity'][sensorData['light-intensity'].length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
         } else {
             setLightIntensity(0); // Default to 0 when no data
         }

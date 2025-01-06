@@ -50,7 +50,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function RadialGridGas() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/gas');
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/gas');
+
     console.log(sensorData)
     return (
         <Card className="flex-1">
@@ -66,7 +67,7 @@ export function RadialGridGas() {
                     className="mx-auto aspect-square max-h-[450px] 2xl:max-h-[350px]"
                 >
                     <RadialBarChart
-                        data={sensorData || []}
+                        data={sensorData['gas'] || []}
                         innerRadius={40}
                         outerRadius={120}
                     >

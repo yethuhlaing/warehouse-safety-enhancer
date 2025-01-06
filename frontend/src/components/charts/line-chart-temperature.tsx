@@ -32,11 +32,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function LineChartTemperature() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/temperature');
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
     // const { 
     //     field, minimum, maximum, average
     // } = formatChartData(chartData) as FormattedAggregateData  
-
+    console.log(sensorData, "SensorData")
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
@@ -50,7 +50,7 @@ export function LineChartTemperature() {
                 <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">
                     <LineChart
                         accessibilityLayer
-                        data={sensorData || []}
+                        data={sensorData['temperature'] || []}
                         margin={{
                             left: -25,
                             right: 12,

@@ -37,12 +37,13 @@ type radarChartData = {
     fill?: string
 }
 export function RadarChartPopulation() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/population')
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
     console.log(sensorData)
+    // Subscribe to multiple sensors
     const [totalPopulation, setTotalPopulation] = useState<radarChartData[]>([])
     useEffect(() => {
-        if (Array.isArray(sensorData)) {
-            const populations = sensorData?.reduce((sum, item) => sum + item?._value, 0);
+        if (Array.isArray(sensorData['population']) && sensorData['population'].length > 0) {
+            const populations = sensorData['population']?.reduce((sum, item) => sum + item?._value, 0);
 
             setTotalPopulation([{
                 category: "Warehouse",
@@ -59,7 +60,7 @@ export function RadarChartPopulation() {
                         config={chartConfig}
                         className="mx-auto aspect-square max-h-[450px] 2xl:max-h-[350px] "
                     >
-                        <RadarChart data={sensorData || []} outerRadius={78}>
+                        <RadarChart data={sensorData['population'] || []} outerRadius={78}>
                             <ChartTooltip
                                 cursor={false}
                                 content={<ChartTooltipContent />}

@@ -23,13 +23,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function GuageEmergency() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/emergency')
 
-
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
     const [ emergencyValue, setEmergencyValue ] = useState<number>(0)
     useEffect(() => {
-        if (sensorData && sensorData.length > 0) {
-            setEmergencyValue(sensorData[sensorData.length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
+        if (sensorData['emergency'] && sensorData['emergency']?.length > 0) {
+            setEmergencyValue(sensorData['emergency'][sensorData['emergency'].length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
         } else {
             setEmergencyValue(0); // Default to 0 when no data
         }

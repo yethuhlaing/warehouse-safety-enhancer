@@ -46,9 +46,17 @@ type CombinedDataType = {
     no2: number,
 }
 export function AreaChartStacked() {
-    const { sensorData: coData } = useWebSocketData('ws://localhost:5000/co')
-    const { sensorData: pm10Data} = useWebSocketData('ws://localhost:5000/pm10')
-    const { sensorData: no2Data } = useWebSocketData('ws://localhost:5000/no2')
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+
+    // Subscribe to multiple sensors
+    useEffect(() => {
+        subscribe(['co', 'pm10', 'no2'], {
+            co: '5m',
+            pm10: '5m',
+            no2: '5m',
+        });
+    }, []);
+
     const [visibleAreas, setVisibleAreas] = useState({
         co: true,
         pm10: false,
@@ -60,17 +68,7 @@ export function AreaChartStacked() {
         setVisibleAreas(prev => ({ ...prev, [area]: !prev[area] }))
     }
 
-    useEffect(() => {
-        if (Array.isArray(coData) && Array.isArray(pm10Data) && Array.isArray(no2Data)) {
-            const combined = coData?.map((item, index) => ({
-                time: item._time,
-                co: item._value,
-                pm10: pm10Data[index]?._value,
-                no2: no2Data[index]?._value,
-          }))
-          setCombinedData(combined)
-        }
-      }, [coData, pm10Data, no2Data])
+    console.log()
     return (
         <Card className="flex flex-col">
             <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">

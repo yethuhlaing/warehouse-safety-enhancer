@@ -54,7 +54,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BarChartHumidity() {
-    const { sensorData } = useWebSocketData('ws://localhost:5000/humidity')
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+    
     return (
         <Card className="flex flex-col">
             <CardHeader>
@@ -65,7 +66,7 @@ export function BarChartHumidity() {
                 <ChartContainer config={chartConfig}>
                     <BarChart
                         accessibilityLayer
-                        data={sensorData || []}
+                        data={sensorData['humidity'] || []}
                         layout="vertical"
                         margin={{
                             left: 32,
