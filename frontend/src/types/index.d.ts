@@ -106,11 +106,30 @@ export type TestimonialType = {
 
 // Dashboard Carts
 export type SensorData = {
+    emergency?: number,
+    lightIntensity?: number,
+    vibration?: number,
+    no2?: number,
+    co?: number,
+    pm10?: number,
+    lobby?: number,
+    storage?:  number,
+    office?:  number,
+    security?:  number,
+    cafeteria?:  number,
+    inspection?:  number,
+    automation?:  number,
+    maintenance?: number
+    methane?: number,
+    propane?: number,
+    hydrogen?: number,
+    ammonia?: number,
+    ozone?: number,
     _time: Date;                 // Time as a Date object
     _value: number;              // Measurement value (e.g., 0.7077731111296438)
     _field?: string;              // 'co'
     _measurement?: string;        // 'airSensors'
-    sensor_id?: string;           // 'TLM0201'
+    sensor_id?: string;            // 'TLM0201'
 };
 
 

@@ -13,6 +13,7 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { useState, useEffect } from 'react';
 import GaugeComponent from 'react-gauge-component';
+import { SensorData } from '@/types';
 
 const chartConfig = {
 
@@ -25,14 +26,13 @@ const chartConfig = {
 export function GuageEmergency() {
 
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
-    const [ emergencyValue, setEmergencyValue ] = useState<number>(0)
     useEffect(() => {
-        if (sensorData['emergency'] && sensorData['emergency']?.length > 0) {
-            setEmergencyValue(sensorData['emergency'][sensorData['emergency'].length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
-        } else {
-            setEmergencyValue(0); // Default to 0 when no data
-        }
-    }, [sensorData])
+        subscribe(['emergency'], {
+            "emergency": 'last',
+        });
+    }, []);
+    const latestReading = sensorData?.emergency?.[sensorData?.emergency?.length - 1] as SensorData;
+
     return (
         <Card className="flex flex-col">
             <CardHeader className="flex flex-col space-y-2">
@@ -58,7 +58,7 @@ export function GuageEmergency() {
                             ]
                         }}
                         pointer={{ type: "blob", animationDelay: 0 }}
-                        value={emergencyValue ?? 0} // Fallback to 0 if lightIntensity is undefined or null
+                        value={latestReading?.emergency ?? 0} // Fallback to 0 if lightIntensity is undefined or null
                     />
                 </ChartContainer>
 

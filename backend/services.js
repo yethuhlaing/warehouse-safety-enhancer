@@ -184,23 +184,22 @@ export async function queryAggregateValue() {
 }
 export async function querySensorData(sensor, timeRange, lastTimestamp = null) {
     let fluxQuery;
-    
+
     if (timeRange === 'last') {
         fluxQuery = `
             from(bucket: "${bucket}")
-                |> range(start: -5s) 
-                |> filter(fn: (r) => r._field == "${sensor}")
-                |> keep(columns: ["_value","_field"])
-                |> last()
+                |> range(start: -20s) 
+                |> filter(fn: (r) => r.topic == "sensors/${sensor}")
+                |> keep(columns: ["_value", "_time", "_field"])
+                |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
         `;
     } else {
         const start = lastTimestamp ? lastTimestamp : `-${timeRange}`;
         fluxQuery = `
             from(bucket: "${bucket}")
                 |> range(start: ${start})
-                |> filter(fn: (r) => r._field == "${sensor}")
-                |> keep(columns: ["_value", "_time", "_field", "_measurement", "sensor_id"])
-                // Add aggregation if querying large time ranges
+                |> filter(fn: (r) => r.topic == "sensors/${sensor}")
+                |> keep(columns: ["_value", "_time", "_field"])
                 ${timeRange > '1h' ? '|> aggregateWindow(every: 5s, fn: mean)' : ''}
         `;
     }
@@ -210,6 +209,7 @@ export async function querySensorData(sensor, timeRange, lastTimestamp = null) {
             next: (row, tableMeta) => {
                 const o = tableMeta.toObject(row)
                 sensorData.push(o)
+                
             },
             error: (error) => {
                 reject(error)

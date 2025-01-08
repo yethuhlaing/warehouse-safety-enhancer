@@ -13,6 +13,7 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { useState, useEffect } from 'react';
 import GaugeComponent from 'react-gauge-component';
+import { SensorData } from '@/types';
 
 const chartConfig = {
 
@@ -25,22 +26,19 @@ const chartConfig = {
 export function GuageLightIntensity() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
 
-    const [ lightIntensity, setLightIntensity ] = useState<number>(0)
     useEffect(() => {
-        if (sensorData['light-intensity'] && sensorData['light-intensity'].length > 0) {
-            setLightIntensity(sensorData['light-intensity'][sensorData['light-intensity'].length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
-        } else {
-            setLightIntensity(0); // Default to 0 when no data
-        }
-    }, [sensorData])
-
+        subscribe(['light-intensity'], {
+            "light-intensity": 'last',
+        });
+    }, []);
+    const latestReading = sensorData?.['light-intensity']?.[sensorData['light-intensity']?.length - 1] as SensorData;
     const formatIntensityValue = (value: any): string => {
         if (value !== undefined && value !== null) {
             return value.toFixed(1) + ' lux';
         }
         return '0'; // Default to an empty string or another fallback string
     };
-    console.log(sensorData)
+    
     return (
         <Card className="flex flex-col">
             <CardHeader className="flex flex-col space-y-2">
@@ -83,7 +81,7 @@ export function GuageLightIntensity() {
                             }
                             }
                         }}
-                        value={lightIntensity}
+                        value={latestReading?.['light-intensity']} // Fallback to 0 if lightIntensity is undefined or null
                         maxValue={1000}
                     />
                 </ChartContainer>

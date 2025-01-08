@@ -14,9 +14,7 @@ const server = http.createServer(app)
 const defaultTimeRanges = {
     'temperature': '5m',
     'humidity': 'last',
-    'co': '5m',
-    'no2': '5m',
-    'pm10': '5m',
+    'air': 'last',
     'gas': 'last',
     'emergency': 'last',
     'light-intensity': 'last',

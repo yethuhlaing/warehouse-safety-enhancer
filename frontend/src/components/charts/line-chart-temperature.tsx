@@ -1,7 +1,7 @@
 "use client";
 
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Card,
     CardContent,
@@ -33,10 +33,12 @@ const chartConfig = {
 
 export function LineChartTemperature() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
-    // const { 
-    //     field, minimum, maximum, average
-    // } = formatChartData(chartData) as FormattedAggregateData  
-    console.log(sensorData, "SensorData")
+    // Subscribe to multiple sensors
+    useEffect(() => {
+        subscribe(['temperature'], {
+            temperatureSensor: '5m',
+        });
+    }, []);
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
@@ -44,7 +46,7 @@ export function LineChartTemperature() {
                     <CardTitle>Temperature Monitoring Graph</CardTitle>
                     <CardDescription>Real-time temperature from multiple sensors</CardDescription>
                 </div>
-                <TimeRangeSelector field={'temperature'} />
+                <TimeRangeSelector field={'temperature'} defaultTimeRange={'5m'} />
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">

@@ -16,6 +16,7 @@ import {
 import { useEffect , useState } from "react";
 import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { getCurrentDateTime } from "@/lib/utils";
+import { SensorData } from "@/types";
 
 const chartConfig = {
     desktop: {
@@ -33,25 +34,51 @@ const chartConfig = {
 
 type radarChartData = {
     category: string
-    population: number
+    population: string | number | undefined
     fill?: string
 }
+
 export function RadarChartPopulation() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
-    console.log(sensorData)
-    // Subscribe to multiple sensors
-    const [totalPopulation, setTotalPopulation] = useState<radarChartData[]>([])
     useEffect(() => {
-        if (Array.isArray(sensorData['population']) && sensorData['population'].length > 0) {
-            const populations = sensorData['population']?.reduce((sum, item) => sum + item?._value, 0);
-
-            setTotalPopulation([{
-                category: "Warehouse",
-                population: populations,
-                fill: "var(--color-safari)"
-            }])
+        subscribe(['population']);
+    }, []);
+    
+    function getTotalPopulation(sensorData: SensorData) {
+        // Extract only numeric fields and sum them up
+        let total = 0;
+        for (const key in sensorData) {
+            if (key !== "_time" && key !== "_value" && key !== "_field" && key !== "_measurement" && key !== "sensor_id") {
+                const value = sensorData[key];
+                if (typeof value === "number") {
+                    total += value;
+                }
+            }
         }
-      }, [sensorData])
+        return total;
+    }
+    const latestReading = sensorData?.population?.[sensorData?.population?.length - 1] as SensorData;
+    // Calculate total population by summing all areas
+    console.log(latestReading)
+    if (!latestReading) return null;
+    const totalPeople = [{
+        category: "Warehouse",
+        population: getTotalPopulation(latestReading || {}),
+        fill: "var(--color-safari)"
+    }];
+
+      // Transform the raw data for Recharts
+    const chartData = latestReading ? [
+        { category: "Lobby", population: latestReading.lobby },
+        { category: "Storage", population: latestReading.storage },
+        { category: "Office", population: latestReading.office },
+        { category: "Security", population: latestReading.security },
+        { category: "Cafeteria", population: latestReading.cafeteria },
+        { category: "Inspection", population: latestReading.inspection },
+        { category: "Automation", population: latestReading.automation },
+        { category: "Maintenance", population: latestReading.maintenance }
+    ] : [];
+
     return (
         <div className="flex flex-col sm:flex-row gap-4">
             <Card className="flex-1">
@@ -60,15 +87,15 @@ export function RadarChartPopulation() {
                         config={chartConfig}
                         className="mx-auto aspect-square max-h-[450px] 2xl:max-h-[350px] "
                     >
-                        <RadarChart data={sensorData['population'] || []} outerRadius={78}>
+                        <RadarChart data={chartData} outerRadius={78}>
                             <ChartTooltip
                                 cursor={false}
                                 content={<ChartTooltipContent />}
                             />
-                            <PolarAngleAxis dataKey="_field" domain={[0, 'dataMax']}/>
+                            <PolarAngleAxis dataKey="category" domain={[0, 'dataMax']}/>
                             <PolarGrid />
                             <Radar
-                                dataKey="_value"
+                                dataKey="population"
                                 fill="var(--color-desktop)"
                                 fillOpacity={0.6}
                             />
@@ -84,7 +111,7 @@ export function RadarChartPopulation() {
                         {getCurrentDateTime()}
                     </div>
                 </CardFooter>
-            </Card>
+            </Card>* 
             <Card className="flex-1">
                 <CardContent className="pb-0">
                     <ChartContainer
@@ -92,7 +119,7 @@ export function RadarChartPopulation() {
                         className="mx-auto aspect-square max-h-[450px] 2xl:max-h-[350px] "
                     >
                         <RadialBarChart
-                            data={totalPopulation}
+                            data={totalPeople}
                             startAngle={0}
                             endAngle={250}
                             innerRadius={80}
@@ -134,7 +161,7 @@ export function RadarChartPopulation() {
                                                         y={viewBox.cy}
                                                         className="fill-foreground text-4xl font-bold"
                                                     >
-                                                        {(totalPopulation[0]?.population || 0).toLocaleString()}
+                                                        {(totalPeople[0]?.population || 0).toLocaleString()}
                                                     </tspan>
                                                     <tspan
                                                         x={viewBox.cx}

@@ -20,6 +20,7 @@ import { useWebSocketData } from "@/hooks/use-websocket-data";
 import { Switch } from "../ui/switch";
 import { Label } from "../ui/label";
 import { format } from "date-fns";
+import { checkDomainOfScale } from "recharts/types/util/ChartUtils";
 
 const chartConfig = {
     views: {
@@ -39,36 +40,22 @@ const chartConfig = {
     },
 } satisfies ChartConfig;
 
-type CombinedDataType = {
-    time: Date,
-    co: number,
-    pm10: number,
-    no2: number,
-}
 export function AreaChartStacked() {
-    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
-
+    const { sensorData , connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
     // Subscribe to multiple sensors
     useEffect(() => {
-        subscribe(['co', 'pm10', 'no2'], {
-            co: '5m',
-            pm10: '5m',
-            no2: '5m',
-        });
+        subscribe(['air']);
     }, []);
 
     const [visibleAreas, setVisibleAreas] = useState({
         co: true,
-        pm10: false,
-        no2: false,
+        pm10: true,
+        no2: true,
       })
-    const [combinedData, setCombinedData] = useState<CombinedDataType[]>([])
-
     const toggleArea = (area: keyof typeof visibleAreas) => {
         setVisibleAreas(prev => ({ ...prev, [area]: !prev[area] }))
     }
-
-    console.log()
+    console.log(sensorData)
     return (
         <Card className="flex flex-col">
             <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
@@ -111,7 +98,7 @@ export function AreaChartStacked() {
                 <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">
                     <AreaChart
                         accessibilityLayer
-                        data={combinedData}
+                        data={sensorData['air'] || []}
                         margin={{
                             top: 10,
                             right: 30,

@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Card,
     CardContent,
@@ -35,7 +35,12 @@ const chartConfig = {
 export function StepChartWaterFlow() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
 
-    console.log(sensorData)
+    // Subscribe to multiple sensors
+    useEffect(() => {
+        subscribe(['water-flow'], {
+            waterFlowSensor: '5m',
+        });
+    }, []);
     // const { 
     //     field, minimum, maximum, average
     // } = formatChartData(chartData) as FormattedAggregateData  
@@ -47,7 +52,7 @@ export function StepChartWaterFlow() {
                     <CardTitle>Water Flow Analysis</CardTitle>
                     <CardDescription>Monitoring water flow rates in real time to ensure efficient usage and leak detection (liters/min)</CardDescription>
                 </div>
-                <TimeRangeSelector field={'water-flow'} />
+                <TimeRangeSelector field={'water-flow'} defaultTimeRange='5m' />
             </CardHeader>
             <CardContent>
             <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">

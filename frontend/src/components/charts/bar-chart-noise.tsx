@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -44,7 +44,11 @@ const chartConfig = {
 
 export function BarChartNoise() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
-
+    useEffect(() => {
+        subscribe(['noise-level'], {
+            "noise-level": '5m',
+        });
+    }, []);
     return (
         <Card>
             <CardHeader className="flex flex-row justify-between w-full items-center">
@@ -52,7 +56,7 @@ export function BarChartNoise() {
                     <CardTitle>Noise Level Tracking Chart</CardTitle>
                     <CardDescription>Live noise level data across different areas to maintain operational safety and comply with noise regulations.</CardDescription>
                 </div>
-                <TimeRangeSelector field={'noise-level'} />
+                <TimeRangeSelector field={'noise-level'} defaultTimeRange={'5m'} />
             </CardHeader>
             <CardContent className="px-2 sm:p-6">
                 <ChartContainer

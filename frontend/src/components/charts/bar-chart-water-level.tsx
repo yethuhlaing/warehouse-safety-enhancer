@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     Card,
     CardContent,
@@ -34,8 +34,11 @@ const chartConfig = {
 
 export function BarChartWaterLevel() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
-
-    console.log(sensorData)
+    useEffect(() => {
+        subscribe(['water-level'], {
+            "water-level": '5m',
+        });
+    }, []);
     // const { 
     //     field, minimum, maximum, average
     // } = formatChartData(chartData) as FormattedAggregateData  
@@ -47,7 +50,7 @@ export function BarChartWaterLevel() {
                     <CardTitle>Water Level Monitoring</CardTitle>
                     <CardDescription>Water Level Across Reservoirs and Storage Units</CardDescription>
                 </div>
-                <TimeRangeSelector field={'water-level'} />
+                <TimeRangeSelector field={'water-level'} defaultTimeRange='5m' />
             </CardHeader>
             <CardContent>
             <ChartContainer config={chartConfig} className="aspect-auto h-[350px]">
@@ -75,7 +78,7 @@ export function BarChartWaterLevel() {
                     />
                     <YAxis />
                     <Bar dataKey="_value">
-                    { Array.isArray(sensorData) && sensorData?.map((item) => (
+                    { Array.isArray(sensorData['water-level']) && sensorData['water-level']?.map((item) => (
                         <Cell
                         key={item._field}
                         fill={

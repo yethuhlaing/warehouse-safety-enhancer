@@ -46,7 +46,8 @@ class MQTTPublisher {
 
             const publishPromises = sensorData.map(data => {
                 return new Promise((resolve, reject) => {
-                    this.client.publish(`sensors/${data.measurement}`, JSON.stringify(data), (err) => {
+                    const topic = `sensors/${data.measurement}`;
+                    this.client.publish(topic, JSON.stringify(data), (err) => {
                         if (err) reject(err)
                         else resolve()
                     })

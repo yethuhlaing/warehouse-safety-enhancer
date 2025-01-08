@@ -3,35 +3,15 @@ export const generateSensorData = () => {
     return [
         // Gas
         {
-            measurement: 'co',
+            measurement: 'air',
             tags: {
                 sensor_type: 'airSensor',
-                sensor: 'co'
+                sensor: 'air'
             },
             fields: {
-                co: Math.random() * 100
-            },
-            timestamp: now
-        },
-        {
-            measurement: 'pm10',
-            tags: {
-                sensor_type: 'airSensor',
-                sensor: 'pm10'
-            },
-            fields: {
+                co: Math.random() * 100,
+                no2: Math.random() * 300,
                 pm10: Math.random() * 250
-            },
-            timestamp: now
-        },
-        {
-            measurement: 'no2',
-            tags: {
-                sensor_type: 'airSensor',
-                sensor: 'no2'
-            },
-            fields: {
-                no2: Math.random() * 300
             },
             timestamp: now
         },
@@ -77,7 +57,7 @@ export const generateSensorData = () => {
         
         // Motion Detectors
         {
-            measurement: 'motion_detected',
+            measurement: 'motion-detected',
             tags: {
                 sensor_type: 'motionSensor',
                 sensor: 'motion_detected'
@@ -192,9 +172,14 @@ export const generateSensorData = () => {
                 sensor: 'water-level'
             },
             fields: {
-                'water-level': Math.random() * 10
+                'water-level': getRandom(-10, 20)
             },
             timestamp: now
         }
     ];
 };
+
+
+function getRandom(min, max) {
+    return Math.random() * (max - min) + min; // Generates a random number between min and max
+}

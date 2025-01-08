@@ -16,6 +16,8 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useWebSocketData } from "@/hooks/use-websocket-data";
+import { useEffect } from "react";
+import { SensorData } from "@/types";
 
 
 const chartConfig = {
@@ -56,6 +58,25 @@ const chartConfig = {
 export function BarChartHumidity() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
     
+    useEffect(() => {
+        subscribe(['humidity']);
+    }, []);
+    
+     
+    const latestReading = sensorData?.humidity?.[sensorData?.humidity?.length - 1] as SensorData;
+
+
+        // Transform the raw data for Recharts
+    const chartData = latestReading ? [
+        { category: "lobby", value: latestReading.lobby },
+        { category: "storage", value: latestReading.storage },
+        { category: "office", value: latestReading.office },
+        { category: "security", value: latestReading.security },
+        { category: "cafeteria", value: latestReading.cafeteria },
+        { category: "inspection", value: latestReading.inspection },
+        { category: "automation", value: latestReading.automation },
+        { category: "maintenance", value: latestReading.maintenance }
+    ] : [];
     return (
         <Card className="flex flex-col">
             <CardHeader>
@@ -66,14 +87,14 @@ export function BarChartHumidity() {
                 <ChartContainer config={chartConfig}>
                     <BarChart
                         accessibilityLayer
-                        data={sensorData['humidity'] || []}
+                        data={chartData || []}
                         layout="vertical"
                         margin={{
                             left: 32,
                         }}
                     >
                         <YAxis
-                            dataKey="_field"
+                            dataKey="category"
                             type="category"
                             tickLine={false}
                             tickMargin={12}
@@ -84,12 +105,12 @@ export function BarChartHumidity() {
                                     ?.label
                             }
                         />
-                        <XAxis dataKey="_value" type="number" hide />
+                        <XAxis dataKey="value" type="number" hide />
                         <ChartTooltip
                             cursor={false}
                             content={<ChartTooltipContent hideLabel />}
                         />
-                        <Bar dataKey="_value" layout="vertical" radius={5} fill={"hsl(var(--chart-1)"} />
+                        <Bar dataKey="value" layout="vertical" radius={5} fill={"hsl(var(--chart-1)"} />
                     </BarChart>
                 </ChartContainer>
             </CardContent>

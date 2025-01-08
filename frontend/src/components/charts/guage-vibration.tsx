@@ -13,6 +13,7 @@ import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { useWebSocketData } from '@/hooks/use-websocket-data';
 import { useState, useEffect } from 'react';
 import GaugeComponent from 'react-gauge-component';
+import { SensorData } from '@/types';
 
 const chartConfig = {
 
@@ -25,22 +26,18 @@ const chartConfig = {
 export function GuageVibration() {
     const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
 
-    const [ vibration, setVibration ] = useState<number>(0)
     useEffect(() => {
-        if (sensorData['vibration'] && sensorData['vibration'].length > 0) {
-            setVibration(sensorData['vibration'][sensorData['vibration'].length - 1]?._value ?? 0); // Ensure fallback if _value is undefined
-        } else {
-            setVibration(0); // Default to 0 when no data
-        }
-    }, [sensorData])
-
+        subscribe(['vibration'], {
+            "vibration": 'last',
+        });
+    }, []);
+    const latestReading = sensorData?.['vibration']?.[sensorData?.['vibration']?.length - 1] as SensorData;
     const formatVibrationValue = (value: any): string => {
         if (value !== undefined && value !== null) {
             return value.toFixed(1) + ' m/s²';
         }
         return '0'; // Default to an empty string or another fallback string
     };
-    console.log(sensorData)
     return (
         <Card className="flex flex-col">
             <CardHeader className="flex flex-col space-y-2">
@@ -82,7 +79,7 @@ export function GuageVibration() {
                                 },
                                 ]
                             }}
-                            value={vibration}
+                            value={latestReading?.vibration ?? 0} // Fallback to 0 if lightIntensity is undefined or null
                             minValue={0}
                             maxValue={8}
                             labels={{

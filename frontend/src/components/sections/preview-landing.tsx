@@ -8,14 +8,13 @@ export default function PreviewLanding() {
             <MaxWidthWrapper>
                 <div className="rounded-xl md:bg-muted/30 md:p-3.5 md:ring-1 md:ring-inset md:ring-border">
                     <div className="relative aspect-video overflow-hidden rounded-xl border md:rounded-lg">
-                        <Image
-                            className="size-full object-cover object-center dark:opacity-85 dark:invert"
-                            src="/_static/blog/blog-post-3.jpg"
-                            alt="preview landing"
-                            width={2000}
-                            height={1000}
-                            priority={true}
-                        />
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src="https://www.youtube.com/embed/6-fNOPSlbbs"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                        ></iframe>
                     </div>
                 </div>
             </MaxWidthWrapper>
