@@ -12,7 +12,7 @@ const timeRanges = [
 ];
 function TimeRangeSelector({ field, defaultTimeRange } : { field : FieldType , defaultTimeRange: string} ) {
     const [selectedTimeRange, setSelectedTimeRange] = useState<string | undefined>();
-    const { updateTimeRange  } = useWebSocketData('ws://localhost:5000/sensors');
+    const { updateTimeRange  } = useWebSocketData();
 
     useEffect(() => {
         if (field) {

@@ -144,7 +144,7 @@ wss.on('connection', (ws) => {
 server.on('upgrade', (request, socket, head) => {
     const { pathname } = url.parse(request.url)
     
-    if (pathname === '/sensors') {
+    if (pathname === '/api/realtime/sensors') {
         wss.handleUpgrade(request, socket, head, (ws) => {
             wss.emit('connection', ws, request)
         })
@@ -152,6 +152,11 @@ server.on('upgrade', (request, socket, head) => {
         socket.destroy()
     }
 })
+
+// Route to initialize WebSocket connection
+app.get('/api/realtime/', (req, res) => {
+    res.send('WebSocket server is running. Connect to ws://localhost:5000/api/realtime/sensors');
+});
 
 const PORT = 5000
 server.listen(PORT, () => {

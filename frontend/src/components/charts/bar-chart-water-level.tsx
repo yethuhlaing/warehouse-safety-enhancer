@@ -33,7 +33,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BarChartWaterLevel() {
-    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData();
     useEffect(() => {
         subscribe(['water-level'], {
             "water-level": '5m',

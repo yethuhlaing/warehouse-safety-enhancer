@@ -41,7 +41,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function AreaChartStacked() {
-    const { sensorData , connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+    const { sensorData , connectionStatus, subscribe, updateTimeRange } = useWebSocketData();
     // Subscribe to multiple sensors
     useEffect(() => {
         subscribe(['air']);

@@ -1,0 +1,16 @@
+FROM influxdb:2.6-alpine
+
+# Copy custom InfluxDB configuration if needed
+# COPY influxdb.conf /etc/influxdb2/influxdb.conf
+
+# Set environment variables
+ENV DOCKER_INFLUXDB_INIT_MODE=setup
+ENV DOCKER_INFLUXDB_INIT_USERNAME=your_username
+ENV DOCKER_INFLUXDB_INIT_PASSWORD=your_password
+ENV DOCKER_INFLUXDB_INIT_ORG=your_org
+ENV DOCKER_INFLUXDB_INIT_BUCKET=your_bucket
+
+EXPOSE 8086
+
+# The entrypoint script will handle initialization
+ENTRYPOINT ["influxd"]

@@ -56,7 +56,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BarChartHumidity() {
-    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData();
     
     useEffect(() => {
         subscribe(['humidity']);

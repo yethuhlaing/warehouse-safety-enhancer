@@ -43,7 +43,7 @@ const chartConfig = {
 
 
 export function BarChartNoise() {
-    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData('ws://localhost:5000/sensors');
+    const { sensorData, connectionStatus, subscribe, updateTimeRange } = useWebSocketData();
     useEffect(() => {
         subscribe(['noise-level'], {
             "noise-level": '5m',

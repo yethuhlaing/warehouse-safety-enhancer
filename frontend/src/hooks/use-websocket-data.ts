@@ -18,7 +18,9 @@ interface UseWebSocketDataResult {
     updateTimeRange: (sensorType: string, timeRange: string) => void;
 }
 
-export function useWebSocketData(url: string): UseWebSocketDataResult {
+export function useWebSocketData(): UseWebSocketDataResult {
+
+    const url = process.env.NEXT_PUBLIC_WEBSOCKET_URL as string;
     const [sensorData, setSensorData] = useState<{ [sensorType: string]: SensorData[] | null }>({});
     const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
     const [error, setError] = useState<Error | null>(null);
