@@ -193,7 +193,7 @@ services:
         - action: sync+restart
           path: ./telegraf/telegraf.conf
           target: /etc/telegraf/telegraf.conf
-
+  
 volumes:
   next-cache:
 networks:
