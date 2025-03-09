@@ -21,8 +21,14 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
-      - name: Set up Docker Buildx
+      - name: Set up Docker Buildx with containerd
         uses: docker/setup-buildx-action@v2
+        with:
+          driver: docker-container
+          driver-opts: |
+            image=moby/buildkit:latest
+            network=host
+          buildkitd-flags: --debug
 
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
@@ -36,14 +42,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}
-
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
 
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v4
@@ -71,8 +69,9 @@ jobs:
             NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
             NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
             NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/frontend:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/frontend:cache,mode=max
+          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v4
@@ -83,8 +82,9 @@ jobs:
             ${{ env.REGISTRY }}/backend:latest
             ${{ env.REGISTRY }}/backend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/backend:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/backend:cache,mode=max
+          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and Push InfluxDB Image
         uses: docker/build-push-action@v4
@@ -101,8 +101,9 @@ jobs:
             INFLUXDB_ORG=${{ secrets.INFLUXDB_ORG }}
             INFLUXDB_BUCKET=${{ secrets.INFLUXDB_BUCKET }}
             INFLUXDB_URL=${{ secrets.INFLUXDB_URL }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/influx:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/influx:cache,mode=max
+          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and push Mosquitto
         uses: docker/build-push-action@v4
@@ -114,8 +115,9 @@ jobs:
             ${{ env.REGISTRY }}/mosquitto:latest
             ${{ env.REGISTRY }}/mosquitto:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/mosquitto:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/mosquitto:cache,mode=max
+          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and push Mosquitto Publisher
         uses: docker/build-push-action@v4
@@ -127,8 +129,9 @@ jobs:
             ${{ env.REGISTRY }}/mosquitto-publisher:latest
             ${{ env.REGISTRY }}/mosquitto-publisher:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/mosquitto-publisher:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/mosquitto-publisher:cache,mode=max
+          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and push Telegraf
         uses: docker/build-push-action@v4
@@ -140,8 +143,9 @@ jobs:
             ${{ env.REGISTRY }}/telegraf:latest
             ${{ env.REGISTRY }}/telegraf:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/telegraf:cache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/telegraf:cache,mode=max
+          outputs: type=registry,oci-mediatypes=true
 
       - name: Move cache
         run: |
