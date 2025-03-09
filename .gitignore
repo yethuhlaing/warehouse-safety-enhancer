@@ -71,7 +71,6 @@ frontend/*.swp
 backend/*.swp
 
 
-mosquitto/data
 mosquitto/log
 
 influxdb/data
