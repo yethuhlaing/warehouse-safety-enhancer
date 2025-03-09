@@ -145,5 +145,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: senseiq
-          resource-group-name: warehouse-safety-enhancer
+          resource-group: warehouse-safety-enhancer  # Note: it's "resource-group" not "resource-group-name"
+          slot-name: production
           configuration-file: ./docker-compose.prod.yml

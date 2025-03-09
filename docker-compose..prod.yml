@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
 
   frontend:
@@ -30,12 +29,6 @@ services:
     volumes:
       - ${HOME_SITE}/influxdb/data:/var/lib/influxdb2
       - ${HOME_SITE}/influxdb/config:/etc/influxdb2
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
 
   telegraf:
     image: senseiq.azurecr.io/telegraf:latest
