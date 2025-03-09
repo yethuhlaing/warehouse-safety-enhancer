@@ -105,7 +105,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/mosquitto:latest
             ${{ env.REGISTRY }}/mosquitto:${{ github.sha }}
-            labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Mosquitto Publisher
         uses: docker/build-push-action@v4
@@ -116,7 +116,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/mosquitto-publisher:latest
             ${{ env.REGISTRY }}/mosquitto-publisher:${{ github.sha }}
-            labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Telegraf
         uses: docker/build-push-action@v4
@@ -127,7 +127,7 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/telegraf:latest
             ${{ env.REGISTRY }}/telegraf:${{ github.sha }}
-            labels: ${{ steps.meta.outputs.labels }}
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Move cache
         run: |
