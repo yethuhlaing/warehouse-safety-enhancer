@@ -47,8 +47,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             NEXT_PUBLIC_APP_URL=${{secrets.NEXT_PUBLIC_APP_URL}}
@@ -76,8 +74,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Build and Push InfluxDB Image
         uses: docker/build-push-action@v4
@@ -88,8 +84,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/influx:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/influx:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           build-args: |
             INFLUXDB_TOKEN=${{ secrets.INFLUXDB_TOKEN }}
             INFLUXDB_ORG=${{ secrets.INFLUXDB_ORG }}
@@ -106,8 +100,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-            cache-from: type=local,src=/tmp/.buildx-cache
-            cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Build and push Mosquitto Publisher
         uses: docker/build-push-action@v4
@@ -119,8 +111,6 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto-publisher:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto-publisher:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-            cache-from: type=local,src=/tmp/.buildx-cache
-            cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
       - name: Build and push Telegraf
         uses: docker/build-push-action@v4
@@ -132,8 +122,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/telegraf:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/telegraf:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-            cache-from: type=local,src=/tmp/.buildx-cache
-            cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
       - name: Move cache
         run: |
           rm -rf /tmp/.buildx-cache
