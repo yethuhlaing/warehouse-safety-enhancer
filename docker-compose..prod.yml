@@ -1,73 +1,39 @@
 version: '3.8'
 
 services:
+  next:
+    image: striveplatform.azurecr.io/next-app:latest
+    ports:
+      - '3000:3000'
+
   frontend:
-    container_name: frontend
-    restart: always
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    env_file:
-      - ./frontend/.env
+    image: senseiq.azurecr.io/frontend:latest
     ports:  
       - "3000:3000"
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - next-cache:/app/.next/cache
 
   backend:
-    container_name: backend
-    restart: always
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
+    image: senseiq.azurecr.io/backend:latest
     ports:
       - "5000:5000"
-    env_file:
-      - ./backend/.env
-    environment:
-      - NODE_ENV=production
-      - PORT=4000
-
 
   mosquitto:
-    container_name: mosquitto
-    image: eclipse-mosquitto:latest
+    image: senseiq.azurecr.io/mosquitto:latest
     restart: always
     ports:
       - 1883:1883
       - 8883:8883
       - 9001:9001
-    env_file:
-      - ./mosquitto/.env
-    volumes:
-      - mosquitto-config:/mosquitto/config
-      - mosquitto-data:/mosquitto/data
-      - mosquitto-log:/mosquitto/log
   
   mosquitto-publisher:
-    container_name: mosquitto-publisher
-    build:
-      context: ./mosquitto
-      dockerfile: Dockerfile.prod
-    env_file:
-      - ./mosquitto/.env
+    image: senseiq.azurecr.io/mosquitto-publisher:latest
     restart: always
 
   influxdb:
-    container_name: influxdb
-    image: influxdb:latest
+    image: senseiq.azurecr.io/influxdb:latest
     restart: always
-    ports:
-      - "8086:8086"
     volumes:
-      - influxdb-data:/var/lib/influxdb2
-      - influxdb-config:/etc/influxdb2
-    networks:
-      - app-network
-    env_file:
-      - ./influxdb/.env
+      - ${HOME_SITE}/influxdb/data:/var/lib/influxdb2
+      - ${HOME_SITE}/influxdb/config:/etc/influxdb2
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
       interval: 60s
@@ -76,23 +42,9 @@ services:
       start_period: 30s
 
   telegraf:
-    container_name: telegraf
-    image: telegraf:latest
+    image: senseiq.azurecr.io/telegraf:latest
     restart: always
-    env_file:
-      - ./telegraf/.env
     ports: 
       - "5050:5050"
-    networks:
-      - app-network
     volumes:
-      - telegraf-config:/etc/telegraf
-  
-volumes:
-  next-cache:
-  mosquitto-config:
-  mosquitto-data:
-  mosquitto-log:
-  influxdb-data:
-  influxdb-config:
-  telegraf-config:
+      - ${HOME_SITE}/telegraf/config:/etc/telegraf

@@ -2,7 +2,6 @@ name: Build and deploy a container to an Azure Web App
 
 env:
   REGISTRY: senseiq.azurecr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 on:
   pull_request:
@@ -36,7 +35,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}
 
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v4
@@ -44,8 +43,8 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/frontend:${{ github.sha }}
+            ${{ env.REGISTRY }}/frontend:latest
+            ${{ env.REGISTRY }}/frontend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
@@ -71,18 +70,19 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/backend:${{ github.sha }}
+            ${{ env.REGISTRY }}/backend:latest
+            ${{ env.REGISTRY }}/backend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and Push InfluxDB Image
         uses: docker/build-push-action@v4
         with:
           context: ./influxdb
+          file: ./influxdb/Dockerfile.prod
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/influx:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/influx:${{ github.sha }}
+            ${{ env.REGISTRY }}/influx:latest
+            ${{ env.REGISTRY }}/influx:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             INFLUXDB_TOKEN=${{ secrets.INFLUXDB_TOKEN }}
@@ -97,8 +97,8 @@ jobs:
           file: ./mosquitto/Dockerfile.mosquitto.prod
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto:${{ github.sha }}
+            ${{ env.REGISTRY }}/mosquitto:latest
+            ${{ env.REGISTRY }}/mosquitto:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Mosquitto Publisher
@@ -108,8 +108,8 @@ jobs:
           file: ./mosquitto/Dockerfile.prod
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto-publisher:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/mosquitto-publisher:${{ github.sha }}
+            ${{ env.REGISTRY }}/mosquitto-publisher:latest
+            ${{ env.REGISTRY }}/mosquitto-publisher:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push Telegraf
@@ -119,8 +119,8 @@ jobs:
           file: ./telegraf/Dockerfile.prod
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/telegraf:latest
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/telegraf:${{ github.sha }}
+            ${{ env.REGISTRY }}/telegraf:latest
+            ${{ env.REGISTRY }}/telegraf:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
 
       - name: Move cache
