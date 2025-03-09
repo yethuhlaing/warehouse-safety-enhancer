@@ -4,7 +4,7 @@ FROM telegraf:latest
 WORKDIR /etc/telegraf
 
 # Copy the configuration file into the container
-COPY ./telegraf/telegraf.conf /etc/telegraf/telegraf.conf
+COPY ./telegraf.conf /etc/telegraf/telegraf.conf
 
 # Set the permissions
 RUN chmod 644 /etc/telegraf/telegraf.conf
