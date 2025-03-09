@@ -128,11 +128,7 @@ jobs:
             ${{ env.REGISTRY }}/telegraf:latest
             ${{ env.REGISTRY }}/telegraf:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Move cache
-        run: |
-          rm -rf /tmp/.buildx-cache
-          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+          
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push
