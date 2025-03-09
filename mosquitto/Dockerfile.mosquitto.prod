@@ -6,7 +6,6 @@ RUN mkdir -p /mosquitto/config /mosquitto/data /mosquitto/log
 # Copy configuration files (assuming you have them locally)
 COPY ./mosquitto/config /mosquitto/config
 COPY ./mosquitto/data /mosquitto/data
-COPY ./mosquitto/log /mosquitto/log
 
 # Set permissions
 RUN chmod -R 777 /mosquitto
