@@ -1,7 +1,7 @@
 name: Build and deploy a container to an Azure Web App
 
 env:
-  REGISTRY: azurecr.io
+  REGISTRY: senseiq.azurecr.io
   IMAGE_NAME: ${{ github.repository }}
 
 on:
