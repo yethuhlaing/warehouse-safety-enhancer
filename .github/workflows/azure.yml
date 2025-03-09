@@ -68,9 +68,7 @@ jobs:
             NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_PRO_YEARLY_PLAN_ID }}
             NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_MONTHLY_PLAN_ID }}
             NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID=${{ secrets.NEXT_PUBLIC_STRIPE_BUSINESS_YEARLY_PLAN_ID }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/frontend:cache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/frontend:cache,mode=max
-          outputs: type=registry,oci-mediatypes=true
+
 
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v4
@@ -81,9 +79,6 @@ jobs:
             ${{ env.REGISTRY }}/backend:latest
             ${{ env.REGISTRY }}/backend:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/backend:cache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/backend:cache,mode=max
-          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and Push InfluxDB Image
         uses: docker/build-push-action@v4
@@ -100,9 +95,6 @@ jobs:
             INFLUXDB_ORG=${{ secrets.INFLUXDB_ORG }}
             INFLUXDB_BUCKET=${{ secrets.INFLUXDB_BUCKET }}
             INFLUXDB_URL=${{ secrets.INFLUXDB_URL }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/influx:cache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/influx:cache,mode=max
-          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and push Mosquitto
         uses: docker/build-push-action@v4
@@ -114,9 +106,6 @@ jobs:
             ${{ env.REGISTRY }}/mosquitto:latest
             ${{ env.REGISTRY }}/mosquitto:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/mosquitto:cache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/mosquitto:cache,mode=max
-          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and push Mosquitto Publisher
         uses: docker/build-push-action@v4
@@ -128,9 +117,6 @@ jobs:
             ${{ env.REGISTRY }}/mosquitto-publisher:latest
             ${{ env.REGISTRY }}/mosquitto-publisher:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/mosquitto-publisher:cache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/mosquitto-publisher:cache,mode=max
-          outputs: type=registry,oci-mediatypes=true
 
       - name: Build and push Telegraf
         uses: docker/build-push-action@v4
@@ -142,9 +128,6 @@ jobs:
             ${{ env.REGISTRY }}/telegraf:latest
             ${{ env.REGISTRY }}/telegraf:${{ github.sha }}
             labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/telegraf:cache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/telegraf:cache,mode=max
-          outputs: type=registry,oci-mediatypes=true
 
       - name: Move cache
         run: |
