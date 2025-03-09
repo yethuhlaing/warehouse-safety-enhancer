@@ -1,0 +1,18 @@
+FROM eclipse-mosquitto:latest
+
+# Create necessary directories
+RUN mkdir -p /mosquitto/config /mosquitto/data /mosquitto/log
+
+# Copy configuration files (assuming you have them locally)
+COPY ./mosquitto/config /mosquitto/config
+COPY ./mosquitto/data /mosquitto/data
+COPY ./mosquitto/log /mosquitto/log
+
+# Set permissions
+RUN chmod -R 777 /mosquitto
+
+# Expose ports for MQTT
+EXPOSE 1883 8883 9001
+
+# Run Mosquitto
+CMD ["/usr/sbin/mosquitto", "-c", "/mosquitto/config/mosquitto.conf"]
